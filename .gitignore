@@ -1,0 +1,6 @@
+ForTheCommonGood/bin/*
+ForTheCommonGood/obj/*
+ForTheCommonGood/old/*
+*.suo
+*.tmp
+*.user

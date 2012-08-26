@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 14.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 43363)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="svg0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:version="0.32" inkscape:version="0.45.1" sodipodi:docbase="C:\Documents and Settings\KevinDuke\Desktop" sodipodi:docname="Information_icon3.svg" inkscape:output_extension="org.inkscape.output.svg.inkscape"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="620px" height="620px"
+	 viewBox="0 0 620 620" enable-background="new 0 0 620 620" xml:space="preserve">
+<sodipodi:namedview  id="base" bordercolor="#666666" borderopacity="1.0" objecttolerance="10.0" inkscape:cy="226.66946" gridtolerance="10.0" guidetolerance="10.0" inkscape:cx="310" inkscape:zoom="1.9548387" pagecolor="#ffffff" inkscape:current-layer="svg0" inkscape:window-y="-4" inkscape:window-x="-4" inkscape:window-width="1280" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="968">
+	</sodipodi:namedview>
+<radialGradient id="shadow_1_" cx="308.4792" cy="311.3047" r="0.499" gradientTransform="matrix(564.3441 0 0 -564.3557 -173762.9688 176010.9375)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0" style="stop-color:#C0C0C0"/>
+	<stop  offset="0.88" style="stop-color:#C0C0C0"/>
+	<stop  offset="1" style="stop-color:#C0C0C0;stop-opacity:0"/>
+</radialGradient>
+<ellipse id="shadow" fill="url(#shadow_1_)" cx="325.06" cy="324.986" rx="282.172" ry="282.178"/>
+<linearGradient id="field_1_" gradientUnits="userSpaceOnUse" x1="349.0901" y1="294.2104" x2="328.1182" y2="249.2361" gradientTransform="matrix(10 0 0 -10 -3067.6038 3009.1563)">
+	<stop  offset="0" style="stop-color:#8DE3B7"/>
+	<stop  offset="1" style="stop-color:#10CC74"/>
+</linearGradient>
+<circle id="field" fill="url(#field_1_)" stroke="#119653" stroke-width="20" cx="310" cy="310" r="258"/>
+<polygon id="polygon26" display="none" fill="#FFFFFF" points="230,250 350,250 350,440 390,440 390,480 230,480 230,440 270,440 
+	270,280 230,280 "/>
+<circle id="circle28" display="none" fill="#FFFFFF" cx="310" cy="170" r="40"/>
+<path id="path3146" sodipodi:open="true" sodipodi:end="6.6467418" sodipodi:start="0.3836133" sodipodi:ry="24.705584" sodipodi:rx="24.705584" sodipodi:cy="30.527918" sodipodi:cx="30.370558" sodipodi:type="arc" opacity="0.08" fill="#FFFFFF" enable-background="new    " d="
+	M540.194,402.515c-51.312,127.133-195.968,188.599-323.101,137.287C89.961,488.491,28.496,343.834,79.807,216.701
+	c51.311-127.133,195.968-188.598,323.1-137.287C528.24,129.999,590.072,271.557,542.01,397.879"/>
+<g>
+	
+		<sodipodi:namedview  id="base" bordercolor="#666666" borderopacity="1.0" inkscape:cy="300" inkscape:cx="300" inkscape:zoom="0.62333333" pagecolor="#ffffff" inkscape:current-layer="Yes_check" inkscape:window-y="23" inkscape:window-x="23" inkscape:window-width="790" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="542">
+		</sodipodi:namedview>
+	<path id="check" fill="#FFFFFF" d="M136.164,380.334c0,0,66.562,74.953,79.874,105.572h57.243
+		c23.962-73.218,117.147-248.014,197.021-309.25c16.55-21.277-25.024-30.06-58.573-15.975
+		c-50.563,21.229-145.929,183.312-163.741,222.315c-25.293,6.656-51.917-42.6-51.917-42.6L136.164,380.334z"/>
+</g>
+</svg>

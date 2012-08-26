@@ -1,0 +1,183 @@
+﻿LanguageCode=en
+
+# Main window
+OriginalFileName_TextBox=&Name:
+Go_Button=&Go
+RandomFile_Button=&Random file
+# LOCALIZATION NOTE: this should have the same access key as "RandomFile_Button"
+NextFileInList_Button=Next file f&rom list
+OtherSource_Option=&Other source...
+Settings_Button=&Settings...
+FilePageOnLocalWiki_TextBox_Format=File description &page on {0}
+FilePageOnCommons_TextBox=File description page on Wi&kimedia Commons
+MakeSelectedTextIntoWikilink_Hyperlink=Linkify selected te&xt
+CurrentVersion_Label=Current version
+OldVersion_Label=Old version
+Bytes_Format={0} bytes
+OneEarlierVersion_Label=One earlier version
+EarlierVersions_Format={0} earlier versions
+SelectVersion_Button=Select &version...
+ContainsExifMetadata_Label=Contains EXIF data
+ViewMetadata_Button=View &metadata
+ImageUsage_Label=Pages using this file:
+NoImageUsages_Label=No pages use this file
+SeeWikiForFullList_Label=see wiki for full list
+# LOCALIZATION NOTE: do not translate "File:" (this namespace name works on all wikis)
+NewFilenameOnCommons_TextBox=New &filename on Commons (with File: prefix):
+IgnoreWarnings_CheckBox=Ignore &warnings
+# LOCALIZATION NOTE: do not translate "{{now Commons}}"
+TagLocalFileWithNowCommons_Label=T&ag local file with {{now Commons}}
+DeleteLocalFile_Label=Delete local file &after transfer
+# LOCALIZATION NOTE: "transfer" is a verb
+Transfer_Button=&Transfer
+ViewFilePageOnLocalWiki_Hyperlink_Format=View file pag&e on {0}
+ViewFilePageOnWikimediaCommons_Hyperlink=View file page on Wikimedia &Commons
+DontForgetToCategorize_Label=Don't forget to add categories on Commons!
+HotcatHint_Label=(Click the "Wikimedia Commons" link to the right and use HotCat if you like.)
+# LOCALIZATION NOTE: "check" is a noun here, I think; consider translating as "check with Google" - 
+#                    but it must be kept short!
+GoogleCheck_Hyperlink=Google check
+IfIneligible_Label=If the file is not eligible:
+DeclineTransfer_Button=&Decline transfer
+NoExifRotation_Label=Note: this preview does not take into account EXIF rotation
+Successful_Label=Successful
+# LOCALIZATION NOTE: "potential", adjective ~= "possible"
+PotentialProblems_Label=Potential problems
+
+# General
+OK_Button=OK
+Cancel_Button=Cancel
+
+# Other Source window
+RandomSource_WindowTitle=Select source of random files
+FilesInCategory_Option=Files in category:
+Browse_Button=Browse...
+FilesFromTextFile_Option=Files from text file on disk (one filename per line):
+# LOCALIZATION NOTE: "open" is a verb
+OpenTextFile_WindowTitle=Open text file
+FileNotFound_Label=The file "{0}" could not be found. Continue anyway?
+
+# Settings window
+Settings_WindowTitle=Settings
+# LOCALIZATION NOTE: "log in" is a verb here
+LogIn_WindowTitle=Log in
+CommonsLoginDetails_Label=Wikimedia Commons login details
+LocalLoginDetails_Label=Local wiki login details
+UserName_TextBox=User name:
+Password_TextBox=Password:
+LocalWiki_TextBox=Local wiki:
+SameCredentialsAsCommons_CheckBox=Same as Commons login details
+IAmLocalAdministrator_CheckBox=I am an admin on my local wiki
+# LOCALIZATION NOTE: do not translate "{{now Commons}}"
+LocalAdministratorExplanation_Label=If checked, files will be deleted after transfer, instead of being tagged with {{now Commons}}.
+# LOCALIZATION NOTE: do not translate "Base64"
+SavePasswordsToDisk_CheckBox=Save passwords to disk (unencrypted, in Base64 encoding)
+CheckForUpdates_CheckBox=Check for updated versions of For the Common Good
+OpenFilePageAutomatically_CheckBox=Open file page on Commons after a successful transfer
+# LOCALIZATION NOTE: do not translate "CommonsTransfers.log"
+LogTransfers_CheckBox=Log all transfers to a file (CommonsTransfers.log)
+LocalWikiData_Label=Local wiki data
+LocalWikiDataHint_Label=You can load different datasets that allow For the Common Good to work effectively on many different wikis.
+# LOCALIZATION NOTE: these are both verbs
+LocalWikiDataLoad_Button=Import...
+LocalWikiDataReset_Button=Reset
+LocalWikiDataCurrent_Label=Currently using:
+UseHttps_CheckBox=Use HTTPS (secure connection)
+
+# "About box" area of Settings window
+Version_Format=Version {0}
+# LOCALIZATION NOTE: followed by the username "This, that and the other"
+Author_Label=By
+PublicDomain_Label=Released into the public domain
+
+# Revision browser window
+SelectVersion_WindowTitle=Select version to transfer
+# LOCALIZATION NOTE: here, "preview" is a noun, not a verb
+Preview_Column=Preview
+DateTime_Column=Date/Time
+# LOCALIZATION NOTE: this column contains the "height x width (xyz bytes)" date
+Dimensions_Column=Dimensions
+UserName_Column=User
+# LOCALIZATION NOTE: this is the upload log summary
+Comment_Column=Comment
+# LOCALIZATION NOTE: for technical reasons this is split across three lines;
+#                    if you don't require all three lines leave the unneeded ones
+#                    blank (but don't delete the line).
+FailedToGenerateThumbnail1_Label=Failed to
+FailedToGenerateThumbnail2_Label=generate
+FailedToGenerateThumbnail3_Label=thumbnail
+
+# EXIF viewer window
+ExifViewer_WindowTitle=View EXIF metadata
+# LOCALIZATION NOTE: followed by "current/old version" then timestamp
+ExifDataForVersion_Label=EXIF data for selected revision:
+Name_Column=Name
+Value_Column=Value
+# LOCALIZATION NOTE: "close" is a verb here
+Close_Button=Close
+EXIFFailedNotice=Notice
+EXIFFailedMessage=Failed to display some metadata.
+
+# Messages (error, etc.)
+Welcome1=Welcome to For the Common Good.
+# LOCALIZATION NOTE: do not translate "Base64"
+Welcome2=The next dialog will ask for your wiki login credentials. If you choose to save them to disk, your wiki password will be stored not in cleartext, but in the Base64 encoding (no security at all!). Be aware of this.
+NowCommonsPotentialProblem=The file is tagged with {{now Commons}}, so it has probably already been transferred.
+ChangeIfNotOwnWork=change this if not own work
+Loading=Loading...
+AlreadyCommons=File is already on Commons; can't do anything
+ImageMissing=File does not exist on local wiki
+NoFile=There seems to be a problem; perhaps the file is actually a redirect
+FailedToDownload=Failed to download the file. Perhaps try again later.
+FailedToReadTextFile=Could not read the text file "{0}". Click the "Other source..." option to choose a different file.
+NoMoreFiles=That category contains no more files. Perhaps you misspelt it... or perhaps the backlog is finally clear :)
+RandomCacheEmpty1=No more files in the random cache. Click "Random file" again to find more files.
+RandomCacheEmpty2=(This cannot be done automatically due to the possibility of never-ending loops.)
+# LOCALIZATION NOTE: This is an instruction to the user ("please do not do it!"), not an option that can be chosen.
+RandomCacheEmpty3=Do not transfer the file that is currently displayed.
+PotentialProblemsGoAhead=This file has potential problems which may prevent or affect the transfer. Do you still want to transfer this file to Commons?
+StillDownloading=The file hasn't been downloaded yet. Try again in a few moments.
+OldVersionTransferAdvice=You are transferring an old version of this file. You will need to manually clean up the "original upload log" section of the new wikitext. Click Cancel and do this (or click OK if you have already done so).
+FilenameClash=An image of that name already exists on Commons.
+Warnings1=The following warnings were encountered:
+Warnings2=If you still want to upload, select the "Ignore warnings" option and try again.
+# LOCALIZATION NOTE: this uses .NET timestamp formatting. For assistance, consult User:This, that and the other.
+LogFileTimestampFormat=HH:mm, d MMMM yyyy
+LogFileWriteFailed=Failed to write to log file.
+LocalFileDeleted=The image seems to have been deleted on your local wiki. Not sure what's going on.
+# LOCALIZATION NOTE: this one should end with a colon.
+NowCommonsFailed=Successful up to the point of tagging the local file with {{now commons}}:
+AlreadyDeleted=It looks like the image may have already been deleted.
+DeclineReasonPrompt1=Enter a reason for declining the Commons transfer request.
+DeclineReasonPrompt2=The {{copy to Commons}} tag will be automatically removed.
+CouldNotFindTag=Could not find the {{copy to Commons}} tag to remove. Perhaps an obscure redirect is being used.
+# LOCALIZATION NOTE: this one should end with a colon.
+FailedPlus=Failed:
+# LOCALIZATION NOTE: sense here is "it seems that all is well, but that might not be the case - I don't know".
+#                    Don't translate as "success", since it isn't guaranteed success.
+LooksGood=Looks good to me.
+# LOCALIZATION NOTE: probably do not translate "Partial Trust" - it is .NET jargon - but do translate "scenario"
+LinkVisitFailed=Can't open this link - you need to run FtCG locally, not in a Partial Trust scenario.
+# LOCALIZATION NOTE: if I didn't have a sense of humour this would read:
+#                    "You did not select a version to transfer. Please select only one item from the list before clicking OK."
+NoRevisionSelected=Now, go back and select one, and only one, item, you mischievous little child.
+NewVersionNotice1=A new version ({0}) of For the Common Good is available.
+NewVersionNotice2=It is suggested that you visit http://atlight.github.com to download it.
+# LOCALIZATION NOTE: for non-English languages, please specify that [[WT:FTCG]] is on English Wikipedia
+NewVersionNotice3=You can disable update checks in Settings, but if you do, please add [[WT:FTCG]] to your watchlist.
+TextFileAutoClean=For the Common Good can remove entries from the text file, up to the most recently processed entry.
+SaveChanges=Do you want to save these changes to "{0}"?
+TextFileSaveFailed=Failed to save text file.
+LightboxFailed=Failed to generate lightbox. Perhaps it is a SVG - can't preview those at the moment.
+ReadSettingsError=An error occurred when trying to read the settings file.
+SaveSettingsError=An error occurred when trying to save the settings file.
+LocalWikiDataLoadFailed=Failed to load local wiki data file. Please make sure all lines are valid and are not misspelt.
+FileNotFoundLocal=The file "{0}" could not be found.
+LocalWikiDataWrongDomain=The data file you chose is intended for use on {0}. It is suggested that you change the "local wiki" option to match.
+LocalWikiDataReset=The default data file is intended for use on English Wikipedia (en.wikipedia). You should change the "local wiki" option to "en.wikipedia" for optimum performance.
+
+# Network errors
+MorebitsDotNet_LoginFailure=Login failure: {0}
+MorebitsDotNet_NetRequestFailure=An Internet request failed.
+MorebitsDotNet_UnknownLoginFailure=Unknown login failure.
+MorebitsDotNet_ApiError=An API error occurred.
