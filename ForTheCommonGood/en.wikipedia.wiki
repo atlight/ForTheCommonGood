@@ -55,6 +55,10 @@ IfRegex={{(keep ?local|nocommons)
 Message=The file is tagged with {{keep local}} - do not delete the local file afterwards.
 
 [PotentialProblem]
+IfRegex={{(c[ \-]?uploaded|uploaded from commons|c-upload)
+Message=The file is tagged with {{c-uploaded}}. It originated from Commons and should not be transferred back there.
+
+[PotentialProblem]
 IfContains={{split media
 Message=The file is tagged with {{split media}}. Click "Select version..." above to view earlier versions;  you may need to transfer each one separately.
 
@@ -65,6 +69,14 @@ ReplaceWith=
 [Replacement]
 LookFor={{needs commons category}}
 ReplaceWith=
+
+[Replacement]
+LookFor={{(bots|nobots|Wikipedia:Bots/Status/template)[^\}]*}}
+ReplaceWith=
+
+[Replacement]
+LookFor={{ffd[^\}]*}}
+ReplaceWith= 
 
 [Replacement]
 LookFor== *I .*created this (image|work) entirely by myself.?
