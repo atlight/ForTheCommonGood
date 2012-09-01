@@ -51,6 +51,10 @@ IfRegex={{do not (copy|move) to commons
 Message=The file is tagged with {{do not move to Commons}}.
 
 [PotentialProblem]
+IfContains={{deleted on commons
+Message=The file is tagged with {{deleted on Commons}}. Check the Commons deletion log before transferring.
+
+[PotentialProblem]
 IfRegex={{(keep ?local|nocommons)
 Message=The file is tagged with {{keep local}} - do not delete the local file afterwards.
 
