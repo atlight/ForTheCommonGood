@@ -977,7 +977,7 @@ namespace ForTheCommonGood
                         }));
 
                         XmlNodeList warnings = innerDoc.GetElementsByTagName("warnings");
-                        if (warnings.Count > 0)
+                        if (warnings.Count > 0 && !chkIgnoreWarnings.Checked)
                         {
                             MessageBox.Show(Localization.GetString("Warnings1") + "\n\n" + warnings[0].OuterXml + "\n\n" + Localization.GetString("Warnings2"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             EnableForm(true);
