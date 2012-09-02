@@ -1621,7 +1621,7 @@ namespace ForTheCommonGood
         {
             try
             {
-                Process.Start("http://www.google.com/searchbyimage?image_url=" + Uri.EscapeDataString(iis[0].Attributes["url"].Value));
+                Process.Start("http://www.google.com/searchbyimage?hl=" + Localization.GetString("LanguageCode") + "&image_url=" + Uri.EscapeDataString(iis[0].Attributes["url"].Value));
             }
             catch (Exception)
             {
