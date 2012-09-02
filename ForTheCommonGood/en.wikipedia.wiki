@@ -47,6 +47,10 @@ IfContains={{non-free
 Message=The file appears to be non-free. Commons cannot accept non-free files.
 
 [PotentialProblem]
+IfContains={{file at cci
+Message=The file is subject to a Contributor Copyright Investigation (CCI). Its status as a free file is disputed.
+
+[PotentialProblem]
 IfRegex={{do not (copy|move) to commons
 Message=The file is tagged with {{do not move to Commons}}.
 
