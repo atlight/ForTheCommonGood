@@ -50,7 +50,6 @@
             this.chkDeleteAfter = new System.Windows.Forms.CheckBox();
             this.optCategory1 = new System.Windows.Forms.RadioButton();
             this.optCategory2 = new System.Windows.Forms.RadioButton();
-            this.btnDeclineTransfer = new System.Windows.Forms.Button();
             this.lblName = new System.Windows.Forms.Label();
             this.lblRevision = new System.Windows.Forms.Label();
             this.lblDimensions = new System.Windows.Forms.Label();
@@ -318,17 +317,6 @@
             this.optCategory2.UseVisualStyleBackColor = true;
             this.optCategory2.CheckedChanged += new System.EventHandler(this.optCopyFoo_CheckedChanged);
             // 
-            // btnDeclineTransfer
-            // 
-            this.btnDeclineTransfer.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDeclineTransfer.Location = new System.Drawing.Point(840, 491);
-            this.btnDeclineTransfer.Name = "btnDeclineTransfer";
-            this.btnDeclineTransfer.Size = new System.Drawing.Size(112, 23);
-            this.btnDeclineTransfer.TabIndex = 31;
-            this.btnDeclineTransfer.Text = "<decline transfer>";
-            this.btnDeclineTransfer.UseVisualStyleBackColor = true;
-            this.btnDeclineTransfer.Click += new System.EventHandler(this.DeclineTransfer);
-            // 
             // lblName
             // 
             this.lblName.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
@@ -457,7 +445,6 @@
             this.panRoot.Controls.Add(this.pictureBox1);
             this.panRoot.Controls.Add(this.lblDeclineTransfer);
             this.panRoot.Controls.Add(this.btnTransfer);
-            this.panRoot.Controls.Add(this.btnDeclineTransfer);
             this.panRoot.Controls.Add(this.tableLayoutPanel1);
             this.panRoot.Controls.Add(this.lblDimensions);
             this.panRoot.Controls.Add(this.lblNormName);
@@ -608,12 +595,13 @@
             // lblDeclineTransfer
             // 
             this.lblDeclineTransfer.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDeclineTransfer.Location = new System.Drawing.Point(701, 488);
+            this.lblDeclineTransfer.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.lblDeclineTransfer.Location = new System.Drawing.Point(704, 488);
             this.lblDeclineTransfer.Name = "lblDeclineTransfer";
-            this.lblDeclineTransfer.Size = new System.Drawing.Size(137, 28);
+            this.lblDeclineTransfer.Size = new System.Drawing.Size(248, 28);
             this.lblDeclineTransfer.TabIndex = 30;
-            this.lblDeclineTransfer.Text = "<if ineligible>";
-            this.lblDeclineTransfer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDeclineTransfer.Text = "<if ineligible, edit file page manually>";
+            this.lblDeclineTransfer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // panel2
             // 
@@ -720,7 +708,6 @@
         private System.Windows.Forms.CheckBox chkDeleteAfter;
         private System.Windows.Forms.RadioButton optCategory1;
         private System.Windows.Forms.RadioButton optCategory2;
-        private System.Windows.Forms.Button btnDeclineTransfer;
         private System.Windows.Forms.Label lblName;
         private System.Windows.Forms.Label lblRevision;
         private System.Windows.Forms.Label lblDimensions;

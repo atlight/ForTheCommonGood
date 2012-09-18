@@ -68,7 +68,6 @@ namespace ForTheCommonGood
             //lblCategoryHint.Text = Localization.GetString("DontForgetToCategorize_Label") + " " + Localization.GetString("HotcatHint_Label");
             lnkGoogleImageSearch.Text = Localization.GetString("GoogleCheck_Hyperlink");
             lblDeclineTransfer.Text = Localization.GetString("IfIneligible_Label");
-            btnDeclineTransfer.Text = Localization.GetString("DeclineTransfer_Button");
             lblExifNotice.Text = Localization.GetString("NoExifRotation_Label");
             lblStatus.Text = Localization.GetString("Loading");
 
@@ -262,22 +261,6 @@ namespace ForTheCommonGood
                         return;
                     }
                 }
-                //if (textLowercase.Contains("{{db-"))
-                //    potentialProblems.Add("• The file appears to be tagged for speedy deletion.");
-                //if (textLowercase.Contains("{{di-"))
-                //    potentialProblems.Add("• The file is tagged with a dated (DI) deletion tag.");
-                //if (textLowercase.Contains("{{puf"))
-                //    potentialProblems.Add("• The file appears to be listed at PUF (Possibly unfree files). Check the discussion before transferring.");
-                //if (textLowercase.Contains("{{ffd"))
-                //    potentialProblems.Add("• The file appears to be nominated for deletion. Check the deletion discussion at FFD before transferring.");
-                //if (textLowercase.Contains("{{non-free"))
-                //    potentialProblems.Add("• The file appears to be non-free. Commons cannot accept non-free files.");
-                //if (Regex.IsMatch(text, "{{do not (copy|move) to commons", RegexOptions.IgnoreCase))
-                //    potentialProblems.Add("• The file is tagged with {{do not move to Commons}}.");
-                //if (Regex.IsMatch(text, "{{(keep ?local|nocommons)", RegexOptions.IgnoreCase))
-                //    potentialProblems.Add("• The file is tagged with {{keep local}} - do not delete the local file afterwards.");
-                //if (textLowercase.Contains("{{split media"))
-                //    potentialProblems.Add("• The file is tagged with {{split media}}. Click \"Select version...\" above to view earlier versions;  you may need to transfer each one separately.");
                 foreach (LocalWikiData.PotentialProblem problem in LocalWikiData.PotentialProblems)
                 {
                     if (problem.IsRegex ?
@@ -1149,71 +1132,74 @@ namespace ForTheCommonGood
                 action();
         }
 
-        private void DeclineTransfer(object sender, EventArgs e)
-        {
-            Action action = delegate()
-            {
-                string summary = frmPrompt.Prompt(Localization.GetString("DeclineReasonPrompt1") + "\n" + Localization.GetString("DeclineReasonPrompt2"));
-                if (summary == null)
-                    return;
+        // "Decline transfer" feature removed, due to crashes
+        // Also, it was useless anyway, since bots would re-add {{copy to Commons}} regardless
 
-                EnableForm(false);
+        //private void DeclineTransfer(object sender, EventArgs e)
+        //{
+        //    Action action = delegate()
+        //    {
+        //        string summary = frmPrompt.Prompt(Localization.GetString("DeclineReasonPrompt1") + "\n" + Localization.GetString("DeclineReasonPrompt2"));
+        //        if (summary == null)
+        //            return;
 
-                StringDictionary enTokenQuery = new StringDictionary 
-                {
-                    { "action", "query" },
-                    { "prop", "info|revisions" },
-                    { "intoken", "edit" },
-                    { "titles", filename },  // old filename
-                    { "rvprop", "content" }
-                };
-                MorebitsDotNet.PostApi(Wiki.Local, enTokenQuery, delegate(XmlDocument enDoc)
-                {
-                    if (enDoc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
-                    {
-                        MessageBox.Show(Localization.GetString("LocalFileDeleted"));
-                        EnableForm(true);
-                        return;
-                    }
+        //        EnableForm(false);
 
-                    string enToken = enDoc.GetElementsByTagName("page")[0].Attributes["edittoken"].Value;
+        //        StringDictionary enTokenQuery = new StringDictionary 
+        //        {
+        //            { "action", "query" },
+        //            { "prop", "info|revisions" },
+        //            { "intoken", "edit" },
+        //            { "titles", filename },  // old filename
+        //            { "rvprop", "content" }
+        //        };
+        //        MorebitsDotNet.PostApi(Wiki.Local, enTokenQuery, delegate(XmlDocument enDoc)
+        //        {
+        //            if (enDoc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
+        //            {
+        //                MessageBox.Show(Localization.GetString("LocalFileDeleted"));
+        //                EnableForm(true);
+        //                return;
+        //            }
 
-                    string enText = enDoc.GetElementsByTagName("rev")[0].FirstChild.Value;
-                    string newText =  Regex.Replace(enText, LocalWikiData.CopyToCommonsRegex, "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-                    if (enText == newText)
-                    {
-                        MessageBox.Show(Localization.GetString("CouldNotFindTag"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                        EnableForm(true);
-                        return;
-                    }
+        //            string enToken = enDoc.GetElementsByTagName("page")[0].Attributes["edittoken"].Value;
 
-                    StringDictionary enEditQuery = new StringDictionary 
-                    {
-                        { "action", "edit" },
-                        { "token", enToken },
-                        { "title", filename },
-                        { "text", newText },
-                        { "summary", "Declining {{Copy to Commons}} request: " + summary + " ([[WP:FTCG|FtCG]])" },
-                        { "nocreate", "true" }
-                    };
-                    MorebitsDotNet.PostApi(Wiki.Local, enEditQuery, delegate(XmlDocument enInnerDoc)
-                    {
-                        EnableForm(true);
-                        string editResult = enInnerDoc.GetElementsByTagName("edit")[0].Attributes["result"].Value.ToLower();
-                        if (editResult == "success")
-                            ShowWarningBox(true, "");
-                        else
-                            MessageBox.Show(Localization.GetString("FailedPlus") + " " + editResult, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }, ErrorHandler, true);
-                }, ErrorHandler, true);
-            };
+        //            string enText = enDoc.GetElementsByTagName("rev")[0].FirstChild.Value;
+        //            string newText =  Regex.Replace(enText, LocalWikiData.CopyToCommonsRegex, "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        //            if (enText == newText)
+        //            {
+        //                MessageBox.Show(Localization.GetString("CouldNotFindTag"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+        //                EnableForm(true);
+        //                return;
+        //            }
 
-            if (!MorebitsDotNet.LoginSessions[Wiki.Local].LoggedIn)
-                MorebitsDotNet.LogIn(Wiki.Local, Settings.LocalUserName, Settings.LocalPassword,
-                    action, ErrorHandler);
-            else
-                action();
-        }
+        //            StringDictionary enEditQuery = new StringDictionary 
+        //            {
+        //                { "action", "edit" },
+        //                { "token", enToken },
+        //                { "title", filename },
+        //                { "text", newText },
+        //                { "summary", "Declining {{Copy to Commons}} request: " + summary + " ([[WP:FTCG|FtCG]])" },
+        //                { "nocreate", "true" }
+        //            };
+        //            MorebitsDotNet.PostApi(Wiki.Local, enEditQuery, delegate(XmlDocument enInnerDoc)
+        //            {
+        //                EnableForm(true);
+        //                string editResult = enInnerDoc.GetElementsByTagName("edit")[0].Attributes["result"].Value.ToLower();
+        //                if (editResult == "success")
+        //                    ShowWarningBox(true, "");
+        //                else
+        //                    MessageBox.Show(Localization.GetString("FailedPlus") + " " + editResult, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //            }, ErrorHandler, true);
+        //        }, ErrorHandler, true);
+        //    };
+
+        //    if (!MorebitsDotNet.LoginSessions[Wiki.Local].LoggedIn)
+        //        MorebitsDotNet.LogIn(Wiki.Local, Settings.LocalUserName, Settings.LocalPassword,
+        //            action, ErrorHandler);
+        //    else
+        //        action();
+        //}
 
         // Misc. UI backing code
         // =====================

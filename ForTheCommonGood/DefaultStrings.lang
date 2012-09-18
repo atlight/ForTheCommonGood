@@ -37,8 +37,7 @@ HotcatHint_Label=(Click the "Wikimedia Commons" link to the right and use HotCat
 # LOCALIZATION NOTE: "check" is a noun here, I think; consider translating as "check with Google" - 
 #                    but it must be kept short!
 GoogleCheck_Hyperlink=Google check
-IfIneligible_Label=If the file is not eligible:
-DeclineTransfer_Button=&Decline transfer
+IfIneligibleEditManually_Label=If the file is not eligible, edit the file page manually to remove the free license tag.
 NoExifRotation_Label=Note: this preview does not take into account EXIF rotation
 Successful_Label=Successful
 # LOCALIZATION NOTE: "potential", adjective ~= "possible"
@@ -148,9 +147,6 @@ LocalFileDeleted=The image seems to have been deleted on your local wiki. Not su
 # LOCALIZATION NOTE: this one should end with a colon.
 NowCommonsFailed=Successful up to the point of tagging the local file with {{now commons}}:
 AlreadyDeleted=It looks like the image may have already been deleted.
-DeclineReasonPrompt1=Enter a reason for declining the Commons transfer request.
-DeclineReasonPrompt2=The {{copy to Commons}} tag will be automatically removed.
-CouldNotFindTag=Could not find the {{copy to Commons}} tag to remove. Perhaps an obscure redirect is being used.
 # LOCALIZATION NOTE: this one should end with a colon.
 FailedPlus=Failed:
 # LOCALIZATION NOTE: sense here is "it seems that all is well, but that might not be the case - I don't know".
