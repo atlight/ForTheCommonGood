@@ -158,7 +158,7 @@
             this.lblExifNotice.Name = "lblExifNotice";
             this.lblExifNotice.Size = new System.Drawing.Size(304, 13);
             this.lblExifNotice.TabIndex = 14;
-            this.lblExifNotice.Text = "Note: this preview does not take into account EXIF rotation";
+            this.lblExifNotice.Text = "<exif rotation warning>";
             // 
             // tableLayoutPanel1
             // 

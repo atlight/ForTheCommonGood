@@ -67,7 +67,7 @@ namespace ForTheCommonGood
             lnkCommonsFile.Text = Localization.GetString("ViewFilePageOnWikimediaCommons_Hyperlink");
             //lblCategoryHint.Text = Localization.GetString("DontForgetToCategorize_Label") + " " + Localization.GetString("HotcatHint_Label");
             lnkGoogleImageSearch.Text = Localization.GetString("GoogleCheck_Hyperlink");
-            lblDeclineTransfer.Text = Localization.GetString("IfIneligible_Label");
+            lblDeclineTransfer.Text = Localization.GetString("IfIneligibleEditManually_Label");
             lblExifNotice.Text = Localization.GetString("NoExifRotation_Label");
             lblStatus.Text = Localization.GetString("Loading");
 
@@ -330,6 +330,11 @@ namespace ForTheCommonGood
                 if (!textLowercase.Contains("{{information") &&
                     !Regex.IsMatch(text, "{{" + LocalWikiData.Information, RegexOptions.IgnoreCase))
                 {
+                    string detectedDesc = Regex.Replace(text, "{{[^}]*}}", "", RegexOptions.IgnoreCase);
+                    detectedDesc = Regex.Replace(detectedDesc, "==[^=]*==", "", RegexOptions.IgnoreCase);
+                    detectedDesc = detectedDesc.Split('\n')[0];
+                    text = Regex.Replace(text, Regex.Escape(detectedDesc), "", RegexOptions.IgnoreCase);
+                    
                     XmlNode exifDateNode = iis[iis.Count - 1].SelectSingleNode("metadata/metadata[@name=\"DateTime\"]");
                     string exifDate = null;
                     if (exifDateNode != null)
@@ -343,7 +348,7 @@ namespace ForTheCommonGood
                     var infoTag =
 "== {{int:filedesc}} ==\n" +
 "{{Information\n" +
-"|Description    = {{" + GetCurrentLanguageCode() + "|1=}}\n" +
+"|Description    = {{" + GetCurrentLanguageCode() + "|1=" + detectedDesc.Trim().Replace("|", "&#124;") + "}}\n" +
 "|Date           = " + (exifDate != null ? "{{according to EXIF data|" + exifDate + "}}\n" : "{{original upload date|" + FormatIsoDate(iis[iis.Count - 1]) + "}}\n") +
 "|Source         = {{own}} <!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->\n" +
 "|Author         = " + (selfLicense ? ("[[" + prefix + ":User:" + iis[iis.Count - 1].Attributes["user"].Value + "|]]\n") : "\n") +
@@ -402,6 +407,9 @@ namespace ForTheCommonGood
                         n.Attributes["comment"].Value + ")</nowiki>''";
                 }
                 text += "\n|}";
+
+                // remove multiple line breaks
+                text = Regex.Replace(text, @"[\r\n]{3,}", "\n\n");
 
                 Invoke(new Action(delegate()
                     {

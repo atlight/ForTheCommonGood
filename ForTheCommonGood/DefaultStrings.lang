@@ -37,7 +37,7 @@ HotcatHint_Label=(Click the "Wikimedia Commons" link to the right and use HotCat
 # LOCALIZATION NOTE: "check" is a noun here, I think; consider translating as "check with Google" - 
 #                    but it must be kept short!
 GoogleCheck_Hyperlink=Google check
-IfIneligibleEditManually_Label=If the file is not eligible, edit the file page manually to remove the free license tag.
+IfIneligibleEditManually_Label=If the file is not eligible, edit the file page manually and amend the license tag.
 NoExifRotation_Label=Note: this preview does not take into account EXIF rotation
 Successful_Label=Successful
 # LOCALIZATION NOTE: "potential", adjective ~= "possible"
