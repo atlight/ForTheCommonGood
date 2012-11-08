@@ -1054,7 +1054,7 @@ namespace ForTheCommonGood
                                     { "token", enToken },
                                     { "title", filename },
                                     { "text", newText },
-                                    { "summary", replaced ? "Replaced {{move to Commons}} tag with {{now Commons}} tag ([[w:en:WP:FTCG|FtCG]])" : "Added {{now Commons}} tag ([[WP:FTCG|FtCG]])" },
+                                    { "summary", replaced ? "Replaced {{move to Commons}} tag with {{now Commons}} tag ([[w:en:WP:FTCG|FtCG]])" : "Added {{now Commons}} tag ([[w:en:WP:FTCG|FtCG]])" },
                                     { "nocreate", "true" },
                                     { "redirects", "true" }
                                 };
