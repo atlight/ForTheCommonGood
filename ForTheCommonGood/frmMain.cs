@@ -119,7 +119,12 @@ namespace ForTheCommonGood
 
         string GetCurrentLanguageCode()
         {
-            return Settings.LocalDomain.Substring(0, Settings.LocalDomain.IndexOf('.'));
+            string result = Settings.LocalDomain.Substring(0, Settings.LocalDomain.IndexOf('.'));
+            if (result == "simple")
+                return "en";
+            if (result.Length > 3 && !result.Contains("-"))  // meta, species, etc
+                return "";  // don't emit a language code template
+            return result;
         }
 
         string GetCurrentInterwikiPrefix(bool forUvTemplate)
@@ -148,12 +153,15 @@ namespace ForTheCommonGood
                 case "wikiversity":
                     result = "v:";
                     break;
+                case "wikivoyage":
+                    result = "voy:";
+                    break;
                 case "wikimedia":
                     break;
                 case "mediawiki":
                     return "mw";
             }
-            return result + GetCurrentLanguageCode();
+            return result + Settings.LocalDomain.Substring(0, Settings.LocalDomain.IndexOf('.'));
         }
 
         void ShowWarningBox(bool success, string text)
@@ -345,10 +353,12 @@ namespace ForTheCommonGood
                         else
                             exifDate = null;
                     }
+
+                    string languageCode = GetCurrentLanguageCode();
                     var infoTag =
 "== {{int:filedesc}} ==\n" +
 "{{Information\n" +
-"|Description    = {{" + GetCurrentLanguageCode() + "|1=" + detectedDesc.Trim().Replace("|", "&#124;") + "}}\n" +
+"|Description    = " + (languageCode.Length > 0 ? ("{{" + languageCode + "|1=" + detectedDesc.Trim().Replace("|", "&#124;") + "}}") : detectedDesc.Trim().Replace("|", "&#124;")) + "\n" +
 "|Date           = " + (exifDate != null ? "{{according to EXIF data|" + exifDate + "}}\n" : "{{original upload date|" + FormatIsoDate(iis[iis.Count - 1]) + "}}\n") +
 "|Source         = {{own}} <!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->\n" +
 "|Author         = " + (selfLicense ? ("[[" + prefix + ":User:" + iis[iis.Count - 1].Attributes["user"].Value + "|]]\n") : "\n") +
