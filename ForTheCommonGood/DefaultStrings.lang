@@ -195,10 +195,10 @@ WelcomeToFtcg_IsGood1=It's a great way to quickly transfer free files to Commons
 WelcomeToFtcg_IsGood2=
 WelcomeToFtcg_GetStarted1=To get started, either
 WelcomeToFtcg_GetStarted2=1. enter the name of a file to transfer, and click "Go", or
-# LOCALIZATION NOTE: no longer than 59 characters
+# LOCALIZATION NOTE: GetStarted3 must be no longer than 59 characters
 WelcomeToFtcg_GetStarted3=
 WelcomeToFtcg_GetStarted4=2. click "Random file" to traverse a chosen category at random
-# LOCALIZATION NOTE: no longer than 59 characters
+# LOCALIZATION NOTE: GetStarted5 must be no longer than 59 characters
 WelcomeToFtcg_GetStarted5=
 # LOCALIZATION NOTE: "Transfer" should be the same as the "Transfer_Button" string
 WelcomeToFtcg_NotABludge1=IMPORTANT: FtCG doesn't do all your work for you.
