@@ -104,7 +104,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnCancel.Location = new System.Drawing.Point(615, 240);
@@ -116,7 +116,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnOK.Location = new System.Drawing.Point(535, 240);
             this.btnOK.Name = "btnOK";
@@ -196,7 +196,7 @@
             // 
             // lblLocalSysopHint
             // 
-            this.lblLocalSysopHint.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.lblLocalSysopHint.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLocalSysopHint.Location = new System.Drawing.Point(24, 127);
             this.lblLocalSysopHint.Name = "lblLocalSysopHint";
             this.lblLocalSysopHint.Size = new System.Drawing.Size(280, 40);
@@ -208,7 +208,7 @@
             this.chkLocalSameAsCommons.AutoSize = true;
             this.chkLocalSameAsCommons.Location = new System.Drawing.Point(10, 42);
             this.chkLocalSameAsCommons.Name = "chkLocalSameAsCommons";
-            this.chkLocalSameAsCommons.Size = new System.Drawing.Size(157, 17);
+            this.chkLocalSameAsCommons.Size = new System.Drawing.Size(154, 17);
             this.chkLocalSameAsCommons.TabIndex = 3;
             this.chkLocalSameAsCommons.Text = "<same creds as commons>";
             this.chkLocalSameAsCommons.UseVisualStyleBackColor = true;
@@ -219,7 +219,7 @@
             this.chkLocalSysop.AutoSize = true;
             this.chkLocalSysop.Location = new System.Drawing.Point(10, 109);
             this.chkLocalSysop.Name = "chkLocalSysop";
-            this.chkLocalSysop.Size = new System.Drawing.Size(70, 17);
+            this.chkLocalSysop.Size = new System.Drawing.Size(66, 17);
             this.chkLocalSysop.TabIndex = 8;
             this.chkLocalSysop.Text = "<admin>";
             this.chkLocalSysop.UseVisualStyleBackColor = true;
@@ -253,8 +253,8 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Location = new System.Drawing.Point(8, 270);
             this.panel1.Name = "panel1";
@@ -263,7 +263,7 @@
             // 
             // lblVersion
             // 
-            this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblVersion.AutoSize = true;
             this.lblVersion.Location = new System.Drawing.Point(8, 294);
             this.lblVersion.Name = "lblVersion";
@@ -274,7 +274,7 @@
             // 
             // lnkThisThatOther
             // 
-            this.lnkThisThatOther.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lnkThisThatOther.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkThisThatOther.AutoSize = true;
             this.lnkThisThatOther.Location = new System.Drawing.Point(8, 314);
             this.lnkThisThatOther.Name = "lnkThisThatOther";
@@ -286,7 +286,7 @@
             // 
             // lblLicense
             // 
-            this.lblLicense.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblLicense.AutoSize = true;
             this.lblLicense.Location = new System.Drawing.Point(8, 330);
             this.lblLicense.Name = "lblLicense";
@@ -297,9 +297,9 @@
             // 
             // lnkAppName
             // 
-            this.lnkAppName.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lnkAppName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkAppName.AutoSize = true;
-            this.lnkAppName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.lnkAppName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lnkAppName.Location = new System.Drawing.Point(8, 278);
             this.lnkAppName.Name = "lnkAppName";
             this.lnkAppName.Size = new System.Drawing.Size(131, 18);
@@ -454,7 +454,7 @@
             this.Controls.Add(this.grpCommons);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

@@ -79,12 +79,12 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.panWarning.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.icoWarning)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoWarning)).BeginInit();
             this.panRoot.SuspendLayout();
             this.panFileLinks.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panStatus.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.icoInfo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoInfo)).BeginInit();
             this.SuspendLayout();
             // 
             // lblOriginalFilename
@@ -116,7 +116,7 @@
             // textBox2
             // 
             this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.textBox2.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox2.Location = new System.Drawing.Point(3, 16);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
@@ -131,7 +131,7 @@
             // 
             this.textBox3.AcceptsReturn = true;
             this.textBox3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox3.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.textBox3.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox3.Location = new System.Drawing.Point(475, 16);
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
@@ -142,7 +142,7 @@
             // 
             // btnTransfer
             // 
-            this.btnTransfer.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTransfer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTransfer.Location = new System.Drawing.Point(840, 399);
             this.btnTransfer.Name = "btnTransfer";
             this.btnTransfer.Size = new System.Drawing.Size(112, 23);
@@ -153,7 +153,7 @@
             // 
             // lblExifNotice
             // 
-            this.lblExifNotice.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblExifNotice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblExifNotice.Location = new System.Drawing.Point(320, 499);
             this.lblExifNotice.Name = "lblExifNotice";
             this.lblExifNotice.Size = new System.Drawing.Size(304, 13);
@@ -162,9 +162,9 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -200,7 +200,7 @@
             // 
             // lblNormName
             // 
-            this.lblNormName.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblNormName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblNormName.AutoSize = true;
             this.lblNormName.Location = new System.Drawing.Point(704, 307);
             this.lblNormName.Name = "lblNormName";
@@ -210,7 +210,7 @@
             // 
             // txtNormName
             // 
-            this.txtNormName.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtNormName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNormName.Location = new System.Drawing.Point(704, 323);
             this.txtNormName.Name = "txtNormName";
             this.txtNormName.Size = new System.Drawing.Size(248, 21);
@@ -218,7 +218,7 @@
             // 
             // btnSettings
             // 
-            this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSettings.Location = new System.Drawing.Point(868, 8);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(84, 23);
@@ -229,7 +229,7 @@
             // 
             // chkIgnoreWarnings
             // 
-            this.chkIgnoreWarnings.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkIgnoreWarnings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkIgnoreWarnings.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.chkIgnoreWarnings.Location = new System.Drawing.Point(707, 350);
             this.chkIgnoreWarnings.Name = "chkIgnoreWarnings";
@@ -241,7 +241,7 @@
             // 
             // lnkLocalFile
             // 
-            this.lnkLocalFile.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkLocalFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkLocalFile.Enabled = false;
             this.lnkLocalFile.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkLocalFile.Location = new System.Drawing.Point(704, 428);
@@ -254,7 +254,7 @@
             // 
             // lnkCommonsFile
             // 
-            this.lnkCommonsFile.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkCommonsFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkCommonsFile.Enabled = false;
             this.lnkCommonsFile.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkCommonsFile.Location = new System.Drawing.Point(704, 448);
@@ -285,7 +285,7 @@
             // 
             // chkDeleteAfter
             // 
-            this.chkDeleteAfter.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkDeleteAfter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.chkDeleteAfter.Checked = true;
             this.chkDeleteAfter.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDeleteAfter.Location = new System.Drawing.Point(707, 369);
@@ -319,10 +319,10 @@
             // 
             // lblName
             // 
-            this.lblName.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblName.AutoEllipsis = true;
-            this.lblName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.lblName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblName.Location = new System.Drawing.Point(320, 307);
             this.lblName.Name = "lblName";
             this.lblName.Size = new System.Drawing.Size(360, 13);
@@ -331,7 +331,7 @@
             // 
             // lblRevision
             // 
-            this.lblRevision.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblRevision.Location = new System.Drawing.Point(320, 325);
             this.lblRevision.Name = "lblRevision";
             this.lblRevision.Size = new System.Drawing.Size(232, 13);
@@ -339,7 +339,7 @@
             // 
             // lblDimensions
             // 
-            this.lblDimensions.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblDimensions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDimensions.Location = new System.Drawing.Point(320, 343);
             this.lblDimensions.Name = "lblDimensions";
             this.lblDimensions.Size = new System.Drawing.Size(232, 13);
@@ -347,7 +347,7 @@
             // 
             // lblPastRevisions
             // 
-            this.lblPastRevisions.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPastRevisions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblPastRevisions.Location = new System.Drawing.Point(560, 325);
             this.lblPastRevisions.Name = "lblPastRevisions";
             this.lblPastRevisions.Size = new System.Drawing.Size(130, 13);
@@ -357,7 +357,7 @@
             // 
             // btnPastRevisions
             // 
-            this.btnPastRevisions.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnPastRevisions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnPastRevisions.Location = new System.Drawing.Point(560, 340);
             this.btnPastRevisions.Name = "btnPastRevisions";
             this.btnPastRevisions.Size = new System.Drawing.Size(112, 23);
@@ -369,8 +369,8 @@
             // 
             // panWarning
             // 
-            this.panWarning.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.panWarning.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (238)))), ((int) (((byte) (238)))));
+            this.panWarning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.panWarning.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
             this.panWarning.Controls.Add(this.lblWarningText);
             this.panWarning.Controls.Add(this.icoWarning);
             this.panWarning.Controls.Add(this.lblWarningHeading);
@@ -383,9 +383,9 @@
             // 
             // lblWarningText
             // 
-            this.lblWarningText.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblWarningText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblWarningText.Location = new System.Drawing.Point(6, 45);
             this.lblWarningText.Margin = new System.Windows.Forms.Padding(0);
             this.lblWarningText.Name = "lblWarningText";
@@ -405,7 +405,7 @@
             // lblWarningHeading
             // 
             this.lblWarningHeading.AutoSize = true;
-            this.lblWarningHeading.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.lblWarningHeading.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWarningHeading.ForeColor = System.Drawing.Color.Firebrick;
             this.lblWarningHeading.Location = new System.Drawing.Point(42, 13);
             this.lblWarningHeading.Name = "lblWarningHeading";
@@ -422,8 +422,8 @@
             this.optOther.TabIndex = 8;
             this.optOther.Text = "<other source>";
             this.optOther.UseVisualStyleBackColor = true;
-            this.optOther.Click += new System.EventHandler(this.optOther_CheckedChanged);
             this.optOther.CheckedChanged += new System.EventHandler(this.optCopyFoo_CheckedChanged);
+            this.optOther.Click += new System.EventHandler(this.optOther_CheckedChanged);
             // 
             // panRoot
             // 
@@ -470,7 +470,7 @@
             // 
             // lnkGoogleImageSearch
             // 
-            this.lnkGoogleImageSearch.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkGoogleImageSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkGoogleImageSearch.Enabled = false;
             this.lnkGoogleImageSearch.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkGoogleImageSearch.Location = new System.Drawing.Point(704, 468);
@@ -483,7 +483,7 @@
             // 
             // lnkLinkify
             // 
-            this.lnkLinkify.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkLinkify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkLinkify.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkLinkify.Location = new System.Drawing.Point(775, 55);
             this.lnkLinkify.Name = "lnkLinkify";
@@ -496,8 +496,8 @@
             // 
             // panFileLinks
             // 
-            this.panFileLinks.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panFileLinks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panFileLinks.Controls.Add(this.lblFileLinks);
             this.panFileLinks.Controls.Add(this.lnkGoToFileLink);
             this.panFileLinks.Controls.Add(this.lstFileLinks);
@@ -509,8 +509,8 @@
             // 
             // lblFileLinks
             // 
-            this.lblFileLinks.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblFileLinks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblFileLinks.AutoSize = true;
             this.lblFileLinks.Location = new System.Drawing.Point(0, 0);
             this.lblFileLinks.Name = "lblFileLinks";
@@ -520,7 +520,7 @@
             // 
             // lnkGoToFileLink
             // 
-            this.lnkGoToFileLink.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkGoToFileLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lnkGoToFileLink.Enabled = false;
             this.lnkGoToFileLink.Location = new System.Drawing.Point(67, 88);
             this.lnkGoToFileLink.Name = "lnkGoToFileLink";
@@ -533,8 +533,8 @@
             // 
             // lstFileLinks
             // 
-            this.lstFileLinks.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstFileLinks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstFileLinks.Items.AddRange(new object[] {
             " "});
             this.lstFileLinks.Location = new System.Drawing.Point(0, 16);
@@ -558,7 +558,7 @@
             // 
             // btnViewExif
             // 
-            this.btnViewExif.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnViewExif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnViewExif.Location = new System.Drawing.Point(560, 382);
             this.btnViewExif.Name = "btnViewExif";
             this.btnViewExif.Size = new System.Drawing.Size(112, 23);
@@ -570,7 +570,7 @@
             // 
             // lblViewExif
             // 
-            this.lblViewExif.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblViewExif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblViewExif.Location = new System.Drawing.Point(560, 367);
             this.lblViewExif.Name = "lblViewExif";
             this.lblViewExif.Size = new System.Drawing.Size(130, 13);
@@ -580,10 +580,10 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.pictureBox1.BackgroundImage = global::ForTheCommonGood.Properties.Resources.Checker_16x16;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.InitialImage = ((System.Drawing.Image) (resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
             this.pictureBox1.Location = new System.Drawing.Point(8, 307);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(304, 208);
@@ -594,7 +594,7 @@
             // 
             // lblDeclineTransfer
             // 
-            this.lblDeclineTransfer.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDeclineTransfer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDeclineTransfer.ForeColor = System.Drawing.SystemColors.GrayText;
             this.lblDeclineTransfer.Location = new System.Drawing.Point(704, 488);
             this.lblDeclineTransfer.Name = "lblDeclineTransfer";
@@ -605,7 +605,7 @@
             // 
             // panel2
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Location = new System.Drawing.Point(696, 308);
             this.panel2.Name = "panel2";
@@ -614,7 +614,7 @@
             // 
             // panStatus
             // 
-            this.panStatus.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (251)))), ((int) (((byte) (251)))), ((int) (((byte) (251)))));
+            this.panStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(251)))), ((int)(((byte)(251)))));
             this.panStatus.Controls.Add(this.lblStatusTask);
             this.panStatus.Controls.Add(this.icoInfo);
             this.panStatus.Controls.Add(this.lblStatus);
@@ -646,7 +646,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.lblStatus.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus.Location = new System.Drawing.Point(69, 10);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(76, 16);
@@ -660,28 +660,28 @@
             this.ClientSize = new System.Drawing.Size(961, 522);
             this.Controls.Add(this.panStatus);
             this.Controls.Add(this.panRoot);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MinimumSize = new System.Drawing.Size(977, 560);
             this.Name = "frmMain";
             this.Text = "For the Common Good";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.frmMain_Load);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panWarning.ResumeLayout(false);
             this.panWarning.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.icoWarning)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoWarning)).EndInit();
             this.panRoot.ResumeLayout(false);
             this.panRoot.PerformLayout();
             this.panFileLinks.ResumeLayout(false);
             this.panFileLinks.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panStatus.ResumeLayout(false);
             this.panStatus.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.icoInfo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.icoInfo)).EndInit();
             this.ResumeLayout(false);
 
         }
