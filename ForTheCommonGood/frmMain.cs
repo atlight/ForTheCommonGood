@@ -71,6 +71,38 @@ namespace ForTheCommonGood
             lblExifNotice.Text = Localization.GetString("NoExifRotation_Label");
             lblStatus.Text = Localization.GetString("Loading");
 
+            // prepare welcome text
+            StringBuilder welcome = new StringBuilder();
+            welcome.AppendLine("");
+            welcome.AppendLine(" == " + Localization.GetString("WelcomeToFtcg_Title") + " ==");
+            welcome.AppendLine("");
+            welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_IsGood1"));
+            if (Localization.GetString("WelcomeToFtcg_IsGood2") != "")
+                welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_IsGood2"));
+            welcome.AppendLine("");
+            welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_GetStarted1"));
+            if (Localization.GetString("WelcomeToFtcg_GetStarted2") != "")
+                welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_GetStarted2"));
+            if (Localization.GetString("WelcomeToFtcg_GetStarted3") != "")
+                welcome.AppendLine("    " + Localization.GetString("WelcomeToFtcg_GetStarted3"));
+            if (Localization.GetString("WelcomeToFtcg_GetStarted4") != "")
+                welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_GetStarted4"));
+            if (Localization.GetString("WelcomeToFtcg_GetStarted5") != "")
+                welcome.AppendLine("    " + Localization.GetString("WelcomeToFtcg_GetStarted5"));
+            welcome.AppendLine("");
+            welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_NotABludge1"));
+            if (Localization.GetString("WelcomeToFtcg_NotABludge2") != "")
+                welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_NotABludge2"));
+            if (Localization.GetString("WelcomeToFtcg_NotABludge3") != "")
+                welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_NotABludge3"));
+            if (Localization.GetString("WelcomeToFtcg_NotABludge4") != "")
+                welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_NotABludge4"));
+            if (Localization.GetString("WelcomeToFtcg_NotABludge5") != "")
+                welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_NotABludge5"));
+            welcome.AppendLine("");
+            welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_Enjoy"));
+            textBox2.Text = welcome.ToString();
+
             // time to load settings
             if (File.Exists("ForTheCommonGood.cfg"))
             {
@@ -1129,7 +1161,7 @@ namespace ForTheCommonGood
                     StringDictionary deleteQuery = new StringDictionary 
                     {
                         { "action", "delete" },
-                        { "reason", "[[WP:CSD#F8|F8]]: Media file available on Commons: [[" + lnkCommonsFile.Tag.ToString() + "]]" },
+                        { "reason", LocalWikiData.NowCommonsDeletionSummary + ": [[" + lnkCommonsFile.Tag.ToString() + "]]" },
                         { "token", token },
                         { "title", filename },
                         { "redirects", "true" }
@@ -1138,7 +1170,11 @@ namespace ForTheCommonGood
                     MorebitsDotNet.PostApi(Wiki.Local, deleteQuery, delegate(XmlDocument innerDoc)
                     {
                         EnableForm(true);
-                        MessageBox.Show(Localization.GetString("LooksGood"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ShowWarningBox(true, Localization.GetString("LooksGood") + " " + Localization.GetString("DontForgetToCategorize_Label"));
+                        if (Settings.OpenBrowserAutomatically)
+                            lnkCommonsFile_LinkClicked(null, null);
+                        if (CurrentFileSource != FileSources.Category)
+                            Invoke(new Action(delegate() { btnRandomFile.Focus(); }));
                     }, ErrorHandler);
                 }, ErrorHandler);
             };

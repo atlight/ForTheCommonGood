@@ -28,6 +28,7 @@ namespace ForTheCommonGood
 
         public static string NowCommonsTag { get; private set; }
         public static string CopyToCommonsRegex { get; private set; }
+        public static string NowCommonsDeletionSummary { get; private set; }
 
         public static string Summary { get; private set; }
         public static string Licensing { get; private set; }
@@ -52,6 +53,7 @@ namespace ForTheCommonGood
             Replacements = new StringDictionary();
             SelfLicenseReplacements = new StringDictionary();
             DefaultCategory = "1";
+            NowCommonsDeletionSummary = "Media file now available on Commons";
 
             for (int i = 0; i < lines.Length; i++)
             {

@@ -25,6 +25,7 @@ CategoryNamespace=Category
 CopyToCommonsRegex={{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*}}\n?
 
 NowCommonsTag=now Commons
+NowCommonsDeletionSummary=[[WP:CSD#F8|F8]]: Media file available on Commons
 
 [PotentialProblem]
 IfContains={{db-

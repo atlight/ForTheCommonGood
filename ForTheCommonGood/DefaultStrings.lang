@@ -1,4 +1,10 @@
-﻿LanguageCode=en
+﻿# For the Common Good
+# Language file for English
+
+# To ensure the highest quality of translation, please read the LOCALIZATION NOTE lines.
+# You do not need to translate lines beginning with the # symbol.
+
+LanguageCode=en
 
 # Main window
 OriginalFileName_TextBox=&Name:
@@ -94,7 +100,7 @@ SelectVersion_WindowTitle=Select version to transfer
 # LOCALIZATION NOTE: here, "preview" is a noun, not a verb
 Preview_Column=Preview
 DateTime_Column=Date/Time
-# LOCALIZATION NOTE: this column contains the "height x width (xyz bytes)" date
+# LOCALIZATION NOTE: this column contains the "height x width (xyz bytes)" data
 Dimensions_Column=Dimensions
 UserName_Column=User
 # LOCALIZATION NOTE: this is the upload log summary
@@ -177,3 +183,28 @@ MorebitsDotNet_LoginFailure=Login failure: {0}
 MorebitsDotNet_NetRequestFailure=An Internet request failed.
 MorebitsDotNet_UnknownLoginFailure=Unknown login failure.
 MorebitsDotNet_ApiError=An API error occurred.
+
+# Welcome text, shown in left-hand text box on startup
+# LOCALIZATION NOTE: this string should be no longer than 54 characters.
+WelcomeToFtcg_Title=Welcome to For the Common Good!
+# LOCALIZATION NOTE: each of these strings should be no longer than 62 characters. If you need to, 
+#                    you can use the extra line/s provided (blank in English, because we don't need them, 
+#                    but they will work if you fill them in).
+#                    Do not delete any blank entries though!!
+WelcomeToFtcg_IsGood1=It's a great way to quickly transfer free files to Commons.
+WelcomeToFtcg_IsGood2=
+WelcomeToFtcg_GetStarted1=To get started, either
+WelcomeToFtcg_GetStarted2=1. enter the name of a file to transfer, and click "Go", or
+# LOCALIZATION NOTE: no longer than 59 characters
+WelcomeToFtcg_GetStarted3=
+WelcomeToFtcg_GetStarted4=2. click "Random file" to traverse a chosen category at random
+# LOCALIZATION NOTE: no longer than 59 characters
+WelcomeToFtcg_GetStarted5=
+# LOCALIZATION NOTE: "Transfer" should be the same as the "Transfer_Button" string
+WelcomeToFtcg_NotABludge1=IMPORTANT: FtCG doesn't do all your work for you.
+WelcomeToFtcg_NotABludge2=You *must* clean up the "auto-generated" wikitext in the
+WelcomeToFtcg_NotABludge3=right-hand panel before clicking "Transfer". 
+WelcomeToFtcg_NotABludge4=
+WelcomeToFtcg_NotABludge5=
+# LOCALIZATION NOTE: a breezy salutation to make people happy
+WelcomeToFtcg_Enjoy=Enjoy!

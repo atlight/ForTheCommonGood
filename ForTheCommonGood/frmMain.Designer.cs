@@ -124,7 +124,7 @@
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox2.Size = new System.Drawing.Size(466, 224);
             this.textBox2.TabIndex = 1;
-            this.textBox2.Text = resources.GetString("textBox2.Text");
+            this.textBox2.Text = "<blurb>";
             this.textBox2.WordWrap = false;
             // 
             // textBox3
