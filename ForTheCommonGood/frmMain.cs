@@ -269,6 +269,10 @@ namespace ForTheCommonGood
         {
             Invoke(new Action(delegate()
             {
+                // enable those controls which are initially disabled
+                btnTransfer.Enabled = txtNormName.Enabled = chkDeleteAfter.Enabled = 
+                    chkIgnoreWarnings.Enabled = toolBarLinks.Enabled = true;
+                
                 textBox2.Text = textBox3.Text = lblName.Text = lblRevision.Text = lblDimensions.Text = "";
                 pictureBox1.Image = null;
                 pictureBox1.Cursor = Cursors.Default;
@@ -398,10 +402,12 @@ namespace ForTheCommonGood
                     }
 
                     string languageCode = GetCurrentLanguageCode();
+                    // Note: pipe replacement was commented out because it caused problems with piped wikilinks in the
+                    // detected description. Of course, now any literal pipes will cause problems...
                     var infoTag =
 "== {{int:filedesc}} ==\n" +
 "{{Information\n" +
-"|Description    = " + (languageCode.Length > 0 ? ("{{" + languageCode + "|1=" + detectedDesc.Trim().Replace("|", "&#124;") + "}}") : detectedDesc.Trim().Replace("|", "&#124;")) + "\n" +
+"|Description    = " + (languageCode.Length > 0 ? ("{{" + languageCode + "|1=" + detectedDesc.Trim()/*.Replace("|", "&#124;")*/ + "}}") : detectedDesc.Trim().Replace("|", "&#124;")) + "\n" +
 "|Date           = " + (exifDate != null ? "{{according to EXIF data|" + exifDate + "}}\n" : "{{original upload date|" + FormatIsoDate(iis[iis.Count - 1]) + "}}\n") +
 "|Source         = {{own}} <!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->\n" +
 "|Author         = " + (selfLicense ? ("[[" + prefix + ":User:" + iis[iis.Count - 1].Attributes["user"].Value + "|]]\n") : "\n") +
@@ -1704,10 +1710,6 @@ namespace ForTheCommonGood
                 // remove section-edit links
                 string pageHtml = l[0].InnerText;
                 pageHtml = Regex.Replace(pageHtml, @"<span class=""editsection"">\[(.+)\]</span>\s*", "");
-
-                // add "target" to links  TODO
-                //pageHtml = Regex.Replace(pageHtml, @"<span class=""editsection"">\[(.+)\]</span>\s*", "");
-
 
                 prv.Invoke(new Action(delegate()
                     {

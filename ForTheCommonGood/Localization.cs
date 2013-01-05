@@ -16,21 +16,21 @@ namespace ForTheCommonGood
         internal static string GetString(string key)
         {
 #if DEBUG
-            if ((Localized ? CurrentStrings[key] : DefaultStrings[key]) == null)
+            if (CurrentStrings[key] == null)
                 System.Diagnostics.Debugger.Break();
 #endif
-            return (Localized ? CurrentStrings[key] : DefaultStrings[key]) ?? key;
+            return (CurrentStrings[key] ?? DefaultStrings[key]) ?? key;
         }
 
         internal static string GetString(string key, params string[] arguments)
         {
 #if DEBUG
-            if ((Localized ? CurrentStrings[key] : DefaultStrings[key]) == null)
+            if (CurrentStrings[key] == null)
                 System.Diagnostics.Debugger.Break();
 #endif
-            return (Localized ?
-                (CurrentStrings[key] == null ? key : String.Format(CurrentStrings[key], arguments)) :
-                (DefaultStrings[key] == null ? key : String.Format(DefaultStrings[key], arguments)));
+            return (CurrentStrings[key] == null ?
+                (String.Format(DefaultStrings[key], arguments) ?? key) :
+                String.Format(CurrentStrings[key], arguments));
         }
 
         internal static bool Localized { get; private set; }
@@ -53,6 +53,8 @@ namespace ForTheCommonGood
                     if (l.Length > 0 && !l.StartsWith("#"))
                         CurrentStrings.Add(l.Substring(0, l.IndexOf("=")), l.Substring(l.IndexOf("=") + 1));
             }
+            else
+                CurrentStrings = DefaultStrings;
         }
     }
 }
