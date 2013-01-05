@@ -50,6 +50,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -59,6 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPreview.Designer.cs">
+      <DependentUpon>frmPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmRandomSource.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +104,9 @@
     <Compile Include="MorebitsDotNet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmPreview.resx">
+      <DependentUpon>frmPreview.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmRandomSource.resx">
       <DependentUpon>frmRandomSource.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -152,8 +165,12 @@
     <None Include="Resources\Information_icon4.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Default.ico" />
     <Content Include="ForTheCommonGood.lang">
     </Content>
+    <None Include="Resources\Internet_link_02p.png" />
+    <None Include="Resources\Internet_link_02.png" />
+    <None Include="Resources\Magnifying_glass_icon.png" />
     <None Include="DefaultStrings.lang" />
     <None Include="en.wikipedia.wiki" />
     <None Include="Resources\ZOOMIN.CUR" />

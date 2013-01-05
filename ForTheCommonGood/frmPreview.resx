@@ -117,33 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Ambox_notice" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Ambox_notice.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Checker_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Checker-16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Imbox_content" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Imbox_content.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DefaultStrings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\defaultstrings.lang;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Information_icon4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Information_icon4.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="zoomin_cur" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ZOOMIN.CUR;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="en_wikipedia" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\en.wikipedia.wiki;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Internet_link_02" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Internet_link_02p.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Magnifying_glass_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Magnifying_glass_icon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

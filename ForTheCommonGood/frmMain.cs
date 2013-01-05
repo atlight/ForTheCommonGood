@@ -35,6 +35,14 @@ namespace ForTheCommonGood
         Cursor ZoomInCursor;
         TextureBrush checker;
 
+        class SimpleToolStripRenderer: ToolStripSystemRenderer
+        {
+            protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
+            {
+                // do nothing
+            }
+        }
+
         public frmMain()
         {
             InitializeComponent();
@@ -54,7 +62,8 @@ namespace ForTheCommonGood
             optOther.Text = Localization.GetString("OtherSource_Option");
             btnSettings.Text = Localization.GetString("Settings_Button");
             lblCommonsFileDesc.Text = Localization.GetString("FilePageOnCommons_TextBox");
-            lnkLinkify.Text = Localization.GetString("MakeSelectedTextIntoWikilink_Hyperlink");
+            btnLinkify.Text = Localization.GetString("MakeSelectedTextIntoWikilink_Hyperlink");
+            btnPreview.Text = Localization.GetString("PreviewCommonsWikitext_Hyperlink");
             btnPastRevisions.Text = Localization.GetString("SelectVersion_Button");
             lblViewExif.Text = Localization.GetString("ContainsExifMetadata_Label");
             btnViewExif.Text = Localization.GetString("ViewMetadata_Button");
@@ -102,6 +111,8 @@ namespace ForTheCommonGood
             welcome.AppendLine("");
             welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_Enjoy"));
             textBox2.Text = welcome.ToString();
+
+            toolBarLinks.Renderer = new SimpleToolStripRenderer();
 
             // time to load settings
             if (File.Exists("ForTheCommonGood.cfg"))
@@ -1649,7 +1660,7 @@ namespace ForTheCommonGood
             }
         }
 
-        private void lnkLinkify_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkLinkify_LinkClicked(object sender, EventArgs e)
         {
             int oldSelectionStart = textBox3.SelectionStart;
             int oldSelectionLength = textBox3.SelectionLength;
@@ -1657,6 +1668,56 @@ namespace ForTheCommonGood
                 .Insert(oldSelectionStart, "[[" + GetCurrentInterwikiPrefix(false) + ":");
             textBox3.Focus();
             textBox3.Select(oldSelectionStart, oldSelectionLength + 9);
+        }
+
+        private void lnkPreviewWikitext_LinkClicked(object sender, EventArgs e)
+        {
+            frmPreview prv = new frmPreview();
+
+            prv.CreateControl();
+            IntPtr bogus = prv.Handle;  // seems needed, to force WinForms to actually create the form
+
+            prv.BeginInvoke(new Action(delegate()
+            {
+                prv.ShowDialog();
+            }));
+
+            StringDictionary query = new StringDictionary 
+            {
+                { "action", "parse" },
+                { "prop", "text" },
+                { "pst", "true" },
+                { "text", textBox3.Text },
+                { "title", txtNormName.Text }
+            };
+            MorebitsDotNet.PostApi(Wiki.Commons, query, delegate(XmlDocument doc)
+            {
+                XmlNodeList l = doc.GetElementsByTagName("parse");
+                if (l.Count < 1)
+                {
+                    MessageBox.Show(Localization.GetString("ParsePageFailed"),
+                        Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information); // TODO - error message better
+                    prv.Invoke(new Action(prv.Close));
+                    return;
+                }
+
+                // remove section-edit links
+                string pageHtml = l[0].InnerText;
+                pageHtml = Regex.Replace(pageHtml, @"<span class=""editsection"">\[(.+)\]</span>\s*", "");
+
+                // add "target" to links  TODO
+                //pageHtml = Regex.Replace(pageHtml, @"<span class=""editsection"">\[(.+)\]</span>\s*", "");
+
+
+                prv.Invoke(new Action(delegate()
+                    {
+                        prv.webBrowser1.Document.Write(frmPreview.css + pageHtml);
+                    }));
+
+            }, delegate(string msg) {
+                ErrorHandler(msg);
+                prv.Invoke(new Action(prv.Close));
+            });
         }
 
         private void lnkGoogleImageSearch_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

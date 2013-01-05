@@ -75,7 +75,13 @@ namespace ForTheCommonGood.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LanguageCode=en
+        ///   Looks up a localized string similar to # For the Common Good
+        ///# Language file for English
+        ///
+        ///# To ensure the highest quality of translation, please read the LOCALIZATION NOTE lines.
+        ///# You do not need to translate lines beginning with the # symbol.
+        ///
+        ///LanguageCode=en
         ///
         ///# Main window
         ///OriginalFileName_TextBox=&amp;Name:
@@ -84,11 +90,7 @@ namespace ForTheCommonGood.Properties {
         ///# LOCALIZATION NOTE: this should have the same access key as &quot;RandomFile_Button&quot;
         ///NextFileInList_Button=Next file f&amp;rom list
         ///OtherSource_Option=&amp;Other source...
-        ///Settings_Button=&amp;Settings...
-        ///FilePageOnLocalWiki_TextBox_Format=File description &amp;page on {0}
-        ///FilePageOnCommons_TextBox=File description page on Wi&amp;kimedia Commons
-        ///MakeSelectedTextIntoWikilink_Hyperlink=Linkify selected te&amp;xt
-        ///Curre [rest of string was truncated]&quot;;.
+        ///Settings_Button=&amp;Setti [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DefaultStrings {
             get {
@@ -100,23 +102,19 @@ namespace ForTheCommonGood.Properties {
         ///   Looks up a localized string similar to # For the Common Good
         ///# Local wiki data for English Wikipedia (built into FtCG)
         ///
+        ///# See http://en.wikipedia.org/wiki/User:This,_that_and_the_other/For_the_Common_Good/Local_wiki_data
+        ///# for a template you can use to create your own local wiki data files.
+        ///
         ///LocalDomain=en.wikipedia (Default)
+        ///
+        ///LocalFtcgPage=WP:FTCG
         ///
         ///Category1=Copy to Wikimedia Commons
         ///Category2=Copy to Wikimedia Commons (bot-assessed)
         ///Category3=Move to Commons Priority Candidates
         ///DefaultCategory=3
         ///
-        ///# These are ignored on enwiki at the moment, since they are unnecessary
-        ///Information=Information
-        ///Description=Description
-        ///Date=Date
-        ///Source=Source
-        ///Author=Author
-        ///Permission=Permission
-        ///Other_versions=Other_versions
-        ///
-        ///Summary=Summa [rest of string was truncated]&quot;;.
+        ///# These are ignored on enwiki at [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string en_wikipedia {
             get {
@@ -138,9 +136,16 @@ namespace ForTheCommonGood.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Throbber_dark {
+        internal static System.Drawing.Bitmap Internet_link_02 {
             get {
-                object obj = ResourceManager.GetObject("Throbber_dark", resourceCulture);
+                object obj = ResourceManager.GetObject("Internet_link_02", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Magnifying_glass_icon {
+            get {
+                object obj = ResourceManager.GetObject("Magnifying_glass_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

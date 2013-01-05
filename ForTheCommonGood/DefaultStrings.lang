@@ -17,6 +17,7 @@ Settings_Button=&Settings...
 FilePageOnLocalWiki_TextBox_Format=File description &page on {0}
 FilePageOnCommons_TextBox=File description page on Wi&kimedia Commons
 MakeSelectedTextIntoWikilink_Hyperlink=Linkify selected te&xt
+PreviewCommonsWikitext_Hyperlink=Preview wikitext
 CurrentVersion_Label=Current version
 OldVersion_Label=Old version
 Bytes_Format={0} bytes
@@ -177,6 +178,7 @@ LocalWikiDataLoadFailed=Failed to load local wiki data file. Please make sure al
 FileNotFoundLocal=The file "{0}" could not be found.
 LocalWikiDataWrongDomain=The data file you chose is intended for use on {0}. It is suggested that you change the "local wiki" option to match.
 LocalWikiDataReset=The default data file is intended for use on English Wikipedia (en.wikipedia). You should change the "local wiki" option to "en.wikipedia" for optimum performance.
+ParsePageFailed=Failed to fetch the preview from the server.
 
 # Network errors
 MorebitsDotNet_LoginFailure=Login failure: {0}
