@@ -63,9 +63,11 @@
             this.btnLocalDataLoad = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.chkUseHttps = new System.Windows.Forms.CheckBox();
+            this.panRightSide = new System.Windows.Forms.Panel();
             this.grpCommons.SuspendLayout();
             this.grpLocal.SuspendLayout();
             this.grpLocalData.SuspendLayout();
+            this.panRightSide.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblCommonsUserName
@@ -110,7 +112,7 @@
             this.btnCancel.Location = new System.Drawing.Point(615, 240);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 7;
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "<cancel>";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -121,7 +123,7 @@
             this.btnOK.Location = new System.Drawing.Point(535, 240);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 6;
+            this.btnOK.TabIndex = 3;
             this.btnOK.Text = "<ok>";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.button2_Click);
@@ -259,7 +261,7 @@
             this.panel1.Location = new System.Drawing.Point(8, 270);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(680, 1);
-            this.panel1.TabIndex = 8;
+            this.panel1.TabIndex = 5;
             // 
             // lblVersion
             // 
@@ -268,7 +270,7 @@
             this.lblVersion.Location = new System.Drawing.Point(8, 294);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(56, 18);
-            this.lblVersion.TabIndex = 10;
+            this.lblVersion.TabIndex = 7;
             this.lblVersion.Text = "<version>";
             this.lblVersion.UseCompatibleTextRendering = true;
             // 
@@ -279,7 +281,7 @@
             this.lnkThisThatOther.Location = new System.Drawing.Point(8, 314);
             this.lnkThisThatOther.Name = "lnkThisThatOther";
             this.lnkThisThatOther.Size = new System.Drawing.Size(52, 13);
-            this.lnkThisThatOther.TabIndex = 11;
+            this.lnkThisThatOther.TabIndex = 8;
             this.lnkThisThatOther.TabStop = true;
             this.lnkThisThatOther.Text = "<by tto>";
             this.lnkThisThatOther.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
@@ -291,7 +293,7 @@
             this.lblLicense.Location = new System.Drawing.Point(8, 330);
             this.lblLicense.Name = "lblLicense";
             this.lblLicense.Size = new System.Drawing.Size(90, 18);
-            this.lblLicense.TabIndex = 12;
+            this.lblLicense.TabIndex = 9;
             this.lblLicense.Text = "<public domain>";
             this.lblLicense.UseCompatibleTextRendering = true;
             // 
@@ -303,7 +305,7 @@
             this.lnkAppName.Location = new System.Drawing.Point(8, 278);
             this.lnkAppName.Name = "lnkAppName";
             this.lnkAppName.Size = new System.Drawing.Size(131, 18);
-            this.lnkAppName.TabIndex = 9;
+            this.lnkAppName.TabIndex = 6;
             this.lnkAppName.TabStop = true;
             this.lnkAppName.Text = "For the Common Good";
             this.lnkAppName.UseCompatibleTextRendering = true;
@@ -312,20 +314,22 @@
             // chkLogTransfers
             // 
             this.chkLogTransfers.AutoSize = true;
-            this.chkLogTransfers.Location = new System.Drawing.Point(330, 102);
+            this.chkLogTransfers.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.chkLogTransfers.Location = new System.Drawing.Point(2, 94);
             this.chkLogTransfers.Name = "chkLogTransfers";
-            this.chkLogTransfers.Size = new System.Drawing.Size(103, 17);
-            this.chkLogTransfers.TabIndex = 5;
+            this.chkLogTransfers.Size = new System.Drawing.Size(109, 18);
+            this.chkLogTransfers.TabIndex = 6;
             this.chkLogTransfers.Text = "<log transfers>";
             this.chkLogTransfers.UseVisualStyleBackColor = true;
             // 
             // chkOpenBrowserAutomatically
             // 
             this.chkOpenBrowserAutomatically.AutoSize = true;
-            this.chkOpenBrowserAutomatically.Location = new System.Drawing.Point(330, 80);
+            this.chkOpenBrowserAutomatically.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.chkOpenBrowserAutomatically.Location = new System.Drawing.Point(2, 72);
             this.chkOpenBrowserAutomatically.Name = "chkOpenBrowserAutomatically";
-            this.chkOpenBrowserAutomatically.Size = new System.Drawing.Size(110, 17);
-            this.chkOpenBrowserAutomatically.TabIndex = 4;
+            this.chkOpenBrowserAutomatically.Size = new System.Drawing.Size(116, 18);
+            this.chkOpenBrowserAutomatically.TabIndex = 5;
             this.chkOpenBrowserAutomatically.Text = "<open file page>";
             this.chkOpenBrowserAutomatically.UseMnemonic = false;
             this.chkOpenBrowserAutomatically.UseVisualStyleBackColor = true;
@@ -335,10 +339,11 @@
             this.chkAutoUpdate.AutoSize = true;
             this.chkAutoUpdate.Checked = true;
             this.chkAutoUpdate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAutoUpdate.Location = new System.Drawing.Point(330, 52);
+            this.chkAutoUpdate.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.chkAutoUpdate.Location = new System.Drawing.Point(2, 44);
             this.chkAutoUpdate.Name = "chkAutoUpdate";
-            this.chkAutoUpdate.Size = new System.Drawing.Size(101, 17);
-            this.chkAutoUpdate.TabIndex = 3;
+            this.chkAutoUpdate.Size = new System.Drawing.Size(107, 18);
+            this.chkAutoUpdate.TabIndex = 4;
             this.chkAutoUpdate.Text = "<auto update>";
             this.chkAutoUpdate.UseVisualStyleBackColor = true;
             // 
@@ -347,9 +352,10 @@
             this.chkSaveCreds.AutoSize = true;
             this.chkSaveCreds.Checked = true;
             this.chkSaveCreds.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSaveCreds.Location = new System.Drawing.Point(330, 8);
+            this.chkSaveCreds.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.chkSaveCreds.Location = new System.Drawing.Point(2, 0);
             this.chkSaveCreds.Name = "chkSaveCreds";
-            this.chkSaveCreds.Size = new System.Drawing.Size(153, 17);
+            this.chkSaveCreds.Size = new System.Drawing.Size(159, 18);
             this.chkSaveCreds.TabIndex = 2;
             this.chkSaveCreds.Text = "<save passwords to disk>";
             this.chkSaveCreds.UseVisualStyleBackColor = true;
@@ -359,7 +365,7 @@
             this.lblLocalDataHint.Location = new System.Drawing.Point(10, 20);
             this.lblLocalDataHint.Name = "lblLocalDataHint";
             this.lblLocalDataHint.Size = new System.Drawing.Size(198, 56);
-            this.lblLocalDataHint.TabIndex = 13;
+            this.lblLocalDataHint.TabIndex = 0;
             this.lblLocalDataHint.Text = "<local data hint>";
             // 
             // grpLocalData
@@ -369,20 +375,21 @@
             this.grpLocalData.Controls.Add(this.btnLocalDataReset);
             this.grpLocalData.Controls.Add(this.btnLocalDataLoad);
             this.grpLocalData.Controls.Add(this.lblLocalDataHint);
-            this.grpLocalData.Location = new System.Drawing.Point(328, 144);
+            this.grpLocalData.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.grpLocalData.Location = new System.Drawing.Point(0, 136);
             this.grpLocalData.Name = "grpLocalData";
             this.grpLocalData.Size = new System.Drawing.Size(360, 84);
-            this.grpLocalData.TabIndex = 14;
+            this.grpLocalData.TabIndex = 7;
             this.grpLocalData.TabStop = false;
-            this.grpLocalData.Text = "Local wiki data";
+            this.grpLocalData.Text = "<local wiki data>";
             // 
             // lblLocalCurrent
             // 
             this.lblLocalCurrent.Location = new System.Drawing.Point(211, 61);
             this.lblLocalCurrent.Name = "lblLocalCurrent";
             this.lblLocalCurrent.Size = new System.Drawing.Size(144, 16);
-            this.lblLocalCurrent.TabIndex = 15;
-            this.lblLocalCurrent.Text = "en.wikipedia (Default)";
+            this.lblLocalCurrent.TabIndex = 4;
+            this.lblLocalCurrent.Text = "<wiki domain>";
             this.lblLocalCurrent.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // lblLocalCurrentLabel
@@ -391,8 +398,8 @@
             this.lblLocalCurrentLabel.Location = new System.Drawing.Point(211, 44);
             this.lblLocalCurrentLabel.Name = "lblLocalCurrentLabel";
             this.lblLocalCurrentLabel.Size = new System.Drawing.Size(144, 16);
-            this.lblLocalCurrentLabel.TabIndex = 15;
-            this.lblLocalCurrentLabel.Text = "Currently using:";
+            this.lblLocalCurrentLabel.TabIndex = 3;
+            this.lblLocalCurrentLabel.Text = "<currently using>";
             this.lblLocalCurrentLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // btnLocalDataReset
@@ -400,8 +407,8 @@
             this.btnLocalDataReset.Location = new System.Drawing.Point(288, 16);
             this.btnLocalDataReset.Name = "btnLocalDataReset";
             this.btnLocalDataReset.Size = new System.Drawing.Size(67, 23);
-            this.btnLocalDataReset.TabIndex = 14;
-            this.btnLocalDataReset.Text = "Reset";
+            this.btnLocalDataReset.TabIndex = 2;
+            this.btnLocalDataReset.Text = "<reset>";
             this.btnLocalDataReset.UseVisualStyleBackColor = true;
             this.btnLocalDataReset.Click += new System.EventHandler(this.btnLocalDataReset_Click);
             // 
@@ -410,8 +417,8 @@
             this.btnLocalDataLoad.Location = new System.Drawing.Point(208, 16);
             this.btnLocalDataLoad.Name = "btnLocalDataLoad";
             this.btnLocalDataLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnLocalDataLoad.TabIndex = 14;
-            this.btnLocalDataLoad.Text = "Load...";
+            this.btnLocalDataLoad.TabIndex = 1;
+            this.btnLocalDataLoad.Text = "<load>";
             this.btnLocalDataLoad.UseVisualStyleBackColor = true;
             this.btnLocalDataLoad.Click += new System.EventHandler(this.btnLocalDataLoad_Click);
             // 
@@ -425,12 +432,26 @@
             this.chkUseHttps.AutoSize = true;
             this.chkUseHttps.Checked = true;
             this.chkUseHttps.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkUseHttps.Location = new System.Drawing.Point(330, 30);
+            this.chkUseHttps.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.chkUseHttps.Location = new System.Drawing.Point(2, 22);
             this.chkUseHttps.Name = "chkUseHttps";
-            this.chkUseHttps.Size = new System.Drawing.Size(87, 17);
+            this.chkUseHttps.Size = new System.Drawing.Size(93, 18);
             this.chkUseHttps.TabIndex = 3;
             this.chkUseHttps.Text = "<use https>";
             this.chkUseHttps.UseVisualStyleBackColor = true;
+            // 
+            // panRightSide
+            // 
+            this.panRightSide.Controls.Add(this.chkSaveCreds);
+            this.panRightSide.Controls.Add(this.grpLocalData);
+            this.panRightSide.Controls.Add(this.chkUseHttps);
+            this.panRightSide.Controls.Add(this.chkLogTransfers);
+            this.panRightSide.Controls.Add(this.chkOpenBrowserAutomatically);
+            this.panRightSide.Controls.Add(this.chkAutoUpdate);
+            this.panRightSide.Location = new System.Drawing.Point(328, 8);
+            this.panRightSide.Name = "panRightSide";
+            this.panRightSide.Size = new System.Drawing.Size(360, 224);
+            this.panRightSide.TabIndex = 2;
             // 
             // frmSettings
             // 
@@ -439,12 +460,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(696, 350);
-            this.Controls.Add(this.grpLocalData);
-            this.Controls.Add(this.chkOpenBrowserAutomatically);
-            this.Controls.Add(this.chkSaveCreds);
-            this.Controls.Add(this.chkUseHttps);
-            this.Controls.Add(this.chkAutoUpdate);
-            this.Controls.Add(this.chkLogTransfers);
+            this.Controls.Add(this.panRightSide);
             this.Controls.Add(this.lnkAppName);
             this.Controls.Add(this.lblLicense);
             this.Controls.Add(this.lnkThisThatOther);
@@ -459,16 +475,17 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmSettings";
-            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Settings";
+            this.Text = "<settings>";
             this.Load += new System.EventHandler(this.frmLogin_Load);
             this.grpCommons.ResumeLayout(false);
             this.grpCommons.PerformLayout();
             this.grpLocal.ResumeLayout(false);
             this.grpLocal.PerformLayout();
             this.grpLocalData.ResumeLayout(false);
+            this.panRightSide.ResumeLayout(false);
+            this.panRightSide.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -511,5 +528,6 @@
         private System.Windows.Forms.Button btnLocalDataReset;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.CheckBox chkUseHttps;
+        private System.Windows.Forms.Panel panRightSide;
     }
 }

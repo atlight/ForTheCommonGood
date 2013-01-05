@@ -48,10 +48,12 @@ namespace ForTheCommonGood
             if (loginOnly)
             {
                 txtCommonsUserName.Enabled = txtLocalDomain.Enabled = txtLocalUserName.Enabled =
-                    chkOpenBrowserAutomatically.Visible = lblLocalSysopHint.Visible = chkLocalSameAsCommons.Enabled =
-                    chkLogTransfers.Visible = chkAutoUpdate.Visible = chkLocalSysop.Visible = false;
-                Text = Localization.GetString("LogIn_WindowTitle");
+                    lblLocalSysopHint.Visible = chkLocalSameAsCommons.Enabled = chkLocalSysop.Visible = 
+                    panRightSide.Visible = false;
+                Text = Localization.GetString("LogIn_WindowTitle") + " - " + Application.ProductName;
                 ClientSize = new Size(330, ClientSize.Height + 32);
+                ShowInTaskbar = true;
+                FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             }
             else
             {
@@ -114,6 +116,8 @@ namespace ForTheCommonGood
                 localWikiDataFile = Settings.LocalWikiData;
                 lblLocalCurrent.Text = LocalWikiData.LocalDomain;
             }
+            else
+                lblLocalCurrent.Text = "en.wikipedia (Default)"; // TODO: localize
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
