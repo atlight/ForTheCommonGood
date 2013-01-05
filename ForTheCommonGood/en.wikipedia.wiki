@@ -1,7 +1,12 @@
 ﻿# For the Common Good
 # Local wiki data for English Wikipedia (built into FtCG)
 
+# See http://en.wikipedia.org/wiki/User:This,_that_and_the_other/For_the_Common_Good/Local_wiki_data
+# for a template you can use to create your own local wiki data files.
+
 LocalDomain=en.wikipedia (Default)
+
+LocalFtcgPage=WP:FTCG
 
 Category1=Copy to Wikimedia Commons
 Category2=Copy to Wikimedia Commons (bot-assessed)
@@ -26,6 +31,8 @@ CopyToCommonsRegex={{(mtc|(copy |move )?to ?commons|move to wikimedia commons|co
 
 NowCommonsTag=now Commons
 NowCommonsDeletionSummary=[[WP:CSD#F8|F8]]: Media file available on Commons
+NowCommonsAddingTagEditSummary=Added {{now Commons}} tag
+NowCommonsReplacingTagEditSummary=Replaced {{move to Commons}} tag with {{now Commons}} tag
 
 [PotentialProblem]
 IfContains={{db-
@@ -100,7 +107,7 @@ LookFor={{GFDL-self-with-disclaimers([^\}]*)}}
 ReplaceWith={{GFDL-user-en-with-disclaimers|%%OriginalUploader%%$1}}
 
 [SelfLicenseReplacement]
-LookFor={{GFDL-self([^\}]*)}}
+LookFor={{GFDL-self(?:-no-disclaimers)?([^\}]*)}}
 ReplaceWith={{GFDL-user|%%OriginalUploader%%|en$1}}
 
 [SelfLicenseReplacement]

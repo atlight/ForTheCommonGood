@@ -28,11 +28,16 @@ namespace ForTheCommonGood
 
         public static string NowCommonsTag { get; private set; }
         public static string CopyToCommonsRegex { get; private set; }
-        public static string NowCommonsDeletionSummary { get; private set; }
 
         public static string Summary { get; private set; }
         public static string Licensing { get; private set; }
         public static string CategoryNamespace { get; private set; }
+
+        public static string NowCommonsDeletionSummary { get; private set; }
+        public static string NowCommonsAddingTagEditSummary { get; private set; }
+        public static string NowCommonsReplacingTagEditSummary { get; private set; }
+
+        public static string LocalFtcgPage { get; private set; }
 
         public class PotentialProblem
         {
@@ -53,7 +58,13 @@ namespace ForTheCommonGood
             Replacements = new StringDictionary();
             SelfLicenseReplacements = new StringDictionary();
             DefaultCategory = "1";
+
+            // newer properties that require default values (since they are not specified in 
+            // older .wiki files)
             NowCommonsDeletionSummary = "Media file now available on Commons";
+            NowCommonsAddingTagEditSummary = "Added {{now Commons}} tag";
+            NowCommonsReplacingTagEditSummary = "Replaced {{move to Commons}} tag with {{now Commons}} tag";
+            LocalFtcgPage = "w:en:WP:FTCG";
 
             for (int i = 0; i < lines.Length; i++)
             {

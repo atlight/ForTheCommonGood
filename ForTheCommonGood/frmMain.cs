@@ -374,7 +374,7 @@ namespace ForTheCommonGood
                     detectedDesc = Regex.Replace(detectedDesc, "==[^=]*==", "", RegexOptions.IgnoreCase);
                     detectedDesc = detectedDesc.Split('\n')[0];
                     text = Regex.Replace(text, Regex.Escape(detectedDesc), "", RegexOptions.IgnoreCase);
-                    
+
                     XmlNode exifDateNode = iis[iis.Count - 1].SelectSingleNode("metadata/metadata[@name=\"DateTime\"]");
                     string exifDate = null;
                     if (exifDateNode != null)
@@ -431,13 +431,13 @@ namespace ForTheCommonGood
                         text = Regex.Replace(text, @"\|\s*" + LocalWikiData.Other_versions + @"\s*=", "|Other_versions =", RegexOptions.IgnoreCase);
                     }
 
-                    
+
                     //text = Regex.Replace(text, @"= *I .*created this (image|work) entirely by myself.?", "= {{own}} <!-- change this if not own work -->", RegexOptions.IgnoreCase);
-                    
+
                 }
 
                 text += "\n\n== {{Original upload log}} ==\n\n{{transferred from|" +
-                    Settings.LocalDomain + "||[[:en:WP:FTCG|For the Common Good]]}} {{original description page|" + 
+                    Settings.LocalDomain + "||[[:en:WP:FTCG|For the Common Good]]}} {{original description page|" +
                     Settings.LocalDomain + "|" + Uri.EscapeDataString(filename.Substring(filename.IndexOf(':') + 1).Replace(' ', '_')) + "}}";
 
                 text += "\n\n{| class=\"wikitable\"\n! {{int:filehist-datetime}} !! {{int:filehist-dimensions}} !! {{int:filehist-user}} !! {{int:filehist-comment}}";
@@ -994,6 +994,7 @@ namespace ForTheCommonGood
                         { "action", "upload" },
                         { "filename", newFilename },
                         { "text", textBox3.Text.Replace("<!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->", "") },
+                        // Note: this upload comment is not localised, since Commons uses English as lingua franca
                         { "comment", "Transferred from " + Settings.LocalDomain + ": see original upload log above" },
                         { "token", token }
                     };
@@ -1082,7 +1083,7 @@ namespace ForTheCommonGood
 
                                 string enText = Regex.Replace(enDoc.GetElementsByTagName("rev")[0].FirstChild.Value, "{{orphan image[^}]*}}", "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
                                 string nowcommonsTag = "{{" + LocalWikiData.NowCommonsTag + "|" + txtNormName.Text + "|date=" + DateTime.UtcNow.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "}}\n";
-                                string newText =  Regex.Replace(enText, LocalWikiData.CopyToCommonsRegex, nowcommonsTag, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                                string newText = Regex.Replace(enText, LocalWikiData.CopyToCommonsRegex, nowcommonsTag, RegexOptions.IgnoreCase | RegexOptions.Compiled);
                                 bool replaced = true;
                                 if (enText == newText)
                                 {
@@ -1096,7 +1097,8 @@ namespace ForTheCommonGood
                                     { "token", enToken },
                                     { "title", filename },
                                     { "text", newText },
-                                    { "summary", replaced ? "Replaced {{move to Commons}} tag with {{now Commons}} tag ([[w:en:WP:FTCG|FtCG]])" : "Added {{now Commons}} tag ([[w:en:WP:FTCG|FtCG]])" },
+                                    { "summary", (replaced ? LocalWikiData.NowCommonsReplacingTagEditSummary : LocalWikiData.NowCommonsAddingTagEditSummary) +
+                                        " ([[" + LocalWikiData.LocalFtcgPage + "|FtCG]])" },
                                     { "nocreate", "true" },
                                     { "redirects", "true" }
                                 };
@@ -1580,7 +1582,7 @@ namespace ForTheCommonGood
                             { 
                                 Localization.GetString("EXIFFailedNotice"),
                                 Localization.GetString("EXIFFailedMessage")
-                            }) { ForeColor = SystemColors.GrayText } );
+                            }) { ForeColor = SystemColors.GrayText });
                         failures = true;
                     }
                 }
