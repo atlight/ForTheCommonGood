@@ -454,7 +454,7 @@ namespace ForTheCommonGood
                 }
 
                 text += "\n\n== {{Original upload log}} ==\n\n{{transferred from|" +
-                    Settings.LocalDomain + "||[[:en:WP:FTCG|For the Common Good]]}} {{original description page|" +
+                    Settings.LocalDomain + "||ftcg}} {{original description page|" +
                     Settings.LocalDomain + "|" + Uri.EscapeDataString(filename.Substring(filename.IndexOf(':') + 1).Replace(' ', '_')) + "}}";
 
                 text += "\n\n{| class=\"wikitable\"\n! {{int:filehist-datetime}} !! {{int:filehist-dimensions}} !! {{int:filehist-user}} !! {{int:filehist-comment}}";
