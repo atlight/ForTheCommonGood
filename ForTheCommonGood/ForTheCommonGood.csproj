@@ -165,11 +165,9 @@
     <None Include="Resources\Information_icon4.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Default.ico" />
     <Content Include="ForTheCommonGood.lang">
     </Content>
     <None Include="Resources\Internet_link_02p.png" />
-    <None Include="Resources\Internet_link_02.png" />
     <None Include="Resources\Magnifying_glass_icon.png" />
     <None Include="DefaultStrings.lang" />
     <None Include="en.wikipedia.wiki" />
