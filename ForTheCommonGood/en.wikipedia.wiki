@@ -6,7 +6,7 @@
 
 LocalDomain=en.wikipedia (Default)
 
-LocalFtcgPage=WP:FTCG
+LocalFtcgPage=w:en:WP:FTCG
 
 Category1=Copy to Wikimedia Commons
 Category2=Copy to Wikimedia Commons (bot-assessed)
