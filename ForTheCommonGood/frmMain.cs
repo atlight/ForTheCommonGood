@@ -395,7 +395,7 @@ namespace ForTheCommonGood
                     if (exifDateNode != null)
                     {
                         exifDate = exifDateNode.Attributes["value"].Value;
-                        if (Regex.IsMatch(exifDate, @"^\d\d\d\d:\d\d:\d\d"))
+                        if (Regex.IsMatch(exifDate, @"^\d\d\d\d:\d\d:\d\d") && !exifDate.StartsWith("0000"))
                             exifDate = exifDate.Substring(0, 10).Replace(':', '-');
                         else
                             exifDate = null;
