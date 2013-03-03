@@ -179,6 +179,9 @@ FileNotFoundLocal=The file "{0}" could not be found.
 LocalWikiDataWrongDomain=The data file you chose is intended for use on {0}. It is suggested that you change the "local wiki" option to match.
 LocalWikiDataReset=The default data file is intended for use on English Wikipedia (en.wikipedia). You should change the "local wiki" option to "en.wikipedia" for optimum performance.
 ParsePageFailed=Failed to fetch the preview from the server.
+# LOCALIZATION NOTE: {0} is the TalkPage localized string, {1} is something like " (1,234 bytes)"
+ContentOnTalkPage=The file has a {0}{1} - copy it over manually if relevant.
+TalkPage=talk page
 
 # Network errors
 MorebitsDotNet_LoginFailure=Login failure: {0}

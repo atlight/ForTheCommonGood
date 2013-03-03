@@ -34,6 +34,8 @@ NowCommonsDeletionSummary=[[WP:CSD#F8|F8]]: Media file available on Commons
 NowCommonsAddingTagEditSummary=Added {{now Commons}} tag
 NowCommonsReplacingTagEditSummary=Replaced {{move to Commons}} tag with {{now Commons}} tag
 
+FileTalkMinimumSize=500
+
 [PotentialProblem]
 IfContains={{db-
 Message=The file appears to be tagged for speedy deletion.

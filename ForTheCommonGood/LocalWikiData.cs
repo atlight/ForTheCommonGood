@@ -39,6 +39,8 @@ namespace ForTheCommonGood
 
         public static string LocalFtcgPage { get; private set; }
 
+        public static string FileTalkMinimumSize { get; private set; }
+
         public class PotentialProblem
         {
             public string Test { get; set; }
@@ -65,6 +67,7 @@ namespace ForTheCommonGood
             NowCommonsAddingTagEditSummary = "Added {{now Commons}} tag";
             NowCommonsReplacingTagEditSummary = "Replaced {{move to Commons}} tag with {{now Commons}} tag";
             LocalFtcgPage = "w:en:WP:FTCG";
+            FileTalkMinimumSize = "120";  // small default
 
             for (int i = 0; i < lines.Length; i++)
             {
@@ -115,6 +118,11 @@ namespace ForTheCommonGood
                     }
                 }
             }
+
+            // validate FileTalkMinimumSize
+            int dummy;
+            if (!int.TryParse(FileTalkMinimumSize, out dummy))
+                FileTalkMinimumSize = "120";
 
             PotentialProblems = problems.ToArray();
         }

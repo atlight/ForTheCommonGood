@@ -56,7 +56,6 @@
             this.lblPastRevisions = new System.Windows.Forms.Label();
             this.btnPastRevisions = new System.Windows.Forms.Button();
             this.panWarning = new System.Windows.Forms.Panel();
-            this.lblWarningText = new System.Windows.Forms.Label();
             this.icoWarning = new System.Windows.Forms.PictureBox();
             this.lblWarningHeading = new System.Windows.Forms.Label();
             this.optOther = new System.Windows.Forms.RadioButton();
@@ -78,6 +77,7 @@
             this.panStatus = new System.Windows.Forms.Panel();
             this.icoInfo = new System.Windows.Forms.PictureBox();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.panWarningTexts = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.panWarning.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoWarning)).BeginInit();
@@ -379,7 +379,7 @@
             // 
             this.panWarning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.panWarning.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(238)))), ((int)(((byte)(238)))));
-            this.panWarning.Controls.Add(this.lblWarningText);
+            this.panWarning.Controls.Add(this.panWarningTexts);
             this.panWarning.Controls.Add(this.icoWarning);
             this.panWarning.Controls.Add(this.lblWarningHeading);
             this.panWarning.Location = new System.Drawing.Point(320, 367);
@@ -388,17 +388,6 @@
             this.panWarning.TabIndex = 14;
             this.panWarning.Visible = false;
             this.panWarning.Paint += new System.Windows.Forms.PaintEventHandler(this.FmboxLookalike);
-            // 
-            // lblWarningText
-            // 
-            this.lblWarningText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblWarningText.Location = new System.Drawing.Point(6, 45);
-            this.lblWarningText.Margin = new System.Windows.Forms.Padding(0);
-            this.lblWarningText.Name = "lblWarningText";
-            this.lblWarningText.Size = new System.Drawing.Size(219, 74);
-            this.lblWarningText.TabIndex = 1;
             // 
             // icoWarning
             // 
@@ -678,6 +667,19 @@
             this.lblStatus.Text = "<loading>";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // panWarningTexts
+            // 
+            this.panWarningTexts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panWarningTexts.AutoScroll = true;
+            this.panWarningTexts.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.panWarningTexts.Location = new System.Drawing.Point(6, 45);
+            this.panWarningTexts.Name = "panWarningTexts";
+            this.panWarningTexts.Size = new System.Drawing.Size(219, 74);
+            this.panWarningTexts.TabIndex = 2;
+            this.panWarningTexts.WrapContents = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -742,7 +744,6 @@
         private System.Windows.Forms.Panel panWarning;
         private System.Windows.Forms.PictureBox icoWarning;
         private System.Windows.Forms.Label lblWarningHeading;
-        private System.Windows.Forms.Label lblWarningText;
         private System.Windows.Forms.Label lblLocalFileDesc;
         private System.Windows.Forms.Label lblCommonsFileDesc;
         private System.Windows.Forms.RadioButton optOther;
@@ -763,6 +764,7 @@
         private System.Windows.Forms.ToolStrip toolBarLinks;
         private System.Windows.Forms.ToolStripButton btnLinkify;
         private System.Windows.Forms.ToolStripButton btnPreview;
+        private System.Windows.Forms.FlowLayoutPanel panWarningTexts;
     }
 }
 

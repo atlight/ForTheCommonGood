@@ -207,37 +207,68 @@ namespace ForTheCommonGood
             return result + Settings.LocalDomain.Substring(0, Settings.LocalDomain.IndexOf('.'));
         }
 
-        void ShowWarningBox(bool success, string text)
+        enum WarningBoxType
+        {
+            Warning,
+            Success
+        }
+
+        void AddWarningCore(Control ctl, WarningBoxType type)
         {
             Invoke(new Action(delegate()
             {
-                panWarning.Visible = true;
-                lblWarningText.Text = text;
-                if (success)
+                if (!panWarning.Visible)
                 {
-                    panRoot.BackColor = Color.FromArgb(236, 255, 236);
-                    icoWarning.Image = Properties.Resources.Information_icon4;
-                    lblWarningHeading.ForeColor = Color.Green;
-                    lblWarningHeading.Text = Localization.GetString("Successful_Label");
-                    panWarning.BackColor = Color.FromArgb(222, 245, 222);
-                    panWarning.Tag = Color.FromArgb(28, 134, 28);
+                    panWarning.Visible = true;
+                    if (type == WarningBoxType.Success)
+                    {
+                        panRoot.BackColor = Color.FromArgb(236, 255, 236);
+                        icoWarning.Image = Properties.Resources.Information_icon4;
+                        lblWarningHeading.ForeColor = Color.Green;
+                        lblWarningHeading.Text = Localization.GetString("Successful_Label");
+                        panWarning.BackColor = Color.FromArgb(222, 245, 222);
+                        panWarning.Tag = Color.FromArgb(28, 134, 28);
+                    }
+                    else
+                    {
+                        panRoot.BackColor = Color.FromArgb(246, 255, 192);
+                        icoWarning.Image = Properties.Resources.Imbox_content;
+                        lblWarningHeading.ForeColor = Color.Firebrick;
+                        lblWarningHeading.Text = Localization.GetString("PotentialProblems_Label");
+                        panWarning.BackColor = Color.FromArgb(255, 238, 238);
+                        panWarning.Tag = Color.FromArgb(178, 34, 34);
+                    }
                 }
-                else
-                {
-                    panRoot.BackColor = Color.FromArgb(246, 255, 192);
-                    icoWarning.Image = Properties.Resources.Imbox_content;
-                    lblWarningHeading.ForeColor = Color.Firebrick;
-                    lblWarningHeading.Text = Localization.GetString("PotentialProblems_Label");
-                    panWarning.BackColor = Color.FromArgb(255, 238, 238);
-                    panWarning.Tag = Color.FromArgb(178, 34, 34);
-                }
+                ctl.Margin = new Padding(3, 0, 3, 3);
+                panWarningTexts.Controls.Add(ctl);
             }));
         }
 
-        void HideWarningBox()
+        void AddWarning(string text, WarningBoxType type)
+        {
+            Label label = new Label();
+            label.AutoSize = true;
+            label.Text = text;
+            AddWarningCore(label, type);
+        }
+
+        void AddWarningLink(string formatText, string linkText, LinkLabelLinkClickedEventHandler linkEvent, WarningBoxType type)
+        {
+            LinkLabel label = new LinkLabel();
+            label.AutoSize = true;
+            label.Text = String.Format(formatText, linkText);
+            label.Links.Clear();
+            label.Links.Add(formatText.IndexOf("{0}"), linkText.Length);
+            label.LinkBehavior = LinkBehavior.HoverUnderline;
+            label.LinkClicked += linkEvent;
+            AddWarningCore(label, type);
+        }
+
+        void ClearWarnings()
         {
             panWarning.Visible = false;
             panRoot.BackColor = DefaultBackColor;
+            panWarningTexts.Controls.Clear();
         }
 
         void EnableForm(bool enabled)
@@ -270,9 +301,9 @@ namespace ForTheCommonGood
             Invoke(new Action(delegate()
             {
                 // enable those controls which are initially disabled
-                btnTransfer.Enabled = txtNormName.Enabled = chkDeleteAfter.Enabled = 
+                btnTransfer.Enabled = txtNormName.Enabled = chkDeleteAfter.Enabled =
                     chkIgnoreWarnings.Enabled = toolBarLinks.Enabled = true;
-                
+
                 textBox2.Text = textBox3.Text = lblName.Text = lblRevision.Text = lblDimensions.Text = "";
                 pictureBox1.Image = null;
                 pictureBox1.Cursor = Cursors.Default;
@@ -281,7 +312,7 @@ namespace ForTheCommonGood
                 lstFileLinks.ForeColor = SystemColors.GrayText;
                 lstFileLinks.Items.Clear();
                 chkIgnoreWarnings.Checked = false;
-                HideWarningBox();
+                ClearWarnings();
                 lnkCommonsFile.Enabled = lnkLocalFile.Enabled = lnkGoogleImageSearch.Enabled =
                     lnkGoToFileLink.Enabled = false;
 
@@ -330,7 +361,8 @@ namespace ForTheCommonGood
                 {
                     Invoke(new Action(delegate()
                     {
-                        ShowWarningBox(false, String.Join("\n", potentialProblems.ToArray()));
+                        foreach (string i in potentialProblems)
+                            AddWarning(i, WarningBoxType.Warning);
                     }));
                 }
 
@@ -496,24 +528,26 @@ namespace ForTheCommonGood
             StringDictionary query = new StringDictionary 
             {
                 { "action", "query" },
-                { "prop", "imageinfo" },
+                { "prop", "imageinfo|info" },
                 { "iiprop", "comment|timestamp|user|url|size|mime|metadata" },
                 { "iilimit", "500" },
                 { "iiurlwidth", pictureBox1.Width.ToString() },
                 { "iiurlheight", pictureBox1.Height.ToString() },
-                { "titles", filename },
+                { "titles", filename + "|File talk:" + filename.Substring(5) },
                 { "redirects", "true" }
             };
             MorebitsDotNet.PostApi(Wiki.Local, query, delegate(XmlDocument doc)
             {
-                switch (doc.GetElementsByTagName("page")[0].Attributes["imagerepository"].Value)
+                XmlNode filePage = doc.SelectSingleNode("//page[@ns=6]");  // was doc.GetElementsByTagName("page")[0]
+
+                switch (filePage.Attributes["imagerepository"].Value)
                 {
                     case "shared":
                         MessageBox.Show(Localization.GetString("AlreadyCommons"));
                         sentry.Fail();
                         return;
                     case "":
-                        if (doc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
+                        if (filePage.Attributes["missing"] != null)
                             MessageBox.Show(Localization.GetString("ImageMissing"));
                         else
                             MessageBox.Show(Localization.GetString("NoFile"));
@@ -525,7 +559,7 @@ namespace ForTheCommonGood
 
                 Invoke(new Action(delegate()
                 {
-                    lblName.Text = doc.GetElementsByTagName("page")[0].Attributes["title"].Value;
+                    lblName.Text = filePage.Attributes["title"].Value;
 
                     if (iis.Count > 1)
                     {
@@ -537,6 +571,30 @@ namespace ForTheCommonGood
                     else
                         lblPastRevisions.Visible = btnPastRevisions.Visible = false;
                 }));
+
+                // notify about presence of file talk page (if it is over 120 bytes in size)
+                XmlNode fileTalkPage = doc.SelectSingleNode("//page[@ns=7]");
+                if (fileTalkPage.Attributes["missing"] == null)
+                {
+                    string warningtext = "• " + Localization.GetString("ContentOnTalkPage");
+                    if (fileTalkPage.Attributes["length"] != null && 
+                        int.Parse(fileTalkPage.Attributes["length"].Value) > int.Parse(LocalWikiData.FileTalkMinimumSize))
+                    {
+                        warningtext = warningtext.Replace("{1}", " (" + int.Parse(fileTalkPage.Attributes["length"].Value).
+                            ToString("n0", CultureInfo.InvariantCulture) + " bytes)");
+                        AddWarningLink(warningtext, Localization.GetString("TalkPage"), delegate(object sender, LinkLabelLinkClickedEventArgs e)
+                        {
+                            try
+                            {
+                                Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/File_talk:" + filename.Substring(5));
+                            }
+                            catch (Exception)
+                            {
+                                ErrorHandler(Localization.GetString("LinkVisitFailed"));
+                            }
+                        }, WarningBoxType.Warning);
+                    }
+                }
 
                 // download the file and display a thumbnail (also display metadata)
                 DownloadFileAndDisplayThumb(iis[0]);
@@ -1057,15 +1115,22 @@ namespace ForTheCommonGood
                             }
                         }
 
+                        // this is invoked when all is finished
+                        Action showSuccess = delegate()
+                        {
+                            AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
+                            AddWarning(Localization.GetString("HotcatHint_Label"), WarningBoxType.Success);
+                            if (Settings.OpenBrowserAutomatically)
+                                lnkCommonsFile_LinkClicked(null, null);
+                            if (CurrentFileSource != FileSources.Category)
+                                Invoke(new Action(delegate() { btnRandomFile.Focus(); }));
+                        };
+
                         // finished?
                         if (!chkDeleteAfter.Checked)
                         {
-                            ShowWarningBox(true, Localization.GetString("DontForgetToCategorize_Label") + " " + Localization.GetString("HotcatHint_Label"));
-                            if (Settings.OpenBrowserAutomatically)
-                                lnkCommonsFile_LinkClicked(null, null);
                             EnableForm(true);
-                            if (CurrentFileSource != FileSources.Category)
-                                Invoke(new Action(delegate() { btnRandomFile.Focus(); }));
+                            showSuccess();
                             return;
                         }
 
@@ -1128,11 +1193,7 @@ namespace ForTheCommonGood
                                         MessageBox.Show(Localization.GetString("NowCommonsFailed") + " " + editResult, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                                         return;
                                     }
-                                    ShowWarningBox(true, Localization.GetString("DontForgetToCategorize_Label") + " " + Localization.GetString("HotcatHint_Label"));
-                                    if (Settings.OpenBrowserAutomatically)
-                                        lnkCommonsFile_LinkClicked(null, null);
-                                    if (CurrentFileSource != FileSources.Category)
-                                        Invoke(new Action(delegate() { btnRandomFile.Focus(); }));
+                                    showSuccess();
                                 }, ErrorHandler);
                             }, ErrorHandler);
                         };
@@ -1189,7 +1250,8 @@ namespace ForTheCommonGood
                     MorebitsDotNet.PostApi(Wiki.Local, deleteQuery, delegate(XmlDocument innerDoc)
                     {
                         EnableForm(true);
-                        ShowWarningBox(true, Localization.GetString("LooksGood") + " " + Localization.GetString("DontForgetToCategorize_Label"));
+                        AddWarning(Localization.GetString("LooksGood"), WarningBoxType.Success);
+                        AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
                         if (Settings.OpenBrowserAutomatically)
                             lnkCommonsFile_LinkClicked(null, null);
                         if (CurrentFileSource != FileSources.Category)
@@ -1716,7 +1778,8 @@ namespace ForTheCommonGood
                         prv.webBrowser1.Document.Write(frmPreview.css + pageHtml);
                     }));
 
-            }, delegate(string msg) {
+            }, delegate(string msg)
+            {
                 ErrorHandler(msg);
                 prv.Invoke(new Action(prv.Close));
             });
