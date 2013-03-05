@@ -80,6 +80,7 @@ LocalAdministratorExplanation_Label=If checked, files will be deleted after tran
 SavePasswordsToDisk_CheckBox=Save passwords to disk (unencrypted, in Base64 encoding)
 CheckForUpdates_CheckBox=Check for updated versions of For the Common Good
 OpenFilePageAutomatically_CheckBox=Open file page on Commons after a successful transfer
+OpenLocalFilePageAutomatically_CheckBox=Open file page on local wiki after a successful transfer
 # LOCALIZATION NOTE: do not translate "CommonsTransfers.log"
 LogTransfers_CheckBox=Log all transfers to a file (CommonsTransfers.log)
 LocalWikiData_Label=Local wiki data

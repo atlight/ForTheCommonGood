@@ -31,6 +31,7 @@ namespace ForTheCommonGood
             chkUseHttps.Text = Localization.GetString("UseHttps_CheckBox");
             chkAutoUpdate.Text = Localization.GetString("CheckForUpdates_CheckBox");
             chkOpenBrowserAutomatically.Text = Localization.GetString("OpenFilePageAutomatically_CheckBox");
+            chkOpenBrowserLocal.Text = Localization.GetString("OpenLocalFilePageAutomatically_CheckBox");
             chkLogTransfers.Text = Localization.GetString("LogTransfers_CheckBox");
             lnkThisThatOther.Text = Localization.GetString("Author_Label") + " This, that and the other";
             lnkThisThatOther.LinkArea = new LinkArea(lnkThisThatOther.Text.Length - "This, that and the other".Length,
@@ -73,6 +74,7 @@ namespace ForTheCommonGood
             Settings.UseHttps = chkUseHttps.Checked;
             Settings.LogTransfers = chkLogTransfers.Checked;
             Settings.OpenBrowserAutomatically = chkOpenBrowserAutomatically.Checked;
+            Settings.OpenBrowserLocal = chkOpenBrowserLocal.Checked;
             Settings.AutoUpdate = chkAutoUpdate.Checked;
             Settings.LocalWikiData = localWikiDataFile;
 
@@ -109,6 +111,7 @@ namespace ForTheCommonGood
             chkUseHttps.Checked = Settings.UseHttps;
             chkLogTransfers.Checked = Settings.LogTransfers;
             chkOpenBrowserAutomatically.Checked = Settings.OpenBrowserAutomatically;
+            chkOpenBrowserLocal.Checked = Settings.OpenBrowserLocal;
             chkAutoUpdate.Checked = Settings.AutoUpdate;
 
             if (Settings.LocalWikiData != "")
@@ -199,6 +202,7 @@ namespace ForTheCommonGood
         public static bool UseHttps { get; set; }
         public static bool LogTransfers { get; set; }
         public static bool OpenBrowserAutomatically { get; set; }
+        public static bool OpenBrowserLocal { get; set; }
         public static bool AutoUpdate { get; set; }
 
         public static string LocalWikiData { get; set; }
@@ -215,7 +219,7 @@ namespace ForTheCommonGood
             LocalUserName = LocalPassword = CommonsPassword = CommonsUserName =
                 LocalWikiData =
                 CurrentSourceOption = SourceCategory = SourceTextFile = "";
-            LocalSysop = LogTransfers = OpenBrowserAutomatically = false;
+            LocalSysop = LogTransfers = OpenBrowserAutomatically = OpenBrowserLocal = false;
             SaveCreds = UseHttps = AutoUpdate = true;
         }
 
@@ -243,6 +247,8 @@ namespace ForTheCommonGood
                         Settings.LogTransfers = l.Substring("LogTransfers=".Length) == "true";
                     if (l.StartsWith("OpenBrowserAutomatically="))
                         Settings.OpenBrowserAutomatically = l.Substring("OpenBrowserAutomatically=".Length) == "true";
+                    if (l.StartsWith("OpenBrowserLocal="))
+                        Settings.OpenBrowserLocal = l.Substring("OpenBrowserLocal=".Length) == "true";
                     if (l.StartsWith("AutoUpdate="))
                         Settings.AutoUpdate = l.Substring("AutoUpdate=".Length) != "false";
                     if (l.StartsWith("LocalWikiData="))
@@ -280,6 +286,7 @@ namespace ForTheCommonGood
                     "UseHttps=" + (Settings.UseHttps ? "true" : "false"),
                     "LogTransfers=" + (Settings.LogTransfers ? "true" : "false"),
                     "OpenBrowserAutomatically=" + (Settings.OpenBrowserAutomatically ? "true" : "false"),
+                    "OpenBrowserLocal=" + (Settings.OpenBrowserLocal ? "true" : "false"),
                     "AutoUpdate=" + (Settings.AutoUpdate ? "true" : "false"),
                     "LocalWikiData=" + Convert.ToBase64String(Encoding.UTF8.GetBytes(Settings.LocalWikiData)),
                     "CurrentSourceOption=" + Settings.CurrentSourceOption,

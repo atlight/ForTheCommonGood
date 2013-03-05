@@ -1120,6 +1120,8 @@ namespace ForTheCommonGood
                         {
                             AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
                             AddWarning(Localization.GetString("HotcatHint_Label"), WarningBoxType.Success);
+                            if (Settings.OpenBrowserLocal)
+                                lnkLocalFile_LinkClicked(null, null);
                             if (Settings.OpenBrowserAutomatically)
                                 lnkCommonsFile_LinkClicked(null, null);
                             if (CurrentFileSource != FileSources.Category)
@@ -1252,6 +1254,8 @@ namespace ForTheCommonGood
                         EnableForm(true);
                         AddWarning(Localization.GetString("LooksGood"), WarningBoxType.Success);
                         AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
+                        if (Settings.OpenBrowserLocal)
+                            lnkLocalFile_LinkClicked(null, null);
                         if (Settings.OpenBrowserAutomatically)
                             lnkCommonsFile_LinkClicked(null, null);
                         if (CurrentFileSource != FileSources.Category)
