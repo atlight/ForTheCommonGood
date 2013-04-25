@@ -390,7 +390,7 @@ namespace ForTheCommonGood
                 // per-wiki cleanup
                 foreach (string replacement in LocalWikiData.Replacements.Keys)
                 {
-                    text = Regex.Replace(text, replacement, LocalWikiData.Replacements[replacement],
+                    text = Regex.Replace(text, replacement, LocalWikiData.Replacements[replacement].Replace("\\n", "\n"),
                         RegexOptions.IgnoreCase);
                 }
                 //text = Regex.Replace(text, "{{orphan image.*}}\n?", "", RegexOptions.IgnoreCase);
@@ -586,7 +586,8 @@ namespace ForTheCommonGood
                         {
                             try
                             {
-                                Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/File_talk:" + filename.Substring(5));
+                                Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/File_talk:" + 
+                                    filename.Substring(filename.IndexOf(':') + 1));
                             }
                             catch (Exception)
                             {
@@ -1404,6 +1405,7 @@ namespace ForTheCommonGood
                     break;
             }
             RandomFileSource = FileSources.Category;
+            RandomImageCache.Clear();
         }
 
         private void lnkLocalFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1641,33 +1643,31 @@ namespace ForTheCommonGood
 
             foreach (XmlNode i in (XmlNodeList) btnViewExif.Tag)
             {
-                if (i.Attributes["name"].Value == "metadata")
-                    foreach (XmlNode j in i.SelectNodes("value/metadata"))
-                        form.lstExif.Items.Add(new ListViewItem(new string[]
+                try
+                {
+                    if (i.Attributes["name"].Value == "metadata")
+                        foreach (XmlNode j in i.SelectNodes("value/metadata"))
+                            form.lstExif.Items.Add(new ListViewItem(new string[]
                         { 
                             j.Attributes["name"].Value,
                             j.Attributes["value"].Value 
                         }));
-                else
+                    else
+                        form.lstExif.Items.Add(new ListViewItem(new string[]
+                    { 
+                        i.Attributes["name"].Value,
+                        i.Attributes["value"].Value 
+                    }));
+                }
+                catch (Exception)
                 {
-                    try
-                    {
+                    if (!failures)
                         form.lstExif.Items.Add(new ListViewItem(new string[]
                         { 
-                            i.Attributes["name"].Value,
-                            i.Attributes["value"].Value 
-                        }));
-                    }
-                    catch (Exception)
-                    {
-                        if (!failures)
-                            form.lstExif.Items.Add(new ListViewItem(new string[]
-                            { 
-                                Localization.GetString("EXIFFailedNotice"),
-                                Localization.GetString("EXIFFailedMessage")
-                            }) { ForeColor = SystemColors.GrayText });
-                        failures = true;
-                    }
+                            Localization.GetString("EXIFFailedNotice"),
+                            Localization.GetString("EXIFFailedMessage")
+                        }) { ForeColor = SystemColors.GrayText });
+                    failures = true;
                 }
             }
 
