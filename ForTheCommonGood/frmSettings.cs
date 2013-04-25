@@ -171,7 +171,7 @@ namespace ForTheCommonGood
                 return;
             }
             localWikiDataFile = File.ReadAllText(openFileDialog1.FileName, Encoding.UTF8);
-            lblLocalCurrent.Text = Regex.Match(localWikiDataFile, "LocalDomain=(.+)[\r\n]").Groups[1].Value;
+            lblLocalCurrent.Text = Regex.Match(localWikiDataFile, "LocalDomain=([^\r\n]+)[\r\n]").Groups[1].Value;
             if (lblLocalCurrent.Text != txtLocalDomain.Text)
             {
                 MessageBox.Show(Localization.GetString("LocalWikiDataWrongDomain", lblLocalCurrent.Text.Trim()));
