@@ -166,7 +166,7 @@ LinkVisitFailed=Can't open this link - you need to run FtCG locally, not in a Pa
 #                    "You did not select a version to transfer. Please select only one item from the list before clicking OK."
 NoRevisionSelected=Now, go back and select one, and only one, item, you mischievous little child.
 NewVersionNotice1=A new version ({0}) of For the Common Good is available.
-NewVersionNotice2=It is suggested that you visit http://atlight.github.com to download it.
+NewVersionNotice2=It is suggested that you visit http://atlight.github.io to download it.
 # LOCALIZATION NOTE: for non-English languages, please specify that [[WT:FTCG]] is on English Wikipedia
 NewVersionNotice3=You can disable update checks in Settings, but if you do, please add [[WT:FTCG]] to your watchlist.
 TextFileAutoClean=For the Common Good can remove entries from the text file, up to the most recently processed entry.
