@@ -49,16 +49,18 @@ namespace ForTheCommonGood
         }
         public static PotentialProblem[] PotentialProblems { get; private set; }
 
-        public static StringDictionary Replacements { get; private set; }
-        public static StringDictionary SelfLicenseReplacements { get; private set; }
+        // cannot use Dictionary<string, string> or StringDictionary classes here, 
+        // because they do not preserve the order in which elements are added
+        public static KeyValuePair<string, string>[] Replacements { get; private set; }
+        public static KeyValuePair<string, string>[] SelfLicenseReplacements { get; private set; }
 
         public static void LoadWikiData(string[] lines)
         {
             LocalDomain = Category1 = Category2 = Category3 = Information = Description =
                 Date = Source = Author = Permission = Other_versions = Summary = Licensing = "";
             List<PotentialProblem> problems = new List<PotentialProblem>();
-            Replacements = new StringDictionary();
-            SelfLicenseReplacements = new StringDictionary();
+            List<KeyValuePair<string, string>> replaces = new List<KeyValuePair<string, string>>();
+            List<KeyValuePair<string, string>> selfReplaces = new List<KeyValuePair<string, string>>();
             DefaultCategory = "1";
 
             // newer properties that require default values (since they are not specified in 
@@ -89,16 +91,16 @@ namespace ForTheCommonGood
                 {
                     string lookfor = lines[i + 1];
                     string replacewith = lines[i + 2];
-                    Replacements.Add(lookfor.Substring(lookfor.IndexOf('=') + 1),
-                        replacewith.Substring(replacewith.IndexOf('=') + 1));
+                    replaces.Add(new KeyValuePair<string, string>(lookfor.Substring(lookfor.IndexOf('=') + 1),
+                        replacewith.Substring(replacewith.IndexOf('=') + 1)));
                     i += 2;
                 }
                 else if (l == "[SelfLicenseReplacement]")
                 {
                     string lookfor = lines[i + 1];
                     string replacewith = lines[i + 2];
-                    SelfLicenseReplacements.Add(lookfor.Substring(lookfor.IndexOf('=') + 1),
-                        replacewith.Substring(replacewith.IndexOf('=') + 1));
+                    selfReplaces.Add(new KeyValuePair<string, string>(lookfor.Substring(lookfor.IndexOf('=') + 1),
+                        replacewith.Substring(replacewith.IndexOf('=') + 1)));
                     i += 2;
                 }
                 else
@@ -125,6 +127,8 @@ namespace ForTheCommonGood
                 FileTalkMinimumSize = "120";
 
             PotentialProblems = problems.ToArray();
+            Replacements = replaces.ToArray();
+            SelfLicenseReplacements = selfReplaces.ToArray();
         }
     }
 }

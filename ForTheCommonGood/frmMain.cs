@@ -388,31 +388,26 @@ namespace ForTheCommonGood
                 text = Regex.Replace(text, @"\[\[" + prefix + @":(Category:[^\]]+\]\])", "<!-- [[$1 -->", RegexOptions.Compiled);
 
                 // per-wiki cleanup
-                foreach (string replacement in LocalWikiData.Replacements.Keys)
+                foreach (KeyValuePair<string, string> replacement in LocalWikiData.Replacements)
                 {
-                    text = Regex.Replace(text, replacement, LocalWikiData.Replacements[replacement].Replace("\\n", "\n"),
+                    text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n"),
                         RegexOptions.IgnoreCase);
                 }
-                //text = Regex.Replace(text, "{{orphan image.*}}\n?", "", RegexOptions.IgnoreCase);
-                //text = text.Replace("{{needs commons category}}", "");  // seems to always be lowercase with no params
-
+                
                 // amend self-license tags
                 string beforeSelfTagCheck = text;
-                foreach (string replacement in LocalWikiData.SelfLicenseReplacements.Keys)
+                foreach (KeyValuePair<string, string> replacement in LocalWikiData.SelfLicenseReplacements)
                 {
-                    text = Regex.Replace(text, replacement,
-                        LocalWikiData.SelfLicenseReplacements[replacement]
-                            .Replace("%%OriginalUploader%%", origUploader)
-                            .Replace("%%InterwikiLinkPrefix%%", prefix),
+                    text = Regex.Replace(text, replacement.Key, 
+                        replacement.Value.Replace("%%OriginalUploader%%", origUploader).Replace("%%InterwikiLinkPrefix%%", prefix),
                         RegexOptions.IgnoreCase);
                 }
-                //text = Regex.Replace(text, "{{PD-self.*}}", "{{PD-user|" + origUploader + "|en}}", RegexOptions.IgnoreCase);
-                //text = Regex.Replace(text, @"{{GFDL-self-with-disclaimers([^\}]*)}}", "{{GFDL-user-en-with-disclaimers|" + origUploader + "$1}}", RegexOptions.IgnoreCase);
-                //text = Regex.Replace(text, @"{{GFDL-self([^\}]*)}}", "{{GFDL-user|" + origUploader + "|en$1}}", RegexOptions.IgnoreCase);
-                //text = Regex.Replace(text, @"{{self([^\}]*)}}", "{{self$1|author=[[" + prefix + ":" + origUploader + "|]]}}", RegexOptions.IgnoreCase);
                 bool selfLicense = (text != beforeSelfTagCheck);
 
                 text = text.Trim();
+
+                // the character index at which the information tag finishes (doesn't have to be exact)
+                int infoTagEnd = 0;
 
                 if (!textLowercase.Contains("{{information") &&
                     !Regex.IsMatch(text, "{{" + LocalWikiData.Information, RegexOptions.IgnoreCase))
@@ -448,18 +443,7 @@ namespace ForTheCommonGood
 "}}\n\n";
                     text = infoTag + text;
 
-                    // assume first template is a license tag
-                    if (!text.Contains("{{int:license-header}}"))
-                    {
-                        bool hadAnySuccessYet = false;
-                        text = Regex.Replace(text, "\n?\n?{{", delegate(Match m)
-                        {
-                            if (m.Index < infoTag.Length || hadAnySuccessYet)
-                                return m.Groups[0].Value;
-                            hadAnySuccessYet = true;
-                            return "\n\n== {{int:license-header}} ==\n{{";
-                        });
-                    }
+                    infoTagEnd = infoTag.Length - 8;  // -8 for sanity
                 }
                 else
                 {
@@ -480,9 +464,22 @@ namespace ForTheCommonGood
                         text = Regex.Replace(text, @"\|\s*" + LocalWikiData.Other_versions + @"\s*=", "|Other_versions =", RegexOptions.IgnoreCase);
                     }
 
+                    Match infoTagMatch = Regex.Match(text, @"{{\s*information\s*(\|({{[^{}]*}}|[^{}])*)?}}", RegexOptions.IgnoreCase);
+                    infoTagEnd = infoTagMatch.Index + infoTagMatch.Length - 8;  // -8 for sanity
+                }
 
-                    //text = Regex.Replace(text, @"= *I .*created this (image|work) entirely by myself.?", "= {{own}} <!-- change this if not own work -->", RegexOptions.IgnoreCase);
 
+                // assume first template is a license tag
+                if (!text.Contains("{{int:license-header}}"))
+                {
+                    bool hadAnySuccessYet = false;
+                    text = Regex.Replace(text, "\n?\n?{{", delegate(Match m)
+                    {
+                        if (m.Index < infoTagEnd || hadAnySuccessYet)
+                            return m.Groups[0].Value;
+                        hadAnySuccessYet = true;
+                        return "\n\n== {{int:license-header}} ==\n{{";
+                    });
                 }
 
                 text += "\n\n== {{Original upload log}} ==\n\n{{transferred from|" +
