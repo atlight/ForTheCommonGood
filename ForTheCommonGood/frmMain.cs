@@ -398,8 +398,8 @@ namespace ForTheCommonGood
                 string beforeSelfTagCheck = text;
                 foreach (KeyValuePair<string, string> replacement in LocalWikiData.SelfLicenseReplacements)
                 {
-                    text = Regex.Replace(text, replacement.Key, 
-                        replacement.Value.Replace("%%OriginalUploader%%", origUploader).Replace("%%InterwikiLinkPrefix%%", prefix),
+                    text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n")
+                        .Replace("%%OriginalUploader%%", origUploader).Replace("%%InterwikiLinkPrefix%%", prefix),
                         RegexOptions.IgnoreCase);
                 }
                 bool selfLicense = (text != beforeSelfTagCheck);
