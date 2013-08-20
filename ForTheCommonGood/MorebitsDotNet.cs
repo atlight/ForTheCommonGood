@@ -179,7 +179,7 @@ namespace ForTheCommonGood
             {
                 CookieContainer jar = new CookieContainer();
                 string domain = GetDomainForCookies(wiki);
-                jar.Add(new Cookie(session.CookiePrefix + "_session", session.SessionID, "/", domain));
+                jar.Add(new Cookie(session.CookiePrefix + "Session", session.SessionID, "/", domain));
                 if (!loggingIn)
                 {
                     jar.Add(new Cookie(session.CookiePrefix + "UserName", Uri.EscapeDataString(session.UserName).Replace("%20", "+"), "/", domain));
@@ -281,7 +281,7 @@ namespace ForTheCommonGood
             {
                 CookieContainer jar = new CookieContainer();
                 string domain = GetDomainForCookies(wiki);
-                jar.Add(new Cookie(session.CookiePrefix + "_session", session.SessionID, "/", domain));
+                jar.Add(new Cookie(session.CookiePrefix + "Session", session.SessionID, "/", domain));
                 jar.Add(new Cookie(session.CookiePrefix + "UserName", Uri.EscapeDataString(session.UserName).Replace("%20", "+"), "/", domain));
                 jar.Add(new Cookie("centralauth_User", Uri.EscapeDataString(session.UserName).Replace("%20", "+"), "/", domain));
                 jar.Add(new Cookie(session.CookiePrefix + "UserID", session.UserID, "/", domain));
