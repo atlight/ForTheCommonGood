@@ -1546,10 +1546,7 @@ namespace ForTheCommonGood
                         Version newVersion = new Version(resp.Result.Split('\n')[1]);
                         if (newVersion > new Version(Application.ProductVersion))
                         {
-                            MessageBox.Show(Localization.GetString("NewVersionNotice1", newVersion.ToString()) + "\n\n" +
-                                Localization.GetString("NewVersionNotice2") + "\n\n" +
-                                Localization.GetString("NewVersionNotice3"),
-                                Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            new frmUpdateAvailable(newVersion).ShowDialog();
                         }
                     }
                     catch (Exception)
