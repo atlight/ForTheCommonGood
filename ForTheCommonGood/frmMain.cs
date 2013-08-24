@@ -491,8 +491,7 @@ namespace ForTheCommonGood
                 {
                     text += "\n|-\n| " + FormatTimestamp(n) + " || " + FormatDimensions(n);
                     text += " || {{uv|" + n.Attributes["user"].Value + "|" + GetCurrentInterwikiPrefix(true) +
-                        ":}} || ''<nowiki>(" +
-                        n.Attributes["comment"].Value + ")</nowiki>''";
+                        ":}} || <nowiki>" + n.Attributes["comment"].Value + "</nowiki>";
                 }
                 text += "\n|}";
 
