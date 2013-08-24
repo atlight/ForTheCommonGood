@@ -14,6 +14,8 @@ namespace ForTheCommonGood
         {
             InitializeComponent();
             Text = Application.ProductName;
+            button2.Text = Localization.GetString("OK_Button");
+            button1.Text = Localization.GetString("Cancel_Button");
         }
 
         public static string Prompt(string question)

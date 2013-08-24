@@ -75,12 +75,6 @@
     <Compile Include="frmRandomSource.Designer.cs">
       <DependentUpon>frmRandomSource.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmPrompt.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmPrompt.Designer.cs">
-      <DependentUpon>frmPrompt.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmRevisionBrowse.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,10 +103,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmRandomSource.resx">
       <DependentUpon>frmRandomSource.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmPrompt.resx">
-      <DependentUpon>frmPrompt.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmRevisionBrowse.resx">
