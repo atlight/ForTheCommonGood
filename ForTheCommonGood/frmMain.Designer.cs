@@ -387,7 +387,7 @@
             this.panWarning.Size = new System.Drawing.Size(232, 126);
             this.panWarning.TabIndex = 14;
             this.panWarning.Visible = false;
-            this.panWarning.Paint += new System.Windows.Forms.PaintEventHandler(this.FmboxLookalike);
+            this.panWarning.Paint += new System.Windows.Forms.PaintEventHandler(this.ImboxLookalike);
             // 
             // panWarningTexts
             // 
@@ -658,7 +658,7 @@
             this.panStatus.Size = new System.Drawing.Size(200, 54);
             this.panStatus.TabIndex = 1;
             this.panStatus.Visible = false;
-            this.panStatus.Paint += new System.Windows.Forms.PaintEventHandler(this.FmboxLookalike);
+            this.panStatus.Paint += new System.Windows.Forms.PaintEventHandler(this.ImboxLookalike);
             // 
             // icoInfo
             // 

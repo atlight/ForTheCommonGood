@@ -1623,7 +1623,7 @@ namespace ForTheCommonGood
                 (ClientSize.Height - panStatus.Height) / 2);
         }
 
-        private void FmboxLookalike(object sender, PaintEventArgs e)
+        private void ImboxLookalike(object sender, PaintEventArgs e)
         {
             Control ctl = (Control) sender;
             e.Graphics.Clear(ctl.BackColor);
