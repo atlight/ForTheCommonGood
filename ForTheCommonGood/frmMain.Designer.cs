@@ -476,7 +476,6 @@
             this.panRoot.Name = "panRoot";
             this.panRoot.Size = new System.Drawing.Size(977, 522);
             this.panRoot.TabIndex = 0;
-            this.panRoot.Paint += new System.Windows.Forms.PaintEventHandler(this.panRoot_Paint);
             // 
             // toolBarLinks
             // 

@@ -1026,7 +1026,7 @@ namespace ForTheCommonGood
 
         private void DoTransfer(object sender, EventArgs e)
         {
-            if (panWarning.Visible && MessageBox.Show(Localization.GetString("PotentialProblemsGoAhead"), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            if (panWarning.Visible && MessageBox.Show(Localization.GetString("PotentialProblemsGoAhead"), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
 
             if (ImageData == null)
@@ -1035,7 +1035,7 @@ namespace ForTheCommonGood
                 return;
             }
 
-            if (lblRevision.ForeColor == Color.Red && MessageBox.Show(Localization.GetString("OldVersionTransferAdvice"), Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+            if (lblRevision.ForeColor == Color.Red && MessageBox.Show(Localization.GetString("OldVersionTransferAdvice"), Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
                 return;
 
             EnableForm(false);
@@ -1792,11 +1792,6 @@ namespace ForTheCommonGood
             {
                 ErrorHandler(Localization.GetString("LinkVisitFailed"));
             }
-        }
-
-        private void panRoot_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

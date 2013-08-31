@@ -43,7 +43,7 @@ namespace ForTheCommonGood
         {
             if (optTextFile.Checked && DialogResult == DialogResult.OK && !File.Exists(txtFileName.Text) &&
                 MessageBox.Show(Localization.GetString("FileNotFound_Label", txtFileName.Text),
-                Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 e.Cancel = true;
         }
     }
