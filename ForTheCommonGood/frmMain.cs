@@ -415,7 +415,8 @@ namespace ForTheCommonGood
                     string detectedDesc = Regex.Replace(text, "{{[^}]*}}", "", RegexOptions.IgnoreCase);
                     detectedDesc = Regex.Replace(detectedDesc, "==[^=]*==", "", RegexOptions.IgnoreCase);
                     detectedDesc = detectedDesc.Split('\n')[0];
-                    text = Regex.Replace(text, Regex.Escape(detectedDesc), "", RegexOptions.IgnoreCase);
+                    if (detectedDesc.Length > 0)
+                        text = text.Replace(detectedDesc, "");
 
                     XmlNode exifDateNode = iis[iis.Count - 1].SelectSingleNode("metadata/metadata[@name=\"DateTime\"]");
                     string exifDate = null;
