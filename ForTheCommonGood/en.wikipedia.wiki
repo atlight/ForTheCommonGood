@@ -98,7 +98,7 @@ ReplaceWith=
 
 [Replacement]
 LookFor== *I .*created this (image|work) entirely by myself.?
-ReplaceWith== {{own}}
+ReplaceWith== {{own work by original uploader}}
 
 [SelfLicenseReplacement]
 LookFor={{PD-self([^\}]*)}}

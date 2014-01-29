@@ -437,7 +437,7 @@ namespace ForTheCommonGood
 "{{Information\n" +
 "|Description    = " + (languageCode.Length > 0 ? ("{{" + languageCode + "|1=" + detectedDesc.Trim()/*.Replace("|", "&#124;")*/ + "}}") : detectedDesc.Trim().Replace("|", "&#124;")) + "\n" +
 "|Date           = " + (exifDate != null ? "{{according to EXIF data|" + exifDate + "}}\n" : "{{original upload date|" + FormatIsoDate(iis[iis.Count - 1]) + "}}\n") +
-"|Source         = {{own}} <!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->\n" +
+"|Source         = {{own work by original uploader}} <!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->\n" +
 "|Author         = " + (selfLicense ? ("[[" + prefix + ":User:" + iis[iis.Count - 1].Attributes["user"].Value + "|]]\n") : "\n") +
 "|Permission     = \n" +
 "|Other_versions = \n" +
