@@ -490,9 +490,23 @@ namespace ForTheCommonGood
                 text += "\n\n{| class=\"wikitable\"\n! {{int:filehist-datetime}} !! {{int:filehist-dimensions}} !! {{int:filehist-user}} !! {{int:filehist-comment}}";
                 foreach (XmlNode n in iis)
                 {
-                    text += "\n|-\n| " + FormatTimestamp(n) + " || " + FormatDimensions(n);
-                    text += " || {{uv|" + n.Attributes["user"].Value + "|" + GetCurrentInterwikiPrefix(true) +
-                        ":}} || <nowiki>" + n.Attributes["comment"].Value + "</nowiki>";
+                    text += "\n|-\n| " + FormatTimestamp(n) + " || " + FormatDimensions(n) + " || ";
+
+                    // check if the username has been RevDel'd (for admins, the user attribute
+                    // will be present, and we don't want to copy the hidden username to Commons,
+                    // so we need to check the userhidden attribute)
+                    if (n.Attributes["userhidden"] != null || n.Attributes["user"] == null)
+                        text += "<span class=\"history-deleted\">{{int:rev-deleted-user}}</span>";
+                    else
+                        text += "{{uv|" + n.Attributes["user"].Value + "|" + GetCurrentInterwikiPrefix(true) + ":}}";
+
+                    text += " || ";
+
+                    // same deal for comment/commenthidden
+                    if (n.Attributes["commenthidden"] != null || n.Attributes["comment"] == null)
+                        text += "<span class=\"history-deleted\">{{int:rev-deleted-comment}}</span>";
+                    else
+                        text += "<nowiki>" + n.Attributes["comment"].Value + "</nowiki>";
                 }
                 text += "\n|}";
 
@@ -1429,6 +1443,19 @@ namespace ForTheCommonGood
             }
         }
 
+        private Image GetThumbnailFailImage()
+        {
+            Bitmap img = new Bitmap(150, 150);
+            using (Graphics g = Graphics.FromImage(img))
+            {
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
+                g.DrawString(Localization.GetString("FailedToGenerateThumbnail1_Label") + "\n" +
+                    Localization.GetString("FailedToGenerateThumbnail2_Label") + "\n" +
+                    Localization.GetString("FailedToGenerateThumbnail3_Label"), Font, Brushes.Black, 5, 5);
+            }
+            return img;
+        }
+
         private void SelectVersion(object sender, EventArgs e)
         {
             frmRevisionBrowse form = new frmRevisionBrowse();
@@ -1440,13 +1467,13 @@ namespace ForTheCommonGood
                     "", 
                     (first ? (Localization.GetString("CurrentVersion_Label") + "\n") : "") + FormatTimestamp(i),
                     FormatDimensions(i),
-                    i.Attributes["user"].Value,
-                    i.Attributes["comment"].Value
+                    i.Attributes["user"] == null ? Localization.GetString("UserNameHidden") : i.Attributes["user"].Value,
+                    i.Attributes["comment"] == null ? Localization.GetString("CommentHidden") : i.Attributes["comment"].Value
                 });
                 item.Tag = i;
 
                 // download thumbnail
-                if (i.Attributes["thumburl"].Value != "")
+                if (i.Attributes["thumburl"] != null && i.Attributes["thumburl"].Value != "")
                 {
                     WebClient cl = new WebClient();
                     cl.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
@@ -1458,17 +1485,9 @@ namespace ForTheCommonGood
                             {
                                 Invoke(new Action(delegate()
                                 {
-                                    Bitmap img = new Bitmap(150, 150);
-                                    using (Graphics g = Graphics.FromImage(img))
-                                    {
-                                        g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixelGridFit;
-                                        g.DrawString(Localization.GetString("FailedToGenerateThumbnail1_Label") + "\n" +
-                                            Localization.GetString("FailedToGenerateThumbnail2_Label") + "\n" +
-                                            Localization.GetString("FailedToGenerateThumbnail3_Label"), Font, Brushes.Black, 5, 5);
-                                    }
                                     lock (form)
                                     {
-                                        form.imageList.Images.Add(img);
+                                        form.imageList.Images.Add(GetThumbnailFailImage());
                                         item.ImageIndex = form.imageList.Images.Count - 1;
                                     }
                                 }));
@@ -1503,6 +1522,15 @@ namespace ForTheCommonGood
                         });
                     cl.DownloadDataAsync(new Uri(i.Attributes["thumburl"].Value));
                 }
+                else
+                {
+                    lock (form)
+                    {
+                        form.imageList.Images.Add(GetThumbnailFailImage());
+                        item.ImageIndex = form.imageList.Images.Count - 1;
+                    }
+                }
+
                 if (first)
                 {
                     item.UseItemStyleForSubItems = false;

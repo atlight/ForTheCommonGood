@@ -113,6 +113,8 @@ Comment_Column=Comment
 FailedToGenerateThumbnail1_Label=Failed to
 FailedToGenerateThumbnail2_Label=generate
 FailedToGenerateThumbnail3_Label=thumbnail
+UserNameHidden=(username hidden)
+CommentHidden=(comment hidden)
 
 # EXIF viewer window
 ExifViewer_WindowTitle=View EXIF metadata
