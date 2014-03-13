@@ -200,9 +200,10 @@ MorebitsDotNet_ApiError=An API error occurred.
 # Welcome text, shown in left-hand text box on startup
 # LOCALIZATION NOTE: this string should be no longer than 54 characters.
 WelcomeToFtcg_Title=Welcome to For the Common Good!
-# LOCALIZATION NOTE: each of these strings should be no longer than 62 characters. If you need to, 
-#                    you can use the extra line/s provided (blank in English, because we don't need them, 
-#                    but they will work if you fill them in).
+# LOCALIZATION NOTE: each of these strings should be no longer than 62 characters. If you need more
+#                    space, you can continue your translation in the extra blank line/s provided
+#                    (these are blank in English because we don't need them, but they will be shown
+#                    to the user if filled in).
 #                    Do not delete any blank entries though!!
 WelcomeToFtcg_IsGood1=It's a great way to quickly transfer free files to Commons.
 WelcomeToFtcg_IsGood2=
