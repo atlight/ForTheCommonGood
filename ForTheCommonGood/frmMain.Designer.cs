@@ -61,6 +61,7 @@
             this.lblWarningHeading = new System.Windows.Forms.Label();
             this.optOther = new System.Windows.Forms.RadioButton();
             this.panRoot = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.toolBarLinks = new System.Windows.Forms.ToolStrip();
             this.btnPreview = new System.Windows.Forms.ToolStripButton();
             this.btnLinkify = new System.Windows.Forms.ToolStripButton();
@@ -74,7 +75,6 @@
             this.lblViewExif = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblDeclineTransfer = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.panStatus = new System.Windows.Forms.Panel();
             this.icoInfo = new System.Windows.Forms.PictureBox();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -355,7 +355,8 @@
             // 
             // lblPastRevisions
             // 
-            this.lblPastRevisions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPastRevisions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPastRevisions.Location = new System.Drawing.Point(560, 325);
             this.lblPastRevisions.Name = "lblPastRevisions";
             this.lblPastRevisions.Size = new System.Drawing.Size(130, 13);
@@ -438,6 +439,12 @@
             // panRoot
             // 
             this.panRoot.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.panRoot.Controls.Add(this.lblNormName);
+            this.panRoot.Controls.Add(this.txtNormName);
+            this.panRoot.Controls.Add(this.chkIgnoreWarnings);
+            this.panRoot.Controls.Add(this.chkDeleteAfter);
+            this.panRoot.Controls.Add(this.panel2);
+            this.panRoot.Controls.Add(this.textBox1);
             this.panRoot.Controls.Add(this.toolBarLinks);
             this.panRoot.Controls.Add(this.lnkGoogleImageSearch);
             this.panRoot.Controls.Add(this.lblExifNotice);
@@ -446,7 +453,6 @@
             this.panRoot.Controls.Add(this.optOther);
             this.panRoot.Controls.Add(this.lblOriginalFilename);
             this.panRoot.Controls.Add(this.panWarning);
-            this.panRoot.Controls.Add(this.textBox1);
             this.panRoot.Controls.Add(this.btnViewExif);
             this.panRoot.Controls.Add(this.btnPastRevisions);
             this.panRoot.Controls.Add(this.btnGo);
@@ -457,16 +463,11 @@
             this.panRoot.Controls.Add(this.btnTransfer);
             this.panRoot.Controls.Add(this.tableLayoutPanel1);
             this.panRoot.Controls.Add(this.lblDimensions);
-            this.panRoot.Controls.Add(this.lblNormName);
             this.panRoot.Controls.Add(this.lblRevision);
-            this.panRoot.Controls.Add(this.txtNormName);
             this.panRoot.Controls.Add(this.lblName);
             this.panRoot.Controls.Add(this.btnSettings);
             this.panRoot.Controls.Add(this.optCategory2);
-            this.panRoot.Controls.Add(this.chkIgnoreWarnings);
             this.panRoot.Controls.Add(this.optCategory1);
-            this.panRoot.Controls.Add(this.chkDeleteAfter);
-            this.panRoot.Controls.Add(this.panel2);
             this.panRoot.Controls.Add(this.panel1);
             this.panRoot.Controls.Add(this.lnkLocalFile);
             this.panRoot.Controls.Add(this.btnRandomFile);
@@ -476,6 +477,15 @@
             this.panRoot.Name = "panRoot";
             this.panRoot.Size = new System.Drawing.Size(977, 522);
             this.panRoot.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Location = new System.Drawing.Point(704, 308);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1, 204);
+            this.panel2.TabIndex = 21;
             // 
             // toolBarLinks
             // 
@@ -605,7 +615,8 @@
             // 
             // lblViewExif
             // 
-            this.lblViewExif.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblViewExif.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblViewExif.Location = new System.Drawing.Point(560, 367);
             this.lblViewExif.Name = "lblViewExif";
             this.lblViewExif.Size = new System.Drawing.Size(130, 13);
@@ -637,15 +648,6 @@
             this.lblDeclineTransfer.TabIndex = 30;
             this.lblDeclineTransfer.Text = "<if ineligible, edit file page manually>";
             this.lblDeclineTransfer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Location = new System.Drawing.Point(704, 308);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1, 204);
-            this.panel2.TabIndex = 21;
             // 
             // panStatus
             // 

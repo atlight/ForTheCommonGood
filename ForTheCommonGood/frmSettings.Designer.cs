@@ -200,18 +200,19 @@
             // lblLocalSysopHint
             // 
             this.lblLocalSysopHint.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLocalSysopHint.Location = new System.Drawing.Point(24, 127);
+            this.lblLocalSysopHint.Location = new System.Drawing.Point(22, 127);
             this.lblLocalSysopHint.Name = "lblLocalSysopHint";
-            this.lblLocalSysopHint.Size = new System.Drawing.Size(280, 40);
+            this.lblLocalSysopHint.Size = new System.Drawing.Size(282, 40);
             this.lblLocalSysopHint.TabIndex = 9;
             this.lblLocalSysopHint.Text = "<admindesctext>";
             // 
             // chkLocalSameAsCommons
             // 
             this.chkLocalSameAsCommons.AutoSize = true;
+            this.chkLocalSameAsCommons.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.chkLocalSameAsCommons.Location = new System.Drawing.Point(10, 42);
             this.chkLocalSameAsCommons.Name = "chkLocalSameAsCommons";
-            this.chkLocalSameAsCommons.Size = new System.Drawing.Size(154, 17);
+            this.chkLocalSameAsCommons.Size = new System.Drawing.Size(163, 18);
             this.chkLocalSameAsCommons.TabIndex = 3;
             this.chkLocalSameAsCommons.Text = "<same creds as commons>";
             this.chkLocalSameAsCommons.UseVisualStyleBackColor = true;
@@ -220,9 +221,10 @@
             // chkLocalSysop
             // 
             this.chkLocalSysop.AutoSize = true;
+            this.chkLocalSysop.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.chkLocalSysop.Location = new System.Drawing.Point(10, 109);
             this.chkLocalSysop.Name = "chkLocalSysop";
-            this.chkLocalSysop.Size = new System.Drawing.Size(66, 17);
+            this.chkLocalSysop.Size = new System.Drawing.Size(76, 18);
             this.chkLocalSysop.TabIndex = 8;
             this.chkLocalSysop.Text = "<admin>";
             this.chkLocalSysop.UseVisualStyleBackColor = true;
@@ -363,6 +365,9 @@
             // 
             // lblLocalDataHint
             // 
+            this.lblLocalDataHint.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblLocalDataHint.Location = new System.Drawing.Point(10, 20);
             this.lblLocalDataHint.Name = "lblLocalDataHint";
             this.lblLocalDataHint.Size = new System.Drawing.Size(198, 56);
@@ -386,6 +391,7 @@
             // 
             // lblLocalCurrent
             // 
+            this.lblLocalCurrent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblLocalCurrent.Location = new System.Drawing.Point(211, 61);
             this.lblLocalCurrent.Name = "lblLocalCurrent";
             this.lblLocalCurrent.Size = new System.Drawing.Size(144, 16);
@@ -395,6 +401,7 @@
             // 
             // lblLocalCurrentLabel
             // 
+            this.lblLocalCurrentLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblLocalCurrentLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lblLocalCurrentLabel.Location = new System.Drawing.Point(211, 44);
             this.lblLocalCurrentLabel.Name = "lblLocalCurrentLabel";
@@ -405,6 +412,8 @@
             // 
             // btnLocalDataReset
             // 
+            this.btnLocalDataReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLocalDataReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnLocalDataReset.Location = new System.Drawing.Point(288, 16);
             this.btnLocalDataReset.Name = "btnLocalDataReset";
             this.btnLocalDataReset.Size = new System.Drawing.Size(67, 23);
@@ -415,6 +424,8 @@
             // 
             // btnLocalDataLoad
             // 
+            this.btnLocalDataLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLocalDataLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnLocalDataLoad.Location = new System.Drawing.Point(208, 16);
             this.btnLocalDataLoad.Name = "btnLocalDataLoad";
             this.btnLocalDataLoad.Size = new System.Drawing.Size(75, 23);

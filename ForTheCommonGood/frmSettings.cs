@@ -49,10 +49,10 @@ namespace ForTheCommonGood
             if (loginOnly)
             {
                 txtCommonsUserName.Enabled = txtLocalDomain.Enabled = txtLocalUserName.Enabled =
-                    lblLocalSysopHint.Visible = chkLocalSameAsCommons.Enabled = chkLocalSysop.Visible = 
+                    chkLocalSameAsCommons.Enabled = lblLocalSysopHint.Visible = chkLocalSysop.Visible = 
                     panRightSide.Visible = false;
                 Text = Localization.GetString("LogIn_WindowTitle") + " - " + Application.ProductName;
-                ClientSize = new Size(330, ClientSize.Height + 32);
+                ClientSize = new Size(grpCommons.Width + 18, ClientSize.Height + 32);
                 ShowInTaskbar = true;
                 FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             }
