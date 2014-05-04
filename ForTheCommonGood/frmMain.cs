@@ -859,7 +859,7 @@ namespace ForTheCommonGood
                         { "cmlimit", "500" },
                     };
                     if (RandomContinue != null)
-                        query.Add("cmstart", RandomContinue);
+                        query.Add("cmcontinue", RandomContinue);
                     MorebitsDotNet.PostApi(Wiki.Local, query, delegate(XmlDocument doc)
                     {
                         foreach (XmlNode i in doc.GetElementsByTagName("cm"))
@@ -872,7 +872,7 @@ namespace ForTheCommonGood
 
                         XmlNodeList continues = doc.GetElementsByTagName("query-continue");
                         if (continues.Count > 0)
-                            RandomContinue = continues[0].FirstChild.Attributes["cmstart"].Value;
+                            RandomContinue = continues[0].FirstChild.Attributes["cmcontinue"].Value;
                         else
                             RandomContinue = null;
 
