@@ -27,61 +27,35 @@ namespace ForTheCommonGood
         public const int DefaultTimeout = 45000;
         public const int UploadTimeout = 1200000;  // short timeout was blocking huge uploads
 
-        public static string GetProtocol() {
+        public static string GetProtocol()
+        {
             return Settings.UseHttps ? "https" : "http";
         }
 
-        // local wiki configuration
-        public static string LocalDomain { get { return Settings.LocalDomain; } }
+        public static string GetDomain(Wiki w)
+        {
+            switch (w)
+            {
+                case Wiki.Local:
+                    return Settings.LocalDomain + ".org";
+                case Wiki.Commons:
+                    return "commons.wikimedia.org";
+                default:
+                    throw new ArgumentOutOfRangeException("w");
+            }
+        }
 
         private static string GetApiUri(Wiki w)
         {
-            switch (w)
-            {
-                case Wiki.Local:
-                    return GetProtocol() + "://" + LocalDomain + ".org/w/api.php";
-                case Wiki.Commons:
-                    return GetProtocol() + "://commons.wikimedia.org/w/api.php";
-                default:
-                    throw new ArgumentOutOfRangeException("w");
-            }
+            return GetProtocol() + "://" + GetDomain(w) + "/w/api.php";
         }
-
-        private static string GetDomainForCookies(Wiki w)
-        {
-            switch (w)
-            {
-                case Wiki.Local:
-                    return LocalDomain.Substring(LocalDomain.LastIndexOf('.')) + ".org";
-                case Wiki.Commons:
-                    return ".wikimedia.org";
-                default:
-                    throw new ArgumentOutOfRangeException("w");
-            }
-        }
-
-        //private string GetCookiePrefix(Wiki w)
-        //{
-        //    switch (w)
-        //    {
-        //        case Wiki.Local:
-        //            return LocalDomain.Substring(LocalDomain.LastIndexOf('.')) + ".org";
-        //        case Wiki.Commons:
-        //            return ".wikimedia.org";
-        //        default:
-        //            throw new ArgumentOutOfRangeException("w");
-        //    }
-        //}
 
         public class LoginInfo
         {
             public bool LoggedIn { get; set; }
             public string UserName { get; set; }
             public string UserID { get; set; }
-            public string CAToken { get; set; }
-            public string CASession { get; set; }
-            public string SessionID { get; set; }
-            public string CookiePrefix { get; set; }
+            public CookieContainer CookieJar { get; set; }
         }
 
         // current state
@@ -145,8 +119,6 @@ namespace ForTheCommonGood
                     onError(Localization.GetString("MorebitsDotNet_LoginFailure", login.Attributes["result"].Value));
                     return;
                 }
-                LoginSessions[wiki].SessionID = login.Attributes["sessionid"].Value;
-                LoginSessions[wiki].CookiePrefix = login.Attributes["cookieprefix"].Value;
 
                 StringDictionary loginQuery = new StringDictionary
                 {
@@ -198,21 +170,9 @@ namespace ForTheCommonGood
             req.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
             LoginInfo session = LoginSessions[wiki];
-            if (session.LoggedIn || loggingIn)
-            {
-                CookieContainer jar = new CookieContainer();
-                string domain = GetDomainForCookies(wiki);
-                jar.Add(new Cookie(session.CookiePrefix + "Session", session.SessionID, "/", domain));
-                if (!loggingIn)
-                {
-                    jar.Add(new Cookie(session.CookiePrefix + "UserName", Uri.EscapeDataString(session.UserName).Replace("%20", "+"), "/", domain));
-                    jar.Add(new Cookie("centralauth_User", Uri.EscapeDataString(session.UserName).Replace("%20", "+"), "/", domain));
-                    jar.Add(new Cookie(session.CookiePrefix + "UserID", session.UserID, "/", domain));
-                    jar.Add(new Cookie("centralauth_Token", Uri.EscapeDataString(session.CAToken).Replace("%20", "+"), "/", domain));
-                    jar.Add(new Cookie("centralauth_Session", Uri.EscapeDataString(session.CASession).Replace("%20", "+"), "/", domain));
-                }
-                ((HttpWebRequest) req).CookieContainer = jar;
-            }
+            if (session.CookieJar == null)
+                session.CookieJar = new CookieContainer();
+            ((HttpWebRequest) req).CookieContainer = session.CookieJar;
 
             // login doesn't seem to work properly when done asycnhronously
             if (loggingIn || synchronous)
@@ -226,11 +186,19 @@ namespace ForTheCommonGood
             {
                 req.BeginGetRequestStream(delegate(IAsyncResult innerResult)
                 {
-                    using (Stream s = req.EndGetRequestStream(innerResult))
+                    try
                     {
-                        byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
-                        s.Write(bytes, 0, bytes.Length);
-                        s.Close();
+                        using (Stream s = req.EndGetRequestStream(innerResult))
+                        {
+                            byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
+                            s.Write(bytes, 0, bytes.Length);
+                            s.Close();
+                        }
+                    }
+                    catch (WebException e)
+                    {
+                        onError(Localization.GetString("MorebitsDotNet_NetRequestFailure") + "\n\n" + e.Message);
+                        return;
                     }
                 }, null);
             }
@@ -262,15 +230,20 @@ namespace ForTheCommonGood
                             onError(Localization.GetString("MorebitsDotNet_LoginFailure", login.Attributes["result"].Value));
                             return;
                         }
+                        // copy over the cookies for ".commons.wikimedia.org" (hack, not sure why it's needed...)
+                        CookieCollection jar = session.CookieJar.GetCookies(new Uri(GetProtocol() + "://a." + GetDomain(Wiki.Commons)));
+                        session.CookieJar.Add(jar);
                     }
                     catch (Exception x)
                     {
                         onError(Localization.GetString("MorebitsDotNet_UnknownLoginFailure") + "\n\n" + x.Message + "\n\nHere is some debugging info:\n" + doc.OuterXml);
                     }
-                    
-                    LoginSessions[wiki].CAToken = Regex.Match(resp.Headers["Set-Cookie"], "centralauth_Token=([0-9a-f]+);").Groups[1].Value;
-                    LoginSessions[wiki].CASession = Regex.Match(resp.Headers["Set-Cookie"], "centralauth_Session=([0-9a-f]+);").Groups[1].Value;
                 }
+                
+#if REQUEST_LOG
+                // simple request logging; doesn't include request body, so it should be used in conjunction with a debug session
+                System.IO.File.AppendAllText("RequestLog.txt", "====\r\n\r\n" + req.RequestUri + "\r\n\r\nREQUEST HEADERS:\r\n" + req.Headers + "\r\n\r\nRESPONSE HEADERS:\r\n" + resp.Headers);
+#endif
 
                 XmlNodeList list = doc.GetElementsByTagName("error");
                 if (list.Count == 0)
@@ -300,18 +273,9 @@ namespace ForTheCommonGood
             req.Method = "POST";
 
             LoginInfo session = LoginSessions[wiki];
-            if (session.LoggedIn)
-            {
-                CookieContainer jar = new CookieContainer();
-                string domain = GetDomainForCookies(wiki);
-                jar.Add(new Cookie(session.CookiePrefix + "Session", session.SessionID, "/", domain));
-                jar.Add(new Cookie(session.CookiePrefix + "UserName", Uri.EscapeDataString(session.UserName).Replace("%20", "+"), "/", domain));
-                jar.Add(new Cookie("centralauth_User", Uri.EscapeDataString(session.UserName).Replace("%20", "+"), "/", domain));
-                jar.Add(new Cookie(session.CookiePrefix + "UserID", session.UserID, "/", domain));
-                jar.Add(new Cookie("centralauth_Token", Uri.EscapeDataString(session.CAToken).Replace("%20", "+"), "/", domain));
-                jar.Add(new Cookie("centralauth_Session", Uri.EscapeDataString(session.CASession).Replace("%20", "+"), "/", domain));
-                ((HttpWebRequest) req).CookieContainer = jar;
-            }
+            if (session.CookieJar == null)
+                session.CookieJar = new CookieContainer();
+            ((HttpWebRequest) req).CookieContainer = session.CookieJar;
 
             string boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x");
             req.ContentType = "multipart/form-data; boundary=" + boundary;
@@ -360,6 +324,11 @@ namespace ForTheCommonGood
 
                 XmlDocument doc = new XmlDocument();
                 doc.Load(resp.GetResponseStream());
+
+#if REQUEST_LOG
+                // simple request logging; doesn't include request body, so it should be used in conjunction with a debug session
+                System.IO.File.AppendAllText("RequestLog.txt", "====\r\n\r\n" + req.RequestUri + "\r\n\r\nREQUEST HEADERS:\r\n" + req.Headers + "\r\n\r\nRESPONSE HEADERS:\r\n" + resp.Headers);
+#endif
 
                 XmlNodeList list = doc.GetElementsByTagName("error");
                 if (list.Count == 0)
