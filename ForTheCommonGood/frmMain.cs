@@ -136,7 +136,13 @@ namespace ForTheCommonGood
 
         void ErrorHandler(String msg)
         {
-            MessageBox.Show(msg, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            MorebitsDotNet.DefaultErrorHandler(msg);
+            EnableForm(true);
+        }
+
+        void ErrorHandler(String msg, MessageBoxIcon icon)
+        {
+            MorebitsDotNet.DefaultErrorHandler(msg, icon);
             EnableForm(true);
         }
 
@@ -554,14 +560,14 @@ namespace ForTheCommonGood
                 switch (filePage.Attributes["imagerepository"].Value)
                 {
                     case "shared":
-                        MessageBox.Show(Localization.GetString("AlreadyCommons"));
+                        ErrorHandler(Localization.GetString("AlreadyCommons"));
                         sentry.Fail();
                         return;
                     case "":
                         if (filePage.Attributes["missing"] != null)
-                            MessageBox.Show(Localization.GetString("ImageMissing"));
+                            ErrorHandler(Localization.GetString("ImageMissing"));
                         else
-                            MessageBox.Show(Localization.GetString("NoFile"));
+                            ErrorHandler(Localization.GetString("NoFile"));
                         sentry.Fail();
                         return;
                 }
@@ -772,7 +778,7 @@ namespace ForTheCommonGood
                         return;
                     if (v.Error != null)
                     {
-                        MessageBox.Show(Localization.GetString("FailedToDownload") + "\n\n" + v.Error.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ErrorHandler(Localization.GetString("FailedToDownload") + "\n\n" + v.Error.Message);
                         return;
                     }
 
@@ -860,8 +866,7 @@ namespace ForTheCommonGood
                             RandomImageCache.Add(i.Attributes["title"].Value);
                         if (RandomImageCache.Count == 0)
                         {
-                            MessageBox.Show(Localization.GetString("NoMoreFiles"));
-                            EnableForm(true);
+                            ErrorHandler(Localization.GetString("NoMoreFiles"));
                             return;
                         }
 
@@ -888,11 +893,10 @@ namespace ForTheCommonGood
         {
             if (RandomBlacklist.Count >= RandomImageCache.Count)
             {
-                MessageBox.Show(Localization.GetString("RandomCacheEmpty1") + "\n\n" +
+                ErrorHandler(Localization.GetString("RandomCacheEmpty1") + "\n\n" +
                     Localization.GetString("RandomCacheEmpty2") + "\n\n" +
                     Localization.GetString("RandomCacheEmpty3"));
                 RandomImageCache.Clear();
-                EnableForm(true);
                 return;
             }
 
@@ -1046,7 +1050,7 @@ namespace ForTheCommonGood
 
             if (ImageData == null)
             {
-                MessageBox.Show(Localization.GetString("StillDownloading"));
+                ErrorHandler(Localization.GetString("StillDownloading"));
                 return;
             }
 
@@ -1068,8 +1072,7 @@ namespace ForTheCommonGood
                 {
                     if (doc.GetElementsByTagName("page")[0].Attributes["missing"] == null && !chkIgnoreWarnings.Checked)
                     {
-                        MessageBox.Show(Localization.GetString("FilenameClash"));
-                        EnableForm(true);
+                        ErrorHandler(Localization.GetString("FilenameClash"));
                         return;
                     }
 
@@ -1100,8 +1103,7 @@ namespace ForTheCommonGood
                         XmlNodeList warnings = innerDoc.GetElementsByTagName("warnings");
                         if (warnings.Count > 0 && !chkIgnoreWarnings.Checked)
                         {
-                            MessageBox.Show(Localization.GetString("Warnings1") + "\n\n" + warnings[0].OuterXml + "\n\n" + Localization.GetString("Warnings2"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            EnableForm(true);
+                            ErrorHandler(Localization.GetString("Warnings1") + "\n\n" + warnings[0].OuterXml + "\n\n" + Localization.GetString("Warnings2"), MessageBoxIcon.Warning);
                             return;
                         }
 
@@ -1130,6 +1132,7 @@ namespace ForTheCommonGood
                         // this is invoked when all is finished
                         Action showSuccess = delegate()
                         {
+                            Invoke((Action) ClearWarnings);
                             AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
                             AddWarning(Localization.GetString("HotcatHint_Label"), WarningBoxType.Success);
                             if (Settings.OpenBrowserLocal)
@@ -1170,8 +1173,7 @@ namespace ForTheCommonGood
                             {
                                 if (enDoc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
                                 {
-                                    MessageBox.Show(Localization.GetString("LocalFileDeleted"));
-                                    EnableForm(true);
+                                    ErrorHandler(Localization.GetString("LocalFileDeleted"));
                                     return;
                                 }
 
@@ -1204,7 +1206,7 @@ namespace ForTheCommonGood
                                     string editResult = enInnerDoc.GetElementsByTagName("edit")[0].Attributes["result"].Value.ToLower();
                                     if (editResult != "success")
                                     {
-                                        MessageBox.Show(Localization.GetString("NowCommonsFailed") + " " + editResult, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        ErrorHandler(Localization.GetString("NowCommonsFailed") + " " + editResult, MessageBoxIcon.Information);
                                         return;
                                     }
                                     showSuccess();
@@ -1246,8 +1248,7 @@ namespace ForTheCommonGood
                 {
                     if (doc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
                     {
-                        MessageBox.Show(Localization.GetString("AlreadyDeleted"));
-                        EnableForm(true);
+                        ErrorHandler(Localization.GetString("AlreadyDeleted"));
                         return;
                     }
 
@@ -1308,8 +1309,7 @@ namespace ForTheCommonGood
         //        {
         //            if (enDoc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
         //            {
-        //                MessageBox.Show(Localization.GetString("LocalFileDeleted"));
-        //                EnableForm(true);
+        //                ErrorHandler(Localization.GetString("LocalFileDeleted"));
         //                return;
         //            }
 
@@ -1319,8 +1319,7 @@ namespace ForTheCommonGood
         //            string newText =  Regex.Replace(enText, LocalWikiData.CopyToCommonsRegex, "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         //            if (enText == newText)
         //            {
-        //                MessageBox.Show(Localization.GetString("CouldNotFindTag"), Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-        //                EnableForm(true);
+        //                ErrorHandler(Localization.GetString("CouldNotFindTag"));
         //                return;
         //            }
 
@@ -1340,7 +1339,7 @@ namespace ForTheCommonGood
         //                if (editResult == "success")
         //                    ShowWarningBox(true, "");
         //                else
-        //                    MessageBox.Show(Localization.GetString("FailedPlus") + " " + editResult, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //                    ErrorHandler(Localization.GetString("FailedPlus") + " " + editResult, MessageBoxIcon.Information);
         //            }, ErrorHandler, true);
         //        }, ErrorHandler, true);
         //    };
@@ -1546,7 +1545,7 @@ namespace ForTheCommonGood
 
             if (form.listView.SelectedItems.Count != 1)
             {
-                MessageBox.Show(Localization.GetString("NoRevisionSelected"));
+                ErrorHandler(Localization.GetString("NoRevisionSelected"));
                 return;
             }
 
@@ -1789,8 +1788,7 @@ namespace ForTheCommonGood
                 XmlNodeList l = doc.GetElementsByTagName("parse");
                 if (l.Count < 1)
                 {
-                    MessageBox.Show(Localization.GetString("ParsePageFailed"),
-                        Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information); // TODO - error message better
+                    ErrorHandler(Localization.GetString("ParsePageFailed"), MessageBoxIcon.Information); // TODO - error message better
                     prv.Invoke(new Action(prv.Close));
                     return;
                 }

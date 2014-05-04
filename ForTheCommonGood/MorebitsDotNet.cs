@@ -100,10 +100,33 @@ namespace ForTheCommonGood
             }
         }
 
-        private static void DefaultErrorHandler(string message)
+        // a general-purpose error handler, with logic to find a parent form for the MessageBox
+
+        private delegate DialogResult MessageBoxShowAction(IWin32Window a, string b, string c, MessageBoxButtons d, MessageBoxIcon e);
+
+        public static void DefaultErrorHandler(string message)
         {
-            MessageBox.Show(message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            DefaultErrorHandler(message, MessageBoxIcon.Stop);
         }
+
+        public static void DefaultErrorHandler(string message, MessageBoxIcon icon)
+        {
+            Form fm;
+            try
+            {
+                fm = Form.ActiveForm ?? Application.OpenForms[0];
+                if (fm.InvokeRequired)
+                    fm.Invoke((MessageBoxShowAction) MessageBox.Show, fm, message, Application.ProductName, MessageBoxButtons.OK, icon);
+                else
+                    MessageBox.Show(fm, message, Application.ProductName, MessageBoxButtons.OK, icon);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(message, Application.ProductName, MessageBoxButtons.OK, icon);
+            }
+        }
+
+        // API interaction
 
         public static void LogIn(Wiki wiki, string userName, string password, Action onSuccess,
             Action<string> onError)
@@ -141,7 +164,7 @@ namespace ForTheCommonGood
                     onSuccess();
                 }, onError, true, false);
             }, onError);
-            
+
         }
 
         public static void PostApi(Wiki wiki, StringDictionary query, Action<XmlDocument> onSuccess)
