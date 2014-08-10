@@ -31,6 +31,7 @@ NoImageUsages_Label=No pages use this file
 SeeWikiForFullList_Label=see wiki for full list
 # LOCALIZATION NOTE: do not translate "File:" (this namespace name works on all wikis)
 NewFilenameOnCommons_TextBox=New &filename on Commons (with File: prefix):
+NewFilenameOnTarget_TextBox=New &filename on {0} (with File: prefix):
 IgnoreWarnings_CheckBox=Ignore &warnings
 # LOCALIZATION NOTE: do not translate "{{now Commons}}"
 TagLocalFileWithNowCommons_Label=T&ag local file with {{now Commons}}
@@ -68,11 +69,13 @@ Settings_WindowTitle=Settings
 # LOCALIZATION NOTE: "log in" is a verb here
 LogIn_WindowTitle=Log in
 CommonsLoginDetails_Label=Wikimedia Commons login details
+TargetLoginDetails_Label=Target wiki ({0}) login details
 LocalLoginDetails_Label=Local wiki login details
 UserName_TextBox=User name:
 Password_TextBox=Password:
 LocalWiki_TextBox=Local wiki:
 SameCredentialsAsCommons_CheckBox=Same as Commons login details
+SameCredentialsAsTarget_CheckBox=Same as {0} login details
 IAmLocalAdministrator_CheckBox=I am an admin on my local wiki
 # LOCALIZATION NOTE: do not translate "{{now Commons}}"
 LocalAdministratorExplanation_Label=If checked, files will be deleted after transfer, instead of being tagged with {{now Commons}}.
@@ -80,6 +83,7 @@ LocalAdministratorExplanation_Label=If checked, files will be deleted after tran
 SavePasswordsToDisk_CheckBox=Save passwords to disk (unencrypted, in Base64 encoding)
 CheckForUpdates_CheckBox=Check for updated versions of For the Common Good
 OpenFilePageAutomatically_CheckBox=Open file page on Commons after a successful transfer
+OpenTargetFilePageAutomatically_CheckBox=Open file page on {0} after a successful transfer
 OpenLocalFilePageAutomatically_CheckBox=Open file page on local wiki after a successful transfer
 # LOCALIZATION NOTE: do not translate "CommonsTransfers.log"
 LogTransfers_CheckBox=Log all transfers to a file (CommonsTransfers.log)

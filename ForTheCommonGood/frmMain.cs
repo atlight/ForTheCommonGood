@@ -399,7 +399,7 @@ namespace ForTheCommonGood
                     text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n"),
                         RegexOptions.IgnoreCase);
                 }
-                
+
                 // amend self-license tags
                 string beforeSelfTagCheck = text;
                 foreach (KeyValuePair<string, string> replacement in LocalWikiData.SelfLicenseReplacements)
@@ -414,6 +414,8 @@ namespace ForTheCommonGood
 
                 // the character index at which the information tag finishes (doesn't have to be exact)
                 int infoTagEnd = 0;
+
+                string languageCode = GetCurrentLanguageCode();
 
                 if (!textLowercase.Contains("{{information") &&
                     !Regex.IsMatch(text, "{{" + LocalWikiData.Information, RegexOptions.IgnoreCase))
@@ -435,7 +437,6 @@ namespace ForTheCommonGood
                             exifDate = null;
                     }
 
-                    string languageCode = GetCurrentLanguageCode();
                     // Note: pipe replacement was commented out because it caused problems with piped wikilinks in the
                     // detected description. Of course, now any literal pipes will cause problems...
                     var infoTag =
@@ -456,9 +457,9 @@ namespace ForTheCommonGood
                 {
                     text = "== {{int:filedesc}} ==\n" + text;
 
-                    if (!text.Contains("{{" + GetCurrentLanguageCode() + "|"))
+                    if (languageCode.Length > 0 && !text.Contains("{{" + languageCode + "|"))
                         text = Regex.Replace(text, @"({{Information[\r\n]* *\| ?Description *= *)([^\r\n ][^\r\n]+)([\r\n])",
-                            "$1{{" + GetCurrentLanguageCode() + "|1=$2}}$3", RegexOptions.IgnoreCase);
+                            "$1{{" + languageCode + "|1=$2}}$3", RegexOptions.IgnoreCase);
 
                     if (!LocalWikiData.LocalDomain.StartsWith("en.wikipedia"))  // speed boost - this is unneeded on enwiki
                     {
@@ -489,9 +490,12 @@ namespace ForTheCommonGood
                     });
                 }
 
-                text += "\n\n== {{Original upload log}} ==\n\n{{transferred from|" +
-                    Settings.LocalDomain + "||ftcg}} {{original description page|" +
-                    Settings.LocalDomain + "|" + Uri.EscapeDataString(filename.Substring(filename.IndexOf(':') + 1).Replace(' ', '_')) + "}}";
+                text += "\n\n== {{Original upload log}} ==";
+                if (Settings.CommonsDomain == Settings.DefaultCommonsDomain)
+                {
+                    text += "\n\n{{transferred from|" + Settings.LocalDomain + "||ftcg}} {{original description page|" +
+                        Settings.LocalDomain + "|" + Uri.EscapeDataString(filename.Substring(filename.IndexOf(':') + 1).Replace(' ', '_')) + "}}";
+                }
 
                 text += "\n\n{| class=\"wikitable\"\n! {{int:filehist-datetime}} !! {{int:filehist-dimensions}} !! {{int:filehist-user}} !! {{int:filehist-comment}}";
                 foreach (XmlNode n in iis)
@@ -594,7 +598,7 @@ namespace ForTheCommonGood
                 if (fileTalkPage.Attributes["missing"] == null)
                 {
                     string warningtext = "• " + Localization.GetString("ContentOnTalkPage");
-                    if (fileTalkPage.Attributes["length"] != null && 
+                    if (fileTalkPage.Attributes["length"] != null &&
                         int.Parse(fileTalkPage.Attributes["length"].Value) > int.Parse(LocalWikiData.FileTalkMinimumSize))
                     {
                         warningtext = warningtext.Replace("{1}", " (" + int.Parse(fileTalkPage.Attributes["length"].Value).
@@ -603,7 +607,7 @@ namespace ForTheCommonGood
                         {
                             try
                             {
-                                Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/File_talk:" + 
+                                Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/File_talk:" +
                                     filename.Substring(filename.IndexOf(':') + 1));
                             }
                             catch (Exception)
@@ -1266,7 +1270,8 @@ namespace ForTheCommonGood
                     {
                         EnableForm(true);
                         AddWarning(Localization.GetString("LooksGood"), WarningBoxType.Success);
-                        AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
+                        if (Settings.CommonsDomain == Settings.DefaultCommonsDomain)
+                            AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
                         if (Settings.OpenBrowserLocal)
                             lnkLocalFile_LinkClicked(null, null);
                         if (Settings.OpenBrowserAutomatically)
@@ -1382,6 +1387,19 @@ namespace ForTheCommonGood
                 lblLocalFileDesc.Text = Localization.GetString("FilePageOnLocalWiki_TextBox_Format", Settings.LocalDomain);
             }
 
+            if (Settings.CommonsDomain == Settings.DefaultCommonsDomain)
+            {
+                lnkCommonsFile.Text = Localization.GetString("ViewFilePageOnWikimediaCommons_Hyperlink");
+                lblCommonsFileDesc.Text = Localization.GetString("FilePageOnCommons_TextBox");
+                lblNormName.Text = Localization.GetString("NewFilenameOnCommons_TextBox");
+            }
+            else
+            {
+                lnkCommonsFile.Text = Localization.GetString("ViewFilePageOnLocalWiki_Hyperlink_Format", Settings.CommonsDomain);
+                lblCommonsFileDesc.Text = Localization.GetString("FilePageOnLocalWiki_TextBox_Format", Settings.CommonsDomain);
+                lblNormName.Text = Localization.GetString("NewFilenameOnTarget_TextBox", Settings.CommonsDomain);
+            }
+
             // local wiki data
             LocalWikiData.LoadWikiData((Settings.LocalWikiData == "" ? Properties.Resources.en_wikipedia : Settings.LocalWikiData)
                 .Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
@@ -1422,7 +1440,7 @@ namespace ForTheCommonGood
         {
             try
             {
-                Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/" + filename);
+                Process.Start(MorebitsDotNet.GetProtocol() + "://" + MorebitsDotNet.GetDomain(Wiki.Local) + "/wiki/" + filename);
             }
             catch (Exception)
             {
@@ -1434,7 +1452,7 @@ namespace ForTheCommonGood
         {
             try
             {
-                Process.Start(MorebitsDotNet.GetProtocol() + "://commons.wikimedia.org/wiki/" + lnkCommonsFile.Tag.ToString());
+                Process.Start(MorebitsDotNet.GetProtocol() + "://" + MorebitsDotNet.GetDomain(Wiki.Commons) + "/wiki/" + lnkCommonsFile.Tag.ToString());
             }
             catch (Exception)
             {

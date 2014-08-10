@@ -19,18 +19,15 @@ namespace ForTheCommonGood
             InitializeComponent();
             lblVersion.Text = Localization.GetString("Version_Format", Application.ProductVersion.ToString());
 
-            grpCommons.Text = Localization.GetString("CommonsLoginDetails_Label");
             grpLocal.Text = Localization.GetString("LocalLoginDetails_Label");
             lblCommonsUserName.Text = lblLocalUserName.Text = Localization.GetString("UserName_TextBox");
             lblCommonsPassword.Text = lblLocalPassword.Text = Localization.GetString("Password_TextBox");
             lblLocalDomain.Text = Localization.GetString("LocalWiki_TextBox");
-            chkLocalSameAsCommons.Text = Localization.GetString("SameCredentialsAsCommons_CheckBox");
             chkLocalSysop.Text = Localization.GetString("IAmLocalAdministrator_CheckBox");
             lblLocalSysopHint.Text = Localization.GetString("LocalAdministratorExplanation_Label");
             chkSaveCreds.Text = Localization.GetString("SavePasswordsToDisk_CheckBox");
             chkUseHttps.Text = Localization.GetString("UseHttps_CheckBox");
             chkAutoUpdate.Text = Localization.GetString("CheckForUpdates_CheckBox");
-            chkOpenBrowserAutomatically.Text = Localization.GetString("OpenFilePageAutomatically_CheckBox");
             chkOpenBrowserLocal.Text = Localization.GetString("OpenLocalFilePageAutomatically_CheckBox");
             chkLogTransfers.Text = Localization.GetString("LogTransfers_CheckBox");
             lnkThisThatOther.Text = Localization.GetString("Author_Label") + " This, that and the other";
@@ -45,6 +42,19 @@ namespace ForTheCommonGood
             lblLocalCurrentLabel.Text = Localization.GetString("LocalWikiDataCurrent_Label");
             btnOK.Text = Localization.GetString("OK_Button");
             btnCancel.Text = Localization.GetString("Cancel_Button");
+
+            if (Settings.CommonsDomain == Settings.DefaultCommonsDomain)
+            {
+                grpCommons.Text = Localization.GetString("CommonsLoginDetails_Label");
+                chkLocalSameAsCommons.Text = Localization.GetString("SameCredentialsAsCommons_CheckBox");
+                chkOpenBrowserAutomatically.Text = Localization.GetString("OpenFilePageAutomatically_CheckBox");
+            }
+            else
+            {
+                grpCommons.Text = Localization.GetString("TargetLoginDetails_Label", Settings.CommonsDomain);
+                chkLocalSameAsCommons.Text = Localization.GetString("SameCredentialsAsTarget_CheckBox", Settings.CommonsDomain);
+                chkOpenBrowserAutomatically.Text = Localization.GetString("OpenTargetFilePageAutomatically_CheckBox", Settings.CommonsDomain);
+            }
 
             if (loginOnly)
             {
@@ -120,7 +130,7 @@ namespace ForTheCommonGood
                 lblLocalCurrent.Text = LocalWikiData.LocalDomain;
             }
             else
-                lblLocalCurrent.Text = "en.wikipedia (Default)"; // TODO: localize
+                lblLocalCurrent.Text = Settings.DefaultLocalDomain + " (Default)"; // TODO: localize
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -181,10 +191,10 @@ namespace ForTheCommonGood
         private void btnLocalDataReset_Click(object sender, EventArgs e)
         {
             localWikiDataFile = "";
-            lblLocalCurrent.Text = "en.wikipedia (Default)";
-            if ("en.wikipedia" != txtLocalDomain.Text)
+            lblLocalCurrent.Text = Settings.DefaultLocalDomain + " (Default)";
+            if (txtLocalDomain.Text != Settings.DefaultLocalDomain)
             {
-                MessageBox.Show(Localization.GetString("LocalWikiDataReset", "en.wikipedia"));
+                MessageBox.Show(Localization.GetString("LocalWikiDataReset", Settings.DefaultLocalDomain));
             }
         }
     }
@@ -195,6 +205,8 @@ namespace ForTheCommonGood
         public static string LocalUserName { get; set; }
         public static string LocalPassword { get; set; }
         public static bool LocalSysop { get; set; }
+
+        public static string CommonsDomain { get; set; }
         public static string CommonsUserName { get; set; }
         public static string CommonsPassword { get; set; }
         public static bool SaveCreds { get; set; }
@@ -213,9 +225,13 @@ namespace ForTheCommonGood
 
         const string settingsFileName = "ForTheCommonGood.cfg";
 
+        public static string DefaultLocalDomain { get { return "en.wikipedia"; } }
+        public static string DefaultCommonsDomain { get { return "commons.wikimedia"; } }
+
         static Settings()
         {
-            LocalDomain = "en.wikipedia";
+            LocalDomain = DefaultLocalDomain;
+            CommonsDomain = DefaultCommonsDomain;
             LocalUserName = LocalPassword = CommonsPassword = CommonsUserName =
                 LocalWikiData =
                 CurrentSourceOption = SourceCategory = SourceTextFile = "";
@@ -237,6 +253,8 @@ namespace ForTheCommonGood
                         Settings.LocalPassword = Encoding.UTF8.GetString(Convert.FromBase64String(l.Substring("LocalPassword=".Length)));
                     if (l.StartsWith("LocalSysop="))
                         Settings.LocalSysop = l.Substring("LocalSysop=".Length) == "true";
+                    if (l.StartsWith("CommonsDomain="))
+                        Settings.CommonsDomain = l.Substring("CommonsDomain=".Length);
                     if (l.StartsWith("CommonsUserName="))
                         Settings.CommonsUserName = l.Substring("CommonsUserName=".Length);
                     if (l.StartsWith("CommonsPassword="))
@@ -293,6 +311,8 @@ namespace ForTheCommonGood
                     "SourceCategory=" + Settings.SourceCategory,
                     "SourceTextFile=" + Settings.SourceTextFile,
                 });
+                if (Settings.CommonsDomain != Settings.DefaultCommonsDomain)
+                    lines.Add("CommonsDomain=" + Settings.CommonsDomain);
                 File.WriteAllLines(settingsFileName, lines.ToArray(), Encoding.UTF8);
             }
             catch (Exception ex)

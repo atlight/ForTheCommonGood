@@ -169,7 +169,7 @@
             this.txtLocalDomain.Name = "txtLocalDomain";
             this.txtLocalDomain.Size = new System.Drawing.Size(88, 21);
             this.txtLocalDomain.TabIndex = 1;
-            this.txtLocalDomain.Text = "en.wikipedia";
+            this.txtLocalDomain.Text = Settings.DefaultLocalDomain;
             this.txtLocalDomain.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // txtLocalUserName

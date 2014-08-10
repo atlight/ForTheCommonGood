@@ -39,7 +39,7 @@ namespace ForTheCommonGood
                 case Wiki.Local:
                     return Settings.LocalDomain + ".org";
                 case Wiki.Commons:
-                    return "commons.wikimedia.org";
+                    return Settings.CommonsDomain + ".org";
                 default:
                     throw new ArgumentOutOfRangeException("w");
             }
