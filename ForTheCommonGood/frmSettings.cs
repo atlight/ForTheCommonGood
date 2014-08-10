@@ -14,7 +14,7 @@ namespace ForTheCommonGood
     {
         string localWikiDataFile = "";
 
-        public frmSettings(bool loginOnly)
+        public frmSettings(bool loginOnly, bool showInTaskbar)
         {
             InitializeComponent();
             lblVersion.Text = Localization.GetString("Version_Format", Application.ProductVersion.ToString());
@@ -61,14 +61,19 @@ namespace ForTheCommonGood
                 txtCommonsUserName.Enabled = txtLocalDomain.Enabled = txtLocalUserName.Enabled =
                     chkLocalSameAsCommons.Enabled = lblLocalSysopHint.Visible = chkLocalSysop.Visible = 
                     panRightSide.Visible = false;
-                Text = Localization.GetString("LogIn_WindowTitle") + " - " + Application.ProductName;
+                Text = Localization.GetString("LogIn_WindowTitle");
                 ClientSize = new Size(grpCommons.Width + 18, ClientSize.Height + 32);
-                ShowInTaskbar = true;
-                FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             }
             else
             {
                 Text = Localization.GetString("Settings_WindowTitle");
+            }
+
+            if (showInTaskbar)
+            {
+                FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+                ShowInTaskbar = true;
+                Text += " - " + Application.ProductName;
             }
         }
 

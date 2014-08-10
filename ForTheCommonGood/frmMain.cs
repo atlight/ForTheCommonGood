@@ -120,7 +120,7 @@ namespace ForTheCommonGood
                 Settings.ReadSettings();
                 if (Settings.SaveCreds == false)
                 {
-                    frmSettings set = new frmSettings(Settings.LocalUserName != "");
+                    frmSettings set = new frmSettings(Settings.LocalUserName != "", true);
                     set.ShowDialog(this);
                 }
             }
@@ -128,7 +128,7 @@ namespace ForTheCommonGood
             {
                 MessageBox.Show(Localization.GetString("Welcome1") + "\n\n" + Localization.GetString("Welcome2"),
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                btnSettings_Click(this, null);
+                new frmSettings(false, true).ShowDialog(this);
             }
 
             InitSettings();
@@ -1361,7 +1361,7 @@ namespace ForTheCommonGood
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            frmSettings set = new frmSettings(false);
+            frmSettings set = new frmSettings(false, false);
             if (set.ShowDialog(this) == DialogResult.Cancel)
                 return;
             foreach (Wiki w in MorebitsDotNet.LoginSessions.Keys)
@@ -1799,7 +1799,10 @@ namespace ForTheCommonGood
                 { "prop", "text" },
                 { "pst", "true" },
                 { "text", textBox3.Text },
-                { "title", txtNormName.Text }
+                { "title", txtNormName.Text },
+                { "disabletoc", "true" },
+                { "disableeditsection", "true" },
+                { "uselang", Localization.GetString("LanguageCode") }
             };
             MorebitsDotNet.PostApi(Wiki.Commons, query, delegate(XmlDocument doc)
             {
@@ -1811,15 +1814,8 @@ namespace ForTheCommonGood
                     return;
                 }
 
-                // remove section-edit links
                 string pageHtml = l[0].InnerText;
-                pageHtml = Regex.Replace(pageHtml, @"<span class=""editsection"">\[(.+)\]</span>\s*", "");
-
-                prv.Invoke(new Action(delegate()
-                    {
-                        prv.webBrowser1.Document.Write(frmPreview.css + pageHtml);
-                    }));
-
+                prv.Invoke(new Action(delegate() { prv.SetContent(pageHtml); }));
             }, delegate(string msg)
             {
                 ErrorHandler(msg);
