@@ -489,10 +489,6 @@ namespace ForTheCommonGood
                 {
                     text = "== {{int:filedesc}} ==\n" + text;
 
-                    if (languageCode.Length > 0 && !text.Contains("{{" + languageCode + "|"))
-                        text = Regex.Replace(text, @"({{Information[\r\n]* *\| ?Description *= *)([^\r\n ][^\r\n]+)([\r\n])",
-                            "$1{{" + languageCode + "|1=$2}}$3", RegexOptions.IgnoreCase);
-
                     if (!LocalWikiData.LocalDomain.StartsWith("en.wikipedia"))  // speed boost - this is unneeded on enwiki
                     {
                         string errorTopicText = "";
@@ -519,6 +515,10 @@ namespace ForTheCommonGood
                                 Localization.GetString("LocalWikiDataRegexError", errorTopicText) + "\n\n" + e.Message);
                         }
                     }
+
+                    if (languageCode.Length > 0 && !text.Contains("{{" + languageCode + "|"))
+                        text = Regex.Replace(text, @"({{Information[\r\n]* *\| ?Description *= *)([^\r\n ][^\r\n]+)([\r\n])",
+                            "$1{{" + languageCode + "|1=$2}}$3", RegexOptions.IgnoreCase);
 
                     Match infoTagMatch = Regex.Match(text, @"{{\s*information\s*(\|({{[^{}]*}}|[^{}])*)?}}", RegexOptions.IgnoreCase);
                     infoTagEnd = infoTagMatch.Index + infoTagMatch.Length - 8;  // -8 for sanity
