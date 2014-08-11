@@ -194,6 +194,8 @@ ParsePageFailed=Failed to fetch the preview from the server.
 # LOCALIZATION NOTE: {0} is the TalkPage localized string, {1} is something like " (1,234 bytes)"
 ContentOnTalkPage=The file has a {0}{1} - copy it over manually if relevant.
 TalkPage=talk page
+LocalWikiDataError=There is an error in the currently loaded local wiki data file. If you think you have already corrected this problem, please go back to the Settings dialog and load the file again.
+LocalWikiDataRegexError=The regular expression provided for "{0}" is invalid.
 
 # Network errors
 MorebitsDotNet_LoginFailure=Login failure: {0}

@@ -355,11 +355,19 @@ namespace ForTheCommonGood
                 }
                 foreach (LocalWikiData.PotentialProblem problem in LocalWikiData.PotentialProblems)
                 {
-                    if (problem.IsRegex ?
-                        Regex.IsMatch(text, problem.Test, RegexOptions.IgnoreCase) :
-                        textLowercase.Contains(problem.Test.ToLower()))
+                    try
                     {
-                        potentialProblems.Add("• " + problem.Message);
+                        if (problem.IsRegex ?
+                            Regex.IsMatch(text, problem.Test, RegexOptions.IgnoreCase) :
+                            textLowercase.Contains(problem.Test.ToLower()))
+                        {
+                            potentialProblems.Add("• " + problem.Message);
+                        }
+                    }
+                    catch (ArgumentException e)
+                    {
+                        ErrorHandler(Localization.GetString("LocalWikiDataError") + "\n\n" +
+                            Localization.GetString("LocalWikiDataRegexError", "PotentialProblem IfRegex") + "\n\n" + e.Message);
                     }
                 }
 
@@ -377,7 +385,15 @@ namespace ForTheCommonGood
 
                 // clean up local templates, etc.
                 string prefix = GetCurrentInterwikiPrefix(false);
-                text = Regex.Replace(text, LocalWikiData.CopyToCommonsRegex, "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                try
+                {
+                    text = Regex.Replace(text, LocalWikiData.CopyToCommonsRegex, "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                }
+                catch (ArgumentException e)
+                {
+                    ErrorHandler(Localization.GetString("LocalWikiDataError") + "\n\n" +
+                        Localization.GetString("LocalWikiDataRegexError", "CopyToCommonsRegex") + "\n\n" + e.Message);
+                }
                 //text = Regex.Replace(text, "== ?(Summary|Licensing:?) ?== *\n", "\n");
                 text = Regex.Replace(text, "== ?(" + LocalWikiData.Summary + ") ?== *\n", "", RegexOptions.IgnoreCase);//"== {{int:filedesc}} ==\n");
                 text = Regex.Replace(text, "\n?\n?== ?(" + LocalWikiData.Licensing + ") ?== *\n", "\n\n== {{int:license-header}} ==\n", RegexOptions.IgnoreCase);
@@ -396,17 +412,33 @@ namespace ForTheCommonGood
                 // per-wiki cleanup
                 foreach (KeyValuePair<string, string> replacement in LocalWikiData.Replacements)
                 {
-                    text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n"),
-                        RegexOptions.IgnoreCase);
+                    try
+                    {
+                        text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n"),
+                            RegexOptions.IgnoreCase);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        ErrorHandler(Localization.GetString("LocalWikiDataError") + "\n\n" +
+                            Localization.GetString("LocalWikiDataRegexError", "Replacement") + "\n\n" + e.Message);
+                    }
                 }
 
                 // amend self-license tags
                 string beforeSelfTagCheck = text;
                 foreach (KeyValuePair<string, string> replacement in LocalWikiData.SelfLicenseReplacements)
                 {
-                    text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n")
-                        .Replace("%%OriginalUploader%%", origUploader).Replace("%%InterwikiLinkPrefix%%", prefix),
-                        RegexOptions.IgnoreCase);
+                    try
+                    {
+                        text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n")
+                            .Replace("%%OriginalUploader%%", origUploader).Replace("%%InterwikiLinkPrefix%%", prefix),
+                            RegexOptions.IgnoreCase);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        ErrorHandler(Localization.GetString("LocalWikiDataError") + "\n\n" +
+                            Localization.GetString("LocalWikiDataRegexError", "SelfLicenseReplacement") + "\n\n" + e.Message);
+                    }
                 }
                 bool selfLicense = (text != beforeSelfTagCheck);
 
@@ -463,13 +495,29 @@ namespace ForTheCommonGood
 
                     if (!LocalWikiData.LocalDomain.StartsWith("en.wikipedia"))  // speed boost - this is unneeded on enwiki
                     {
-                        text = Regex.Replace(text, @"{{\s*" + LocalWikiData.Information, "{{Information", RegexOptions.IgnoreCase);
-                        text = Regex.Replace(text, @"\|\s*" + LocalWikiData.Description + @"\s*=", "|Description    =", RegexOptions.IgnoreCase);
-                        text = Regex.Replace(text, @"\|\s*" + LocalWikiData.Date + @"\s*=", "|Date           =", RegexOptions.IgnoreCase);
-                        text = Regex.Replace(text, @"\|\s*" + LocalWikiData.Source + @"\s*=", "|Source         =", RegexOptions.IgnoreCase);
-                        text = Regex.Replace(text, @"\|\s*" + LocalWikiData.Author + @"\s*=", "|Author         =", RegexOptions.IgnoreCase);
-                        text = Regex.Replace(text, @"\|\s*" + LocalWikiData.Permission + @"\s*=", "|Permission     =", RegexOptions.IgnoreCase);
-                        text = Regex.Replace(text, @"\|\s*" + LocalWikiData.Other_versions + @"\s*=", "|Other_versions =", RegexOptions.IgnoreCase);
+                        string errorTopicText = "";
+                        try
+                        {
+                            errorTopicText = "Information";
+                            text = Regex.Replace(text, @"{{\s*(" + LocalWikiData.Information + @")", "{{Information", RegexOptions.IgnoreCase);
+                            errorTopicText = "Description";
+                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Description + @")\s*=", "|Description    =", RegexOptions.IgnoreCase);
+                            errorTopicText = "Date";
+                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Date + @")\s*=", "|Date           =", RegexOptions.IgnoreCase);
+                            errorTopicText = "Source";
+                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Source + @")\s*=", "|Source         =", RegexOptions.IgnoreCase);
+                            errorTopicText = "Author";
+                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Author + @")\s*=", "|Author         =", RegexOptions.IgnoreCase);
+                            errorTopicText = "Permission";
+                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Permission + @")\s*=", "|Permission     =", RegexOptions.IgnoreCase);
+                            errorTopicText = "Other_versions";
+                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Other_versions + @")\s*=", "|Other_versions =", RegexOptions.IgnoreCase);
+                        }
+                        catch (ArgumentException e)
+                        {
+                            ErrorHandler(Localization.GetString("LocalWikiDataError") + "\n\n" +
+                                Localization.GetString("LocalWikiDataRegexError", errorTopicText) + "\n\n" + e.Message);
+                        }
                     }
 
                     Match infoTagMatch = Regex.Match(text, @"{{\s*information\s*(\|({{[^{}]*}}|[^{}])*)?}}", RegexOptions.IgnoreCase);
