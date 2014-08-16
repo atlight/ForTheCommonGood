@@ -42,6 +42,9 @@
             // 
             // listView
             // 
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colPreview,
             this.colDateTime,
@@ -60,27 +63,27 @@
             // 
             // colPreview
             // 
-            this.colPreview.Text = "Preview";
+            this.colPreview.Text = "<preview>";
             this.colPreview.Width = 150;
             // 
             // colDateTime
             // 
-            this.colDateTime.Text = "Date/Time";
+            this.colDateTime.Text = "<date/time>";
             this.colDateTime.Width = 130;
             // 
             // colDimensions
             // 
-            this.colDimensions.Text = "Dimensions";
+            this.colDimensions.Text = "<dimensions>";
             this.colDimensions.Width = 80;
             // 
             // colUser
             // 
-            this.colUser.Text = "User";
+            this.colUser.Text = "<user>";
             this.colUser.Width = 70;
             // 
             // colComment
             // 
-            this.colComment.Text = "Comment";
+            this.colComment.Text = "<comment>";
             this.colComment.Width = 230;
             // 
             // imageList
@@ -91,24 +94,26 @@
             // 
             // button1
             // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button1.Location = new System.Drawing.Point(542, 497);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
-            this.button1.Text = "OK";
+            this.button1.Text = "<ok>";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button2.Location = new System.Drawing.Point(622, 497);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Cancel";
+            this.button2.Text = "<cancel>";
             this.button2.UseVisualStyleBackColor = true;
             // 
             // frmRevisionBrowse
@@ -129,7 +134,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Select version to transfer";
+            this.Text = "<select revision>";
             this.ResumeLayout(false);
 
         }
