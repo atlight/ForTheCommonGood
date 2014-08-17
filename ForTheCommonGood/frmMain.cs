@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -1625,29 +1626,26 @@ namespace ForTheCommonGood
 
             // check for updates
             if (Settings.AutoUpdate)
-            {
-                WebClient autoupdate = new WebClient();
-                autoupdate.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
-                autoupdate.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
-                autoupdate.DownloadStringCompleted += delegate(object obj, DownloadStringCompletedEventArgs resp)
-                {
-                    if (resp.Error != null)
-                        return;   // fail silently for the moment
+                updateChecker.RunWorkerAsync();
+        }
 
-                    try
-                    {
-                        Version newVersion = new Version(resp.Result.Split('\n')[1]);
-                        if (newVersion > new Version(Application.ProductVersion))
-                        {
-                            new frmUpdateAvailable(newVersion).ShowDialog();
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        // don't really care - fail silently
-                    }
-                };
-                autoupdate.DownloadStringAsync(new Uri("http://en.wikipedia.org/w/index.php?action=raw&ctype=text/css&title=User:This,%20that%20and%20the%20other/FtCG%20current%20version.css"));
+        private void updateChecker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            WebClient autoupdate = new WebClient();
+            autoupdate.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
+            autoupdate.CachePolicy = new RequestCachePolicy(RequestCacheLevel.NoCacheNoStore);
+            try
+            {
+                string result = autoupdate.DownloadString(new Uri("http://en.wikipedia.org/w/index.php?action=raw&ctype=text/css&title=User:This,%20that%20and%20the%20other/FtCG%20current%20version.css"));
+                Version newVersion = new Version(result.Split('\n')[1]);
+                if (newVersion > new Version(Application.ProductVersion))
+                {
+                    Invoke((Action) delegate() { new frmUpdateAvailable(newVersion).ShowDialog(this); });
+                }
+            }
+            catch (Exception)
+            {
+                // don't really care - fail silently
             }
         }
 

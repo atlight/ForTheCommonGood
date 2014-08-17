@@ -235,4 +235,7 @@
         xLniKFWWLQsEIjkDgMy0UX/+zAHEQ4WkjIzyHBHSrZuaMyqIDc5YgZGeO5RQafrQMCAAOw==
 </value>
   </data>
+  <metadata name="updateChecker.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>135, 17</value>
+  </metadata>
 </root>

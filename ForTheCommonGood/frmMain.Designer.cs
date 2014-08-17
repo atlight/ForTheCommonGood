@@ -78,6 +78,7 @@
             this.panStatus = new System.Windows.Forms.Panel();
             this.icoInfo = new System.Windows.Forms.PictureBox();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.updateChecker = new System.ComponentModel.BackgroundWorker();
             this.tableLayoutPanel1.SuspendLayout();
             this.panWarning.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoWarning)).BeginInit();
@@ -681,6 +682,10 @@
             this.lblStatus.Text = "<loading>";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // updateChecker
+            // 
+            this.updateChecker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.updateChecker_DoWork);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -766,6 +771,7 @@
         private System.Windows.Forms.ToolStripButton btnLinkify;
         private System.Windows.Forms.ToolStripButton btnPreview;
         private System.Windows.Forms.FlowLayoutPanel panWarningTexts;
+        private System.ComponentModel.BackgroundWorker updateChecker;
     }
 }
 
