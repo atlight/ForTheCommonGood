@@ -111,7 +111,7 @@ namespace ForTheCommonGood
                 welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_NotABludge5"));
             welcome.AppendLine("");
             welcome.AppendLine(" " + Localization.GetString("WelcomeToFtcg_Enjoy"));
-            textBox2.Text = welcome.ToString();
+            txtLocalText.Text = welcome.ToString();
 
             toolBarLinks.Renderer = new SimpleToolStripRenderer();
 
@@ -311,7 +311,7 @@ namespace ForTheCommonGood
                 btnTransfer.Enabled = txtNormName.Enabled = chkDeleteAfter.Enabled =
                     chkIgnoreWarnings.Enabled = toolBarLinks.Enabled = true;
 
-                textBox2.Text = textBox3.Text = lblName.Text = lblRevision.Text = lblDimensions.Text = "";
+                txtLocalText.Text = txtCommonsText.Text = lblName.Text = lblRevision.Text = lblDimensions.Text = "";
                 pictureBox1.Image = null;
                 pictureBox1.Cursor = Cursors.Default;
                 lblPastRevisions.Visible = btnPastRevisions.Visible = lblViewExif.Visible =
@@ -574,7 +574,7 @@ namespace ForTheCommonGood
 
                 Invoke(new Action(delegate()
                     {
-                        textBox3.Text = text.Replace("\n", "\r\n");
+                        txtCommonsText.Text = text.Replace("\n", "\r\n");
                         lnkLocalFile.Enabled = lnkGoogleImageSearch.Enabled = true;
                         lnkCommonsFile.Enabled = false;
                         lblFileLinks.Visible = lstFileLinks.Visible = true;
@@ -695,7 +695,7 @@ namespace ForTheCommonGood
 
                 Invoke(new Action(delegate()
                 {
-                    textBox2.Text = text.Replace("\n", "\r\n");
+                    txtLocalText.Text = text.Replace("\n", "\r\n");
                 }));
 
                 XmlNodeList ns = doc.GetElementsByTagName("n");
@@ -1136,7 +1136,7 @@ namespace ForTheCommonGood
                     {
                         { "action", "upload" },
                         { "filename", newFilename },
-                        { "text", textBox3.Text.Replace("<!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->", "") },
+                        { "text", txtCommonsText.Text.Replace("<!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->", "") },
                         // Note: this upload comment is not localised, since Commons uses English as lingua franca
                         { "comment", "Transferred from " + Settings.LocalDomain + ": see original upload log above" },
                         { "token", token }
@@ -1819,12 +1819,14 @@ namespace ForTheCommonGood
 
         private void lnkLinkify_LinkClicked(object sender, EventArgs e)
         {
-            int oldSelectionStart = textBox3.SelectionStart;
-            int oldSelectionLength = textBox3.SelectionLength;
-            textBox3.Text = textBox3.Text.Insert(oldSelectionStart + oldSelectionLength, "|]]")
-                .Insert(oldSelectionStart, "[[" + GetCurrentInterwikiPrefix(false) + ":");
-            textBox3.Focus();
-            textBox3.Select(oldSelectionStart, oldSelectionLength + 9);
+            int oldSelectionStart = txtCommonsText.SelectionStart;
+            int oldSelectionLength = txtCommonsText.SelectionLength;
+            string prefix = "[[" + GetCurrentInterwikiPrefix(false) + ":";
+            string suffix = "|]]";
+            txtCommonsText.Text = txtCommonsText.Text.Insert(oldSelectionStart + oldSelectionLength, suffix)
+                .Insert(oldSelectionStart, prefix);
+            txtCommonsText.Focus();
+            txtCommonsText.Select(oldSelectionStart, oldSelectionLength + prefix.Length + suffix.Length);
         }
 
         private void lnkPreviewWikitext_LinkClicked(object sender, EventArgs e)
@@ -1844,7 +1846,7 @@ namespace ForTheCommonGood
                 { "action", "parse" },
                 { "prop", "text" },
                 { "pst", "true" },
-                { "text", textBox3.Text },
+                { "text", txtCommonsText.Text },
                 { "title", txtNormName.Text },
                 { "disabletoc", "true" },
                 { "disableeditsection", "true" },
