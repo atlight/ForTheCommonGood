@@ -4,21 +4,24 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Net;
+using System.Net.Cache;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 
 namespace ForTheCommonGood
 {
-    public delegate void Action();
-
     public enum Wiki
     {
         Local,
         Commons
     }
+
+    public delegate void MorebitsDotNetLoginSuccess();
+    public delegate void MorebitsDotNetGetSuccess(string result, object userToken);
+    public delegate void MorebitsDotNetPostSuccess(XmlDocument doc);
+    public delegate void MorebitsDotNetError(string errorMsg);
 
     public static class MorebitsDotNet
     {
@@ -102,8 +105,17 @@ namespace ForTheCommonGood
 
         // API interaction
 
-        public static void LogIn(Wiki wiki, string userName, string password, Action onSuccess,
-            Action<string> onError)
+        /// <summary>
+        /// Logs into the specified MediaWiki API endpoint.
+        /// </summary>
+        /// <param name="wiki">The <see cref="Wiki"/> to contact.</param>
+        /// <param name="userName">The user name to use for the login attempt.</param>
+        /// <param name="password">The password to use for the login attempt.</param>
+        /// <param name="onSuccess">A function that will be called when the login attempt is successful.</param>
+        /// <param name="onError">A function that will be called when the login attempt fails.
+        /// The function is passed the error message string as its only parameter.</param>
+        public static void LogIn(Wiki wiki, string userName, string password, MorebitsDotNetLoginSuccess onSuccess,
+            MorebitsDotNetError onError)
         {
             StringDictionary query = new StringDictionary
             {
@@ -139,25 +151,35 @@ namespace ForTheCommonGood
 
         }
 
-        public static void PostApi(Wiki wiki, StringDictionary query, Action<XmlDocument> onSuccess)
+        public static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess)
         {
             PostApi(wiki, query, onSuccess, DefaultErrorHandler, false, false);
         }
 
-        public static void PostApi(Wiki wiki, StringDictionary query, Action<XmlDocument> onSuccess,
-            Action<string> onError)
+        public static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess,
+            MorebitsDotNetError onError)
         {
             PostApi(wiki, query, onSuccess, onError, false, false);
         }
 
-        public static void PostApi(Wiki wiki, StringDictionary query, Action<XmlDocument> onSuccess,
-            Action<string> onError, bool synchronous)
+        /// <summary>
+        /// Makes an HTTP POST request to the specified MediaWiki API endpoint.
+        /// </summary>
+        /// <param name="wiki">The <see cref="Wiki"/> to contact.</param>
+        /// <param name="query">A dictionary of key-value pairs that represent the request parameters.</param>
+        /// <param name="onSuccess">A function that will be called when the request is successful.
+        /// The function is passed the XML response as its only parameter.</param>
+        /// <param name="onError">A function that will be called when the request fails.
+        /// The function is passed the error message string as its only parameter.</param>
+        /// <param name="synchronous">Set to true if the request should be run synchronously (that is, it should hold up program execution).</param>
+        public static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess,
+            MorebitsDotNetError onError, bool synchronous)
         {
             PostApi(wiki, query, onSuccess, onError, false, synchronous);
         }
 
-        private static void PostApi(Wiki wiki, StringDictionary query, Action<XmlDocument> onSuccess,
-            Action<string> onError, bool loggingIn, bool synchronous)
+        private static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess,
+            MorebitsDotNetError onError, bool loggingIn, bool synchronous)
         {
             string requestContent = "format=xml&";
             foreach (DictionaryEntry i in query)
@@ -174,7 +196,7 @@ namespace ForTheCommonGood
                 session.CookieJar = new CookieContainer();
             ((HttpWebRequest) req).CookieContainer = session.CookieJar;
 
-            // login doesn't seem to work properly when done asycnhronously
+            // login doesn't seem to work properly when done asynchronously
             if (loggingIn || synchronous)
             {
                 Stream s = req.GetRequestStream();
@@ -239,7 +261,7 @@ namespace ForTheCommonGood
                         onError(Localization.GetString("MorebitsDotNet_UnknownLoginFailure") + "\n\n" + x.Message + "\n\nHere is some debugging info:\n" + doc.OuterXml);
                     }
                 }
-                
+
 #if REQUEST_LOG
                 // simple request logging; doesn't include request body, so it should be used in conjunction with a debug session
                 System.IO.File.AppendAllText("RequestLog.txt", "====\r\n\r\n" + req.RequestUri + "\r\n\r\nREQUEST HEADERS:\r\n" + req.Headers + "\r\n\r\nRESPONSE HEADERS:\r\n" + resp.Headers);
@@ -256,13 +278,25 @@ namespace ForTheCommonGood
         }
 
         public static void UploadFile(Wiki wiki, StringDictionary query, byte[] file, string fileName, //string fileMimeType, 
-            string fileParamName, Action<XmlDocument> onSuccess)
+            string fileParamName, MorebitsDotNetPostSuccess onSuccess)
         {
             UploadFile(wiki, query, file, fileName, fileParamName, onSuccess, DefaultErrorHandler);
         }
 
+        /// <summary>
+        /// Uploads a file by making an HTTP POST request to the specified MediaWiki API endpoint.
+        /// </summary>
+        /// <param name="wiki">The <see cref="Wiki"/> to contact.</param>
+        /// <param name="query">A dictionary of key-value pairs that represent the request parameters.</param>
+        /// <param name="file">The file to upload, as a byte array of binary data.</param>
+        /// <param name="fileName">The name of the file to upload.</param>
+        /// <param name="fileParamName">The name (key) of the POST parameter whose value is the file data.</param>
+        /// <param name="onSuccess">A function that will be called when the request is successful.
+        /// The function is passed the XML response as its only parameter.</param>
+        /// <param name="onError">A function that will be called when the request fails.
+        /// The function is passed the error message string as its only parameter.</param>
         public static void UploadFile(Wiki wiki, StringDictionary query, byte[] file, string fileName, //string fileMimeType, 
-            string fileParamName, Action<XmlDocument> onSuccess, Action<string> onError)
+            string fileParamName, MorebitsDotNetPostSuccess onSuccess, MorebitsDotNetError onError)
         {
             // thanks to http://www.paraesthesia.com/archive/2009/12/16/posting-multipartform-data-using-.net-webrequest.aspx
 
@@ -342,6 +376,8 @@ namespace ForTheCommonGood
 
         public class ActionCompleted
         {
+            public delegate void Action();
+            
             private int num;
             private object syncLock = new object();
             private bool done = false;

@@ -222,7 +222,7 @@ namespace ForTheCommonGood
 
         void AddWarningCore(Control ctl, WarningBoxType type)
         {
-            Invoke(new Action(delegate()
+            Invoke((MethodInvoker) delegate()
             {
                 if (!panWarning.Visible)
                 {
@@ -248,7 +248,7 @@ namespace ForTheCommonGood
                 }
                 ctl.Margin = new Padding(3, 0, 3, 3);
                 panWarningTexts.Controls.Add(ctl);
-            }));
+            });
         }
 
         void AddWarning(string text, WarningBoxType type)
@@ -280,11 +280,11 @@ namespace ForTheCommonGood
 
         void EnableForm(bool enabled)
         {
-            Invoke(new Action(delegate()
+            Invoke((MethodInvoker) delegate()
             {
                 panRoot.Enabled = enabled;
                 panStatus.Visible = !enabled;
-            }));
+            });
         }
 
         string filename;  // the old local filename
@@ -305,7 +305,7 @@ namespace ForTheCommonGood
 
         void DownloadAndProcess()
         {
-            Invoke(new Action(delegate()
+            Invoke((MethodInvoker) delegate()
             {
                 // enable those controls which are initially disabled
                 btnTransfer.Enabled = txtNormName.Enabled = chkDeleteAfter.Enabled =
@@ -324,7 +324,7 @@ namespace ForTheCommonGood
                     lnkGoToFileLink.Enabled = false;
 
                 textBox1.Text = textBox1.Text.Trim();
-            }));
+            });
             if (cl != null)
                 cl.CancelAsync();
 
@@ -336,7 +336,7 @@ namespace ForTheCommonGood
             ImageData = null;
             string text = "";
             MorebitsDotNet.ActionCompleted sentry = new MorebitsDotNet.ActionCompleted(2);
-            sentry.Done += new Action(delegate()
+            sentry.Done += new MorebitsDotNet.ActionCompleted.Action(delegate()
             {
                 if (iis == null)
                     return;  // too much on at once
@@ -374,11 +374,11 @@ namespace ForTheCommonGood
 
                 if (potentialProblems.Count > 0)
                 {
-                    Invoke(new Action(delegate()
+                    Invoke((MethodInvoker) delegate()
                     {
                         foreach (string i in potentialProblems)
                             AddWarning(i, WarningBoxType.Warning);
-                    }));
+                    });
                 }
 
                 // start building the new file description page
@@ -572,7 +572,7 @@ namespace ForTheCommonGood
                 // remove multiple line breaks
                 text = Regex.Replace(text, @"[\r\n]{3,}", "\n\n");
 
-                Invoke(new Action(delegate()
+                Invoke((MethodInvoker) delegate()
                     {
                         txtCommonsText.Text = text.Replace("\n", "\r\n");
                         lnkLocalFile.Enabled = lnkGoogleImageSearch.Enabled = true;
@@ -584,14 +584,14 @@ namespace ForTheCommonGood
                             lstFileLinks.Items.Add(Localization.GetString("Loading"));
                         }
                         EnableForm(true);
-                    }));
+                    });
             });
-            sentry.Finally += new Action(delegate()
+            sentry.Finally += new MorebitsDotNet.ActionCompleted.Action(delegate()
             {
-                Invoke(new Action(delegate()
+                Invoke((MethodInvoker) delegate()
                 {
                     EnableForm(true);
-                }));
+                });
             });
 
             // download image file
@@ -627,7 +627,7 @@ namespace ForTheCommonGood
 
                 iis = doc.GetElementsByTagName("ii");
 
-                Invoke(new Action(delegate()
+                Invoke((MethodInvoker) delegate()
                 {
                     lblName.Text = filePage.Attributes["title"].Value;
 
@@ -640,7 +640,7 @@ namespace ForTheCommonGood
                     }
                     else
                         lblPastRevisions.Visible = btnPastRevisions.Visible = false;
-                }));
+                });
 
                 // notify about presence of file talk page (if it is over 120 bytes in size)
                 XmlNode fileTalkPage = doc.SelectSingleNode("//page[@ns=7]");
@@ -693,21 +693,21 @@ namespace ForTheCommonGood
 
                 text = doc.GetElementsByTagName("rev")[0].InnerText;
 
-                Invoke(new Action(delegate()
+                Invoke((MethodInvoker) delegate()
                 {
                     txtLocalText.Text = text.Replace("\n", "\r\n");
-                }));
+                });
 
                 XmlNodeList ns = doc.GetElementsByTagName("n");
                 if (ns.Count > 0)
-                    Invoke(new Action(delegate()
+                    Invoke((MethodInvoker) delegate()
                     {
                         filename = ns[0].Attributes["to"].Value;
-                    }));
-                Invoke(new Action(delegate()
+                    });
+                Invoke((MethodInvoker) delegate()
                 {
                     txtNormName.Text = Regex.Replace(filename, @"^\w+:", "File:");
-                }));
+                });
 
                 sentry.DoneOne();
             }, ErrorHandler);
@@ -722,12 +722,12 @@ namespace ForTheCommonGood
             };
             // prevent race conditions
             object current = new object();
-            Invoke(new Action(delegate() { lstFileLinks.Tag = current; }));
+            Invoke((MethodInvoker) delegate() { lstFileLinks.Tag = current; });
             MorebitsDotNet.PostApi(Wiki.Local, query, delegate(XmlDocument doc)
             {
                 if (lstFileLinks.Tag != current)
                     return;
-                Invoke(new Action(delegate()
+                Invoke((MethodInvoker) delegate()
                 {
                     lstFileLinks.Items.Clear();
                     XmlNodeList ius = doc.GetElementsByTagName("iu");
@@ -742,7 +742,7 @@ namespace ForTheCommonGood
                         lstFileLinks.Items.Add(i.Attributes["title"].Value);
                     if (doc.GetElementsByTagName("query-continue").Count > 0)
                         lstFileLinks.Items.Add("<<" + Localization.GetString("SeeWikiForFullList_Label") + ">>");
-                }));
+                });
             }, ErrorHandler);
         }
 
@@ -751,7 +751,7 @@ namespace ForTheCommonGood
         // per-revision logic
         private void DownloadFileAndDisplayThumb(XmlNode n)
         {
-            Invoke(new Action(delegate()
+            Invoke((MethodInvoker) delegate()
             {
                 lblRevision.Text = (n.PreviousSibling == null ? Localization.GetString("CurrentVersion_Label") : Localization.GetString("OldVersion_Label")) +
                     " (" + FormatTimestamp(n) + ")";
@@ -770,17 +770,17 @@ namespace ForTheCommonGood
                 pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
                 pictureBox1.Image = pictureBox1.InitialImage;
                 pictureBox1.Cursor = Cursors.Default;
-            }));
+            });
 
             // decide whether PictureBox can display this image
             bool previewDownloadedFile = false;
             if (n.Attributes["thumburl"].Value == "")
             {
                 // probably an OGG or something
-                Invoke(new Action(delegate()
+                Invoke((MethodInvoker) delegate()
                 {
                     pictureBox1.Image = pictureBox1.ErrorImage;
-                }));
+                });
             }
             else
             {
@@ -802,7 +802,7 @@ namespace ForTheCommonGood
                             delegate(object s, DownloadDataCompletedEventArgs v)
                             {
                                 pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
-                                Invoke(new Action(delegate()
+                                Invoke((MethodInvoker) delegate()
                                 {
                                     try
                                     {
@@ -813,7 +813,7 @@ namespace ForTheCommonGood
                                     {
                                         pictureBox1.Image = pictureBox1.ErrorImage;
                                     }
-                                }));  // , true, true
+                                });
 
                             });
                         clThumb.DownloadDataAsync(new Uri(n.Attributes["thumburl"].Value));
@@ -838,7 +838,7 @@ namespace ForTheCommonGood
                     ImageData = v.Result;
                     if (previewDownloadedFile)
                     {
-                        Invoke(new Action(delegate()
+                        Invoke((MethodInvoker) delegate()
                         {
                             try
                             {
@@ -855,7 +855,7 @@ namespace ForTheCommonGood
                                 pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
                                 pictureBox1.Image = pictureBox1.ErrorImage;
                             }
-                        }));  // , true, true
+                        });
                     }
                 });
             cl.DownloadDataAsync(new Uri(n.Attributes["url"].Value));
@@ -958,10 +958,10 @@ namespace ForTheCommonGood
             {
                 randIndex = rand.Next(RandomImageCache.Count);
             } while (RandomBlacklist.Contains(randIndex));
-            Invoke(new Action(delegate()
+            Invoke((MethodInvoker) delegate()
             {
                 textBox1.Text = RandomImageCache[randIndex];
-            }));
+            });
             RandomImageCache.RemoveAt(randIndex);
 
             CurrentFileSource = FileSources.Category;
@@ -979,10 +979,10 @@ namespace ForTheCommonGood
         private void RandomImageTextFileCore()
         {
             // not really random - works through the file sequentially
-            Invoke(new Action(delegate()
+            Invoke((MethodInvoker) delegate()
             {
                 textBox1.Text = TextFileCache[0];
-            }));
+            });
             TextFileCache.RemoveAt(0);
 
             CurrentFileSource = FileSources.TextFile;
@@ -1112,7 +1112,7 @@ namespace ForTheCommonGood
 
             EnableForm(false);
 
-            Action action = delegate()
+            MorebitsDotNetLoginSuccess action = delegate()
             {
                 StringDictionary query = new StringDictionary 
                 {
@@ -1147,11 +1147,11 @@ namespace ForTheCommonGood
                     {
                         // assuming success...
 
-                        Invoke(new Action(delegate()
+                        Invoke((MethodInvoker) delegate()
                         {
                             lnkCommonsFile.Enabled = true;
                             lnkCommonsFile.Tag = txtNormName.Text;
-                        }));
+                        });
 
                         XmlNodeList warnings = innerDoc.GetElementsByTagName("warnings");
                         if (warnings.Count > 0 && !chkIgnoreWarnings.Checked)
@@ -1183,9 +1183,9 @@ namespace ForTheCommonGood
                         }
 
                         // this is invoked when all is finished
-                        Action showSuccess = delegate()
+                        MethodInvoker showSuccess = delegate()
                         {
-                            Invoke((Action) ClearWarnings);
+                            Invoke((MethodInvoker) ClearWarnings);
                             AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
                             AddWarning(Localization.GetString("HotcatHint_Label"), WarningBoxType.Success);
                             if (Settings.OpenBrowserLocal)
@@ -1193,7 +1193,7 @@ namespace ForTheCommonGood
                             if (Settings.OpenBrowserAutomatically)
                                 lnkCommonsFile_LinkClicked(null, null);
                             if (CurrentFileSource != FileSources.Category)
-                                Invoke(new Action(delegate() { btnRandomFile.Focus(); }));
+                                Invoke((MethodInvoker) delegate() { btnRandomFile.Focus(); });
                         };
 
                         // finished?
@@ -1206,7 +1206,7 @@ namespace ForTheCommonGood
 
                         // continue with deleting/tagging with {{now Commons}}
 
-                        Action innerAction = delegate()
+                        MorebitsDotNetLoginSuccess innerAction = delegate()
                         {
                             if (Settings.LocalSysop)
                             {
@@ -1287,7 +1287,7 @@ namespace ForTheCommonGood
         {
             EnableForm(false);
 
-            Action action = delegate()
+            MorebitsDotNetLoginSuccess action = delegate()
             {
                 StringDictionary query = new StringDictionary 
                 {
@@ -1326,7 +1326,7 @@ namespace ForTheCommonGood
                         if (Settings.OpenBrowserAutomatically)
                             lnkCommonsFile_LinkClicked(null, null);
                         if (CurrentFileSource != FileSources.Category)
-                            Invoke(new Action(delegate() { btnRandomFile.Focus(); }));
+                            Invoke((MethodInvoker) delegate() { btnRandomFile.Focus(); });
                     }, ErrorHandler);
                 }, ErrorHandler);
             };
@@ -1549,19 +1549,19 @@ namespace ForTheCommonGood
                             // sometimes thumbnails can't be generated and the server gives a 404
                             if (v.Error != null)
                             {
-                                Invoke(new Action(delegate()
+                                Invoke((MethodInvoker) delegate()
                                 {
                                     lock (form)
                                     {
                                         form.imageList.Images.Add(GetThumbnailFailImage());
                                         item.ImageIndex = form.imageList.Images.Count - 1;
                                     }
-                                }));
+                                });
                                 return;
                             }
 
                             byte[] data = v.Result;
-                            Invoke(new Action(delegate()
+                            Invoke((MethodInvoker) delegate()
                             {
                                 Image original = Image.FromStream(new MemoryStream(data, false));
                                 Bitmap img = new Bitmap(150, 150, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -1584,7 +1584,7 @@ namespace ForTheCommonGood
                                     form.imageList.Images.Add(img);
                                     item.ImageIndex = form.imageList.Images.Count - 1;
                                 }
-                            }));
+                            });
                         });
                     cl.DownloadDataAsync(new Uri(i.Attributes["thumburl"].Value));
                 }
@@ -1640,7 +1640,7 @@ namespace ForTheCommonGood
                 Version newVersion = new Version(result.Split('\n')[1]);
                 if (newVersion > new Version(Application.ProductVersion))
                 {
-                    Invoke((Action) delegate() { new frmUpdateAvailable(newVersion).ShowDialog(this); });
+                    Invoke((MethodInvoker) delegate() { new frmUpdateAvailable(newVersion).ShowDialog(this); });
                 }
             }
             catch (Exception)
@@ -1836,10 +1836,10 @@ namespace ForTheCommonGood
             prv.CreateControl();
             IntPtr bogus = prv.Handle;  // seems needed, to force WinForms to actually create the form
 
-            prv.BeginInvoke(new Action(delegate()
+            prv.BeginInvoke((MethodInvoker) delegate()
             {
                 prv.ShowDialog();
-            }));
+            });
 
             StringDictionary query = new StringDictionary 
             {
@@ -1858,16 +1858,16 @@ namespace ForTheCommonGood
                 if (l.Count < 1)
                 {
                     ErrorHandler(Localization.GetString("ParsePageFailed"), MessageBoxIcon.Information); // TODO - error message better
-                    prv.Invoke(new Action(prv.Close));
+                    prv.Invoke((MethodInvoker) prv.Close);
                     return;
                 }
 
                 string pageHtml = l[0].InnerText;
-                prv.Invoke(new Action(delegate() { prv.SetContent(pageHtml); }));
+                prv.Invoke((MethodInvoker) delegate() { prv.SetContent(pageHtml); });
             }, delegate(string msg)
             {
                 ErrorHandler(msg);
-                prv.Invoke(new Action(prv.Close));
+                prv.Invoke((MethodInvoker) prv.Close);
             });
         }
 
