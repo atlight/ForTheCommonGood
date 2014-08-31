@@ -49,7 +49,7 @@
             this.lstExif.Location = new System.Drawing.Point(8, 28);
             this.lstExif.MultiSelect = false;
             this.lstExif.Name = "lstExif";
-            this.lstExif.Size = new System.Drawing.Size(400, 349);
+            this.lstExif.Size = new System.Drawing.Size(400, 455);
             this.lstExif.TabIndex = 0;
             this.lstExif.UseCompatibleStateImageBehavior = false;
             this.lstExif.View = System.Windows.Forms.View.Details;
@@ -71,7 +71,7 @@
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.button1.Location = new System.Drawing.Point(328, 385);
+            this.button1.Location = new System.Drawing.Point(328, 491);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(80, 23);
             this.button1.TabIndex = 1;
@@ -102,7 +102,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.button1;
-            this.ClientSize = new System.Drawing.Size(416, 416);
+            this.ClientSize = new System.Drawing.Size(416, 522);
             this.Controls.Add(this.lblRevision);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
