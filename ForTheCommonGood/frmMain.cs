@@ -48,6 +48,10 @@ namespace ForTheCommonGood
         {
             InitializeComponent();
 
+            // nicer default height - we need to keep it at MinimumSize in design view
+            // to stop the main text boxes from being cut off
+            Height = 720;
+
             panStatus.Tag = Color.FromArgb(30, 144, 255);
             panWarning.Tag = Color.FromArgb(178, 34, 34);
 
@@ -396,8 +400,8 @@ namespace ForTheCommonGood
                         Localization.GetString("LocalWikiDataRegexError", "CopyToCommonsRegex") + "\n\n" + e.Message);
                 }
                 //text = Regex.Replace(text, "== ?(Summary|Licensing:?) ?== *\n", "\n");
-                text = Regex.Replace(text, "== ?(" + LocalWikiData.Summary + ") ?== *\n", "", RegexOptions.IgnoreCase);//"== {{int:filedesc}} ==\n");
-                text = Regex.Replace(text, "\n?\n?== ?(" + LocalWikiData.Licensing + ") ?== *\n", "\n\n== {{int:license-header}} ==\n", RegexOptions.IgnoreCase);
+                text = Regex.Replace(text, "== ?((" + LocalWikiData.Summary + ")|{{int:filedesc}}) ?== *\n", "", RegexOptions.IgnoreCase);
+                text = Regex.Replace(text, "\n?\n?== ?((" + LocalWikiData.Licensing + ")|{{int:license}}) ?== *\n", "\n\n== {{int:license-header}} ==\n", RegexOptions.IgnoreCase);
                 text = Regex.Replace(text, @"\[\[:?", "[[" + prefix + ":", RegexOptions.Compiled);
                 text = Regex.Replace(text, @"\[\[" + prefix + @":([^\|\]]+)\]\]", new MatchEvaluator(delegate(Match m)
                     {
@@ -490,31 +494,31 @@ namespace ForTheCommonGood
                 {
                     text = "== {{int:filedesc}} ==\n" + text;
 
-                    if (!LocalWikiData.LocalDomain.StartsWith("en.wikipedia"))  // speed boost - this is unneeded on enwiki
+                    string errorTopicText = "";
+                    try
                     {
-                        string errorTopicText = "";
-                        try
-                        {
-                            errorTopicText = "Information";
-                            text = Regex.Replace(text, @"{{\s*(" + LocalWikiData.Information + @")", "{{Information", RegexOptions.IgnoreCase);
-                            errorTopicText = "Description";
-                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Description + @")\s*=", "|Description    =", RegexOptions.IgnoreCase);
-                            errorTopicText = "Date";
-                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Date + @")\s*=", "|Date           =", RegexOptions.IgnoreCase);
-                            errorTopicText = "Source";
-                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Source + @")\s*=", "|Source         =", RegexOptions.IgnoreCase);
-                            errorTopicText = "Author";
-                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Author + @")\s*=", "|Author         =", RegexOptions.IgnoreCase);
-                            errorTopicText = "Permission";
-                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Permission + @")\s*=", "|Permission     =", RegexOptions.IgnoreCase);
-                            errorTopicText = "Other_versions";
-                            text = Regex.Replace(text, @"\|\s*(" + LocalWikiData.Other_versions + @")\s*=", "|Other_versions =", RegexOptions.IgnoreCase);
-                        }
-                        catch (ArgumentException e)
-                        {
-                            ErrorHandler(Localization.GetString("LocalWikiDataError") + "\n\n" +
-                                Localization.GetString("LocalWikiDataRegexError", errorTopicText) + "\n\n" + e.Message);
-                        }
+                        errorTopicText = "Information";
+                        text = Regex.Replace(text, @"{{\s*(" + LocalWikiData.Information + @")", "{{Information", RegexOptions.IgnoreCase);
+
+                        string paramStart = @"({{Information({{[^{}]*}}|[^{}])*)\|\s*(";
+                        string paramEnd = @")\s*= *";
+                        errorTopicText = "Description";
+                        text = Regex.Replace(text, paramStart + LocalWikiData.Description + paramEnd, "$1|Description    = ", RegexOptions.IgnoreCase);
+                        errorTopicText = "Date";
+                        text = Regex.Replace(text, paramStart + LocalWikiData.Date + paramEnd, "$1|Date           = ", RegexOptions.IgnoreCase);
+                        errorTopicText = "Source";
+                        text = Regex.Replace(text, paramStart + LocalWikiData.Source + paramEnd, "$1|Source         = ", RegexOptions.IgnoreCase);
+                        errorTopicText = "Author";
+                        text = Regex.Replace(text, paramStart + LocalWikiData.Author + paramEnd, "$1|Author         = ", RegexOptions.IgnoreCase);
+                        errorTopicText = "Permission";
+                        text = Regex.Replace(text, paramStart + LocalWikiData.Permission + paramEnd, "$1|Permission     = ", RegexOptions.IgnoreCase);
+                        errorTopicText = "Other_versions";
+                        text = Regex.Replace(text, paramStart + LocalWikiData.Other_versions + paramEnd, "$1|Other_versions = ", RegexOptions.IgnoreCase);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        ErrorHandler(Localization.GetString("LocalWikiDataError") + "\n\n" +
+                            Localization.GetString("LocalWikiDataRegexError", errorTopicText) + "\n\n" + e.Message);
                     }
 
                     if (languageCode.Length > 0 && !text.Contains("{{" + languageCode + "|"))
