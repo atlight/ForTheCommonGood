@@ -13,7 +13,6 @@ Category2=Copy to Wikimedia Commons (bot-assessed)
 Category3=Move to Commons Priority Candidates
 DefaultCategory=3
 
-# These are ignored on enwiki at the moment, since they are unnecessary
 Information=Information
 Description=Description
 Date=Date
@@ -94,7 +93,11 @@ ReplaceWith=
 
 [Replacement]
 LookFor={{ffd[^\}]*}}
-ReplaceWith= 
+ReplaceWith=
+
+[Replacement]
+LookFor={{category ordered by date[^\}]*}}
+ReplaceWith=
 
 [Replacement]
 LookFor== *I .*created this (image|work) entirely by myself.?
