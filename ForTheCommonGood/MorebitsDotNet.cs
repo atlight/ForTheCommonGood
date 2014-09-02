@@ -146,7 +146,7 @@ namespace ForTheCommonGood
                     LoginSessions[wiki].UserID = innerLogin.Attributes["lguserid"].Value;
                     LoginSessions[wiki].LoggedIn = true;
                     onSuccess();
-                }, onError, true, false);
+                }, onError, true, WebRequestMethods.Http.Post);
             }, onError);
 
         }
@@ -182,19 +182,20 @@ namespace ForTheCommonGood
                 // no error handler yet...
             }
         }
+
         public static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess)
         {
-            PostApi(wiki, query, onSuccess, DefaultErrorHandler, false, false);
+            PostApi(wiki, query, onSuccess, DefaultErrorHandler, false, WebRequestMethods.Http.Post);
         }
 
         public static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess,
             MorebitsDotNetError onError)
         {
-            PostApi(wiki, query, onSuccess, onError, false, false);
+            PostApi(wiki, query, onSuccess, onError, false, WebRequestMethods.Http.Post);
         }
 
         /// <summary>
-        /// Makes an HTTP POST request to the specified MediaWiki API endpoint.
+        /// Makes an HTTP request to the specified MediaWiki API endpoint.
         /// </summary>
         /// <param name="wiki">The <see cref="Wiki"/> to contact.</param>
         /// <param name="query">A dictionary of key-value pairs that represent the request parameters.</param>
@@ -202,24 +203,28 @@ namespace ForTheCommonGood
         /// The function is passed the XML response as its only parameter.</param>
         /// <param name="onError">A function that will be called when the request fails.
         /// The function is passed the error message string as its only parameter.</param>
-        /// <param name="synchronous">Set to true if the request should be run synchronously (that is, it should hold up program execution).</param>
+        /// <param name="method">The HTTP method to use. Use one of the constants in <see cref="System.Net.WebRequestMethods.Http"/>.</param>
         public static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess,
-            MorebitsDotNetError onError, bool synchronous)
+            MorebitsDotNetError onError, string method)
         {
-            PostApi(wiki, query, onSuccess, onError, false, synchronous);
+            PostApi(wiki, query, onSuccess, onError, false, method);
         }
 
         private static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess,
-            MorebitsDotNetError onError, bool loggingIn, bool synchronous)
+            MorebitsDotNetError onError, bool loggingIn, string method)
         {
             string requestContent = "format=xml&";
             foreach (DictionaryEntry i in query)
                 requestContent += Uri.EscapeDataString((string) i.Key) + "=" + Uri.EscapeDataString((string) i.Value ?? "") + "&";
             requestContent = requestContent.TrimEnd('&');
 
-            WebRequest req = HttpWebRequest.Create(GetApiUri(wiki));
+            WebRequest req;
+            if (method == WebRequestMethods.Http.Get)
+                req = HttpWebRequest.Create(GetApiUri(wiki) + "?" + requestContent);
+            else
+                req = HttpWebRequest.Create(GetApiUri(wiki));
             ((HttpWebRequest) req).UserAgent = UserAgent;
-            req.Method = "POST";
+            req.Method = method;
             req.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
 
             LoginInfo session = LoginSessions[wiki];
@@ -228,14 +233,14 @@ namespace ForTheCommonGood
             ((HttpWebRequest) req).CookieContainer = session.CookieJar;
 
             // login doesn't seem to work properly when done asynchronously
-            if (loggingIn || synchronous)
+            if (loggingIn)
             {
                 Stream s = req.GetRequestStream();
                 byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
                 s.Write(bytes, 0, bytes.Length);
                 s.Close();
             }
-            else
+            else if (method != WebRequestMethods.Http.Get)
             {
                 req.BeginGetRequestStream(delegate(IAsyncResult innerResult)
                 {
@@ -450,6 +455,5 @@ namespace ForTheCommonGood
                 Finally();
             }
         }
-
     }
 }

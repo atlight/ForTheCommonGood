@@ -20,6 +20,7 @@ MakeSelectedTextIntoWikilink_Hyperlink=Linkify selected te&xt
 PreviewCommonsWikitext_Hyperlink=Preview wikitext
 CurrentVersion_Label=Current version
 OldVersion_Label=Old version
+MultipleVersions_Label={0} of {1} versions selected
 Bytes_Format={0} bytes
 OneEarlierVersion_Label=One earlier version
 EarlierVersions_Format={0} earlier versions
@@ -110,6 +111,7 @@ PublicDomain_Label=Released into the public domain
 
 # Revision browser window
 SelectVersion_WindowTitle=Select version to transfer
+SelectVersionBlurb_Label=Select the version(s) to transfer. To transfer more than one version, hold Ctrl and click each revision.
 # LOCALIZATION NOTE: here, "preview" is a noun, not a verb
 Preview_Column=Preview
 DateTime_Column=Date/Time
@@ -118,6 +120,7 @@ Dimensions_Column=Dimensions
 UserName_Column=User
 # LOCALIZATION NOTE: this is the upload log summary
 Comment_Column=Comment
+SelectAllVersions_Button=Select all
 # LOCALIZATION NOTE: for technical reasons this is split across three lines;
 #                    if you don't require all three lines leave the unneeded ones
 #                    blank (but don't delete the line).
@@ -145,9 +148,9 @@ Welcome2=The next dialog will ask for your wiki login credentials. If you choose
 NowCommonsPotentialProblem=The file is tagged with {{now Commons}}, so it has probably already been transferred.
 ChangeIfNotOwnWork=change this if not own work
 Loading=Loading...
-AlreadyCommons=File is already on Commons; can't do anything
-ImageMissing=File does not exist on local wiki
-NoFile=There seems to be a problem; perhaps the file is actually a redirect
+AlreadyCommons=File is already on Commons; can't do anything.
+ImageMissing=File does not exist on local wiki.
+NoFile=There seems to be a problem; perhaps the file is actually a redirect.
 FailedToDownload=Failed to download the file. Perhaps try again later.
 FailedToReadTextFile=Could not read the text file "{0}". Click the "Other source..." option to choose a different file.
 NoMoreFiles=That category contains no more files. Perhaps you misspelt it... or perhaps the backlog is finally clear :)
@@ -158,7 +161,9 @@ RandomCacheEmpty3=Do not transfer the file that is currently displayed.
 PotentialProblemsGoAhead=This file has potential problems which may prevent or affect the transfer. Do you still want to transfer this file to Commons?
 StillDownloading=The file hasn't been downloaded yet. Try again in a few moments.
 OldVersionTransferAdvice=You are transferring an old version of this file. You will need to manually clean up the "original upload log" section of the new wikitext. Click Cancel and do this (or click OK if you have already done so).
+MultipleVersionTransferAdvice=You are transferring multiple versions of this file. You may need to manually clean up the "original upload log" section of the new wikitext. Click Cancel and make sure the original upload log is accurate (or click OK if you have already done so).
 FilenameClash=An image of that name already exists on Commons.
+InvalidFilenameCommons=The filename you chose was invalid. Remove the funky characters and try again.
 Warnings1=The following warnings were encountered:
 Warnings2=If you still want to upload, select the "Ignore warnings" option and try again.
 # LOCALIZATION NOTE: this uses .NET timestamp formatting. For assistance, consult User:This, that and the other.
@@ -176,8 +181,8 @@ LooksGood=Looks good to me.
 # LOCALIZATION NOTE: probably do not translate "Partial Trust" - it is .NET jargon - but do translate "scenario"
 LinkVisitFailed=Can't open this link - you need to run FtCG locally, not in a Partial Trust scenario.
 # LOCALIZATION NOTE: if I didn't have a sense of humour this would read:
-#                    "You did not select a version to transfer. Please select only one item from the list before clicking OK."
-NoRevisionSelected=Now, go back and select one, and only one, item, you mischievous little child.
+#                    "You did not select any versions to transfer. Please select at least one item from the list before clicking OK."
+NoRevisionSelected=Now, go back and pick some items from the list, you mischievous little child.
 NewVersionTitle=New version available
 NewVersionNotice1=A new version ({0}) of For the Common Good is available.
 # LOCALIZATION NOTE: {0} will be replaced by the URL of the download site
@@ -203,6 +208,15 @@ ContentOnTalkPage=The file has a {0}{1} - copy it over manually if relevant.
 TalkPage=talk page
 LocalWikiDataError=There is an error in the currently loaded local wiki data file. If you think you have already corrected this problem, please go back to the Settings dialog and load the file again.
 LocalWikiDataRegexError=The regular expression provided for "{0}" is invalid.
+
+# MediaWiki upload warnings
+UploadWarning_BadFilename=The filename is not acceptable in its current form. It will be altered to "{0}".
+UploadWarning_BadPrefix=The filename begins with a disallowed prefix. Try to choose a more specific filename.
+UploadWarning_Duplicate=The file is a duplicate of the following file(s) on Commons:
+UploadWarning_DuplicateArchive=The file is a duplicate of "{0}", a file on Commons that has been deleted.
+UploadWarning_ExistsNormalized=A file with a similar name, "{0}", exists on Commons.
+UploadWarning_ThumbName=The file is named like an automatically generated thumbnail. Please remove the prefix ("200px-" or similar) and try again.
+UploadWarning_Unknown="{0}": {1}
 
 # Network errors
 MorebitsDotNet_LoginFailure=Login failure: {0}

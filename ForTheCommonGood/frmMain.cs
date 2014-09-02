@@ -17,8 +17,31 @@ namespace ForTheCommonGood
 {
     public partial class frmMain: Form
     {
-        byte[] ImageData;
+        // A tool strip renderer with no UI footprint (no bottom border)
+        class SimpleToolStripRenderer: ToolStripSystemRenderer
+        {
+            protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
+            {
+                // do nothing
+            }
+        }
 
+        // The old local filename of the currently loaded image, without the namespace prefix
+        string CurrentFileName;
+
+        // The indexes of each selected revision in the ImageInfos and ImageDatas arrays
+        int[] SelectedRevisions;
+
+        // The <ii> elements received from the API
+        XmlNodeList ImageInfos;
+
+        // Holds the binary data of each image to be transferred
+        byte[][] ImageDatas;
+
+        // Downloads the file into ImageDatas!
+        WebClient ImageDataDownloader;
+
+        // Stuff to support the "random file" feature
         enum FileSources
         {
             ManualInput,
@@ -32,17 +55,9 @@ namespace ForTheCommonGood
         List<string> TextFileCache = new List<string>();
         int RandomCurrentIndex;
 
-        // global resources
+        // Cached global resources
         Cursor ZoomInCursor;
-        TextureBrush checker;
-
-        class SimpleToolStripRenderer: ToolStripSystemRenderer
-        {
-            protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
-            {
-                // do nothing
-            }
-        }
+        TextureBrush CheckerBrush;
 
         public frmMain()
         {
@@ -56,7 +71,7 @@ namespace ForTheCommonGood
             panWarning.Tag = Color.FromArgb(178, 34, 34);
 
             ZoomInCursor = new Cursor(new MemoryStream(Properties.Resources.zoomin_cur));
-            checker = new TextureBrush(Properties.Resources.Checker_16x16, System.Drawing.Drawing2D.WrapMode.Tile);
+            CheckerBrush = new TextureBrush(Properties.Resources.Checker_16x16, System.Drawing.Drawing2D.WrapMode.Tile);
 
             // load language file, if any
             Localization.Init();
@@ -139,6 +154,9 @@ namespace ForTheCommonGood
             InitSettings();
         }
 
+        // Miscellaneous helper methods
+        // ============================
+
         void ErrorHandler(String msg)
         {
             MorebitsDotNet.DefaultErrorHandler(msg);
@@ -218,6 +236,9 @@ namespace ForTheCommonGood
             return result + Settings.LocalDomain.Substring(0, Settings.LocalDomain.IndexOf('.'));
         }
 
+        // Potential problem/success box infrastructure
+        // ============================================
+
         enum WarningBoxType
         {
             Warning,
@@ -282,6 +303,9 @@ namespace ForTheCommonGood
             panWarningTexts.Controls.Clear();
         }
 
+        // Fundamentals of FtCG
+        // ====================
+
         void EnableForm(bool enabled)
         {
             Invoke((MethodInvoker) delegate()
@@ -290,9 +314,6 @@ namespace ForTheCommonGood
                 panStatus.Visible = !enabled;
             });
         }
-
-        string filename;  // the old local filename
-        XmlNodeList iis;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -330,20 +351,20 @@ namespace ForTheCommonGood
 
                 textBox1.Text = textBox1.Text.Trim();
             });
-            if (cl != null)
-                cl.CancelAsync();
+            if (ImageDataDownloader != null)
+                ImageDataDownloader.CancelAsync();
 
-            filename = "File:" + Regex.Replace(textBox1.Text, @"^\w+:", "", RegexOptions.IgnoreCase);
+            CurrentFileName = Regex.Replace(textBox1.Text, @"^\w+:", "", RegexOptions.IgnoreCase);
 
             EnableForm(false);
 
-            iis = null;
-            ImageData = null;
+            ImageInfos = null;
+            ImageDatas = null;
             string text = "";
             MorebitsDotNet.ActionCompleted sentry = new MorebitsDotNet.ActionCompleted(2);
             sentry.Done += new MorebitsDotNet.ActionCompleted.Action(delegate()
             {
-                if (iis == null)
+                if (ImageInfos == null)
                     return;  // too much on at once
 
                 // identify potential problems
@@ -387,7 +408,7 @@ namespace ForTheCommonGood
                 }
 
                 // start building the new file description page
-                string origUploader = iis[iis.Count - 1].Attributes["user"].Value;
+                string origUploader = ImageInfos[ImageInfos.Count - 1].Attributes["user"].Value;
 
                 // clean up local templates, etc.
                 string prefix = GetCurrentInterwikiPrefix(false);
@@ -464,7 +485,7 @@ namespace ForTheCommonGood
                     if (detectedDesc.Length > 0)
                         text = text.Replace(detectedDesc, "");
 
-                    XmlNode exifDateNode = iis[iis.Count - 1].SelectSingleNode("metadata/metadata[@name=\"DateTime\"]");
+                    XmlNode exifDateNode = ImageInfos[ImageInfos.Count - 1].SelectSingleNode("metadata/metadata[@name=\"DateTime\"]");
                     string exifDate = null;
                     if (exifDateNode != null)
                     {
@@ -481,9 +502,9 @@ namespace ForTheCommonGood
 "== {{int:filedesc}} ==\n" +
 "{{Information\n" +
 "|Description    = " + (languageCode.Length > 0 ? ("{{" + languageCode + "|1=" + detectedDesc.Trim()/*.Replace("|", "&#124;")*/ + "}}") : detectedDesc.Trim().Replace("|", "&#124;")) + "\n" +
-"|Date           = " + (exifDate != null ? "{{according to EXIF data|" + exifDate + "}}\n" : "{{original upload date|" + FormatIsoDate(iis[iis.Count - 1]) + "}}\n") +
+"|Date           = " + (exifDate != null ? "{{according to EXIF data|" + exifDate + "}}\n" : "{{original upload date|" + FormatIsoDate(ImageInfos[ImageInfos.Count - 1]) + "}}\n") +
 "|Source         = {{own work by original uploader}} <!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->\n" +
-"|Author         = " + (selfLicense ? ("[[" + prefix + ":User:" + iis[iis.Count - 1].Attributes["user"].Value + "|]]\n") : "\n") +
+"|Author         = " + (selfLicense ? ("[[" + prefix + ":User:" + ImageInfos[ImageInfos.Count - 1].Attributes["user"].Value + "|]]\n") : "\n") +
 "|Permission     = \n" +
 "|Other_versions = \n" +
 "}}\n\n";
@@ -548,11 +569,11 @@ namespace ForTheCommonGood
                 if (Settings.CommonsDomain == Settings.DefaultCommonsDomain)
                 {
                     text += "\n\n{{transferred from|" + Settings.LocalDomain + "||ftcg}} {{original description page|" +
-                        Settings.LocalDomain + "|" + Uri.EscapeDataString(filename.Substring(filename.IndexOf(':') + 1).Replace(' ', '_')) + "}}";
+                        Settings.LocalDomain + "|" + Uri.EscapeDataString(CurrentFileName.Replace(' ', '_')) + "}}";
                 }
 
                 text += "\n\n{| class=\"wikitable\"\n! {{int:filehist-datetime}} !! {{int:filehist-dimensions}} !! {{int:filehist-user}} !! {{int:filehist-comment}}";
-                foreach (XmlNode n in iis)
+                foreach (XmlNode n in ImageInfos)
                 {
                     text += "\n|-\n| " + FormatTimestamp(n) + " || " + FormatDimensions(n) + " || ";
 
@@ -608,7 +629,7 @@ namespace ForTheCommonGood
                 { "iilimit", "500" },
                 { "iiurlwidth", pictureBox1.Width.ToString() },
                 { "iiurlheight", pictureBox1.Height.ToString() },
-                { "titles", filename + "|File talk:" + filename.Substring(5) },
+                { "titles", "File:" + CurrentFileName + "|File talk:" + CurrentFileName },
                 { "redirects", "true" }
             };
             MorebitsDotNet.PostApi(Wiki.Local, query, delegate(XmlDocument doc)
@@ -630,18 +651,19 @@ namespace ForTheCommonGood
                         return;
                 }
 
-                iis = doc.GetElementsByTagName("ii");
+                ImageInfos = doc.GetElementsByTagName("ii");
+                ImageDatas = new byte[ImageInfos.Count][];
 
                 Invoke((MethodInvoker) delegate()
                 {
                     lblName.Text = filePage.Attributes["title"].Value;
 
-                    if (iis.Count > 1)
+                    if (ImageInfos.Count > 1)
                     {
                         lblPastRevisions.Visible = btnPastRevisions.Visible = true;
-                        lblPastRevisions.Text = ((iis.Count == 2) ?
+                        lblPastRevisions.Text = ((ImageInfos.Count == 2) ?
                             Localization.GetString("OneEarlierVersion_Label") :
-                            Localization.GetString("EarlierVersions_Format", (iis.Count - 1).ToString()));
+                            Localization.GetString("EarlierVersions_Format", (ImageInfos.Count - 1).ToString()));
                     }
                     else
                         lblPastRevisions.Visible = btnPastRevisions.Visible = false;
@@ -662,7 +684,7 @@ namespace ForTheCommonGood
                             try
                             {
                                 Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/File_talk:" +
-                                    filename.Substring(filename.IndexOf(':') + 1));
+                                    CurrentFileName);
                             }
                             catch (Exception)
                             {
@@ -673,10 +695,11 @@ namespace ForTheCommonGood
                 }
 
                 // download the file and display a thumbnail (also display metadata)
-                DownloadFileAndDisplayThumb(iis[0]);
+                SelectedRevisions = new int[] { 0 };
+                DownloadFileAndDisplayThumb();
 
                 sentry.DoneOne();
-            }, ErrorHandler);
+            }, ErrorHandler, WebRequestMethods.Http.Get);
 
             // get wikitext of file description page
             query = new StringDictionary 
@@ -684,7 +707,7 @@ namespace ForTheCommonGood
                 { "action", "query" },
                 { "prop", "revisions" },
                 { "rvprop", "content" },
-                { "titles", filename },
+                { "titles", "File:" + CurrentFileName },
                 { "redirects", "true" }
             };
             MorebitsDotNet.PostApi(Wiki.Local, query, delegate(XmlDocument doc)
@@ -707,15 +730,16 @@ namespace ForTheCommonGood
                 if (ns.Count > 0)
                     Invoke((MethodInvoker) delegate()
                     {
-                        filename = ns[0].Attributes["to"].Value;
+                        CurrentFileName = ns[0].Attributes["to"].Value;
+                        CurrentFileName = CurrentFileName.Substring(CurrentFileName.IndexOf(':') + 1);
                     });
                 Invoke((MethodInvoker) delegate()
                 {
-                    txtNormName.Text = Regex.Replace(filename, @"^\w+:", "File:");
+                    txtNormName.Text = "File:" + CurrentFileName;
                 });
 
                 sentry.DoneOne();
-            }, ErrorHandler);
+            }, ErrorHandler, WebRequestMethods.Http.Get);
 
             // get file links (not in sentry)
             query = new StringDictionary 
@@ -723,7 +747,7 @@ namespace ForTheCommonGood
                 { "action", "query" },
                 { "list", "imageusage" },
                 { "iulimit", "20" },
-                { "iutitle", filename }
+                { "iutitle", "File:" + CurrentFileName }
             };
             // prevent race conditions
             object current = new object();
@@ -748,22 +772,27 @@ namespace ForTheCommonGood
                     if (doc.GetElementsByTagName("query-continue").Count > 0)
                         lstFileLinks.Items.Add("<<" + Localization.GetString("SeeWikiForFullList_Label") + ">>");
                 });
-            }, ErrorHandler);
+            }, ErrorHandler, WebRequestMethods.Http.Get);
         }
 
-        WebClient cl;
-
         // per-revision logic
-        private void DownloadFileAndDisplayThumb(XmlNode n)
+        private void DownloadFileAndDisplayThumb()
         {
+            XmlNode topImage = ImageInfos[SelectedRevisions[0]];
             Invoke((MethodInvoker) delegate()
             {
-                lblRevision.Text = (n.PreviousSibling == null ? Localization.GetString("CurrentVersion_Label") : Localization.GetString("OldVersion_Label")) +
-                    " (" + FormatTimestamp(n) + ")";
-                lblDimensions.Text = FormatDimensions(n);
-                lblRevision.ForeColor = lblName.ForeColor = (n.PreviousSibling == null ? SystemColors.ControlText : Color.Red);
+                if (SelectedRevisions.Length > 1)
+                    lblRevision.Text = Localization.GetString("MultipleVersions_Label", SelectedRevisions.Length.ToString(),
+                        ImageInfos.Count.ToString());
+                else if (SelectedRevisions[0] == 0)
+                    lblRevision.Text = Localization.GetString("CurrentVersion_Label") + " (" + FormatTimestamp(topImage) + ")";
+                else
+                    lblRevision.Text = Localization.GetString("OldVersion_Label") + " (" + FormatTimestamp(topImage) + ")";
 
-                XmlNodeList metadatas = n.SelectNodes("metadata/metadata");
+                lblDimensions.Text = FormatDimensions(topImage);
+                lblRevision.ForeColor = lblName.ForeColor = (SelectedRevisions[0] == 0 && SelectedRevisions.Length == 1 ? SystemColors.ControlText : Color.Red);
+
+                XmlNodeList metadatas = topImage.SelectNodes("metadata/metadata");
                 if (metadatas.Count > 4)
                 {
                     lblViewExif.Visible = btnViewExif.Visible = true;
@@ -779,7 +808,7 @@ namespace ForTheCommonGood
 
             // decide whether PictureBox can display this image
             bool previewDownloadedFile = false;
-            if (n.Attributes["thumburl"].Value == "")
+            if (topImage.Attributes["thumburl"].Value == "")
             {
                 // probably an OGG or something
                 Invoke((MethodInvoker) delegate()
@@ -789,7 +818,7 @@ namespace ForTheCommonGood
             }
             else
             {
-                switch (n.Attributes["mime"].Value)
+                switch (topImage.Attributes["mime"].Value)
                 {
                     // GDI+ natively supports only these formats
                     case "image/gif":
@@ -821,15 +850,16 @@ namespace ForTheCommonGood
                                 });
 
                             });
-                        clThumb.DownloadDataAsync(new Uri(n.Attributes["thumburl"].Value));
+                        clThumb.DownloadDataAsync(new Uri(topImage.Attributes["thumburl"].Value));
                         break;
                 }
             }
 
-            // download file
-            cl = new WebClient();
-            cl.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
-            cl.DownloadDataCompleted += new DownloadDataCompletedEventHandler(
+            // download files
+            int currentIndexIndex = 0;  // the index into SelectedRevisions (an array of indexes). So meta!
+            ImageDataDownloader = new WebClient();
+            ImageDataDownloader.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
+            ImageDataDownloader.DownloadDataCompleted += new DownloadDataCompletedEventHandler(
                 delegate(object s, DownloadDataCompletedEventArgs v)
                 {
                     if (v.Cancelled)
@@ -840,14 +870,14 @@ namespace ForTheCommonGood
                         return;
                     }
 
-                    ImageData = v.Result;
-                    if (previewDownloadedFile)
+                    ImageDatas[SelectedRevisions[currentIndexIndex]] = v.Result;
+                    if (previewDownloadedFile && currentIndexIndex == 0)
                     {
                         Invoke((MethodInvoker) delegate()
                         {
                             try
                             {
-                                Image img = Image.FromStream(new MemoryStream(ImageData, false));
+                                Image img = Image.FromStream(new MemoryStream(ImageDatas[SelectedRevisions[currentIndexIndex]], false));
                                 if (img.Height > pictureBox1.Height || img.Width > pictureBox1.Width)
                                     pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
                                 else
@@ -862,8 +892,11 @@ namespace ForTheCommonGood
                             }
                         });
                     }
+
+                    if (++currentIndexIndex < SelectedRevisions.Length)
+                        ImageDataDownloader.DownloadDataAsync(new Uri(ImageInfos[SelectedRevisions[currentIndexIndex]].Attributes["url"].Value));
                 });
-            cl.DownloadDataAsync(new Uri(n.Attributes["url"].Value));
+            ImageDataDownloader.DownloadDataAsync(new Uri(ImageInfos[SelectedRevisions[currentIndexIndex]].Attributes["url"].Value));
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -935,7 +968,7 @@ namespace ForTheCommonGood
                             RandomContinue = null;
 
                         RandomImageCategoryCore();
-                    }, ErrorHandler);
+                    }, ErrorHandler, WebRequestMethods.Http.Get);
                 }
                 else
                     RandomImageCategoryCore();
@@ -1106,201 +1139,306 @@ namespace ForTheCommonGood
             if (panWarning.Visible && MessageBox.Show(Localization.GetString("PotentialProblemsGoAhead"), Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
 
-            if (ImageData == null)
+            if (Array.Exists<int>(SelectedRevisions, i => ImageDatas[i] == null))
             {
                 ErrorHandler(Localization.GetString("StillDownloading"));
                 return;
             }
 
-            if (lblRevision.ForeColor == Color.Red && MessageBox.Show(Localization.GetString("OldVersionTransferAdvice"), Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+            if (SelectedRevisions.Length == 1 && SelectedRevisions[0] != 0 &&
+                MessageBox.Show(Localization.GetString("OldVersionTransferAdvice"), Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+                return;
+            if (SelectedRevisions.Length > 1 &&
+                MessageBox.Show(Localization.GetString("MultipleVersionTransferAdvice"), Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
                 return;
 
             EnableForm(false);
 
-            MorebitsDotNetLoginSuccess action = delegate()
+            if (!MorebitsDotNet.LoginSessions[Wiki.Commons].LoggedIn)
+                MorebitsDotNet.LogIn(Wiki.Commons, Settings.CommonsUserName, Settings.CommonsPassword,
+                    PrepareTransfer, ErrorHandler);
+            else
+                PrepareTransfer();
+        }
+
+        private void PrepareTransfer()
+        {
+            StringDictionary query = new StringDictionary 
             {
-                StringDictionary query = new StringDictionary 
+                { "action", "query" },
+                { "prop", "info" },
+                { "intoken", "edit" },
+                { "titles", txtNormName.Text }
+            };
+            MorebitsDotNet.PostApi(Wiki.Commons, query, delegate(XmlDocument doc)
+            {
+                if (doc.GetElementsByTagName("page")[0].Attributes["invalid"] != null)
                 {
-                    { "action", "query" },
-                    { "prop", "info" },
-                    { "intoken", "edit" },
-                    { "titles", txtNormName.Text }
-                };
-                MorebitsDotNet.PostApi(Wiki.Commons, query, delegate(XmlDocument doc)
+                    ErrorHandler(Localization.GetString("InvalidFilenameCommons"));
+                    return;
+                }
+
+                if (doc.GetElementsByTagName("page")[0].Attributes["missing"] == null && !chkIgnoreWarnings.Checked)
                 {
-                    if (doc.GetElementsByTagName("page")[0].Attributes["missing"] == null && !chkIgnoreWarnings.Checked)
+                    ErrorHandler(Localization.GetString("FilenameClash"));
+                    return;
+                }
+
+                string newFilename = Regex.Replace(txtNormName.Text, "^(Image|File):", "");
+                string token = doc.GetElementsByTagName("page")[0].Attributes["edittoken"].Value;
+
+                // add categories from CoolCat
+                string textForCommons = txtCommonsText.Text.Trim()
+                    .Replace("<!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->", "");
+                IEnumerable<string> categories = coolCat.Categories;
+                bool haveAddedCats = false;
+                foreach (string i in categories)
+                {
+                    if (!haveAddedCats)
                     {
-                        ErrorHandler(Localization.GetString("FilenameClash"));
+                        textForCommons += "\n";
+                        haveAddedCats = true;
+                    }
+                    textForCommons += "\n[[Category:" + i + "]]";
+                }
+
+                // Note: the upload comment is not localised, since Commons uses English as lingua franca
+                UploadEachRevision(newFilename, SelectedRevisions.Length - 1, true, textForCommons, token);
+            }, ErrorHandler);
+        }
+
+        private void UploadEachRevision(string filename, int selectedRevisionIndex,
+            bool isEarliestRevision, string text, string token)
+        {
+            StringDictionary uploadQuery = new StringDictionary 
+            {
+                { "action", "upload" },
+                { "filename", filename }
+            };
+
+            if (isEarliestRevision)
+                uploadQuery.Add("text", text);
+
+            if (selectedRevisionIndex == 0)  // latest revision?
+                uploadQuery.Add("comment", "Transferred from " + Settings.LocalDomain + ": see original upload log above");
+            else
+                uploadQuery.Add("comment", "Old revision as of " + FormatTimestamp(ImageInfos[SelectedRevisions[selectedRevisionIndex]]) +
+                    ": see original upload log above");
+
+            if (chkIgnoreWarnings.Checked || !isEarliestRevision)
+                uploadQuery.Add("ignorewarnings", "true");
+
+            uploadQuery.Add("token", token);  // token always last
+
+            MorebitsDotNetPostSuccess callbackAfterEach = delegate(XmlDocument doc)
+            {
+                // assuming the upload was successful...
+
+                // any warnings?
+                XmlNodeList xmlWarnings = doc.GetElementsByTagName("warnings");
+                List<string> warnings = new List<string>();
+                if (xmlWarnings.Count > 0 && !chkIgnoreWarnings.Checked)
+                {
+                    foreach (XmlAttribute i in xmlWarnings[0].Attributes)
+                    {
+                        switch (i.LocalName)
+                        {
+                            case "badfilename":
+                                // <warnings badfilename="new, corrected filename" />
+                                warnings.Add(Localization.GetString("UploadWarning_BadFilename", i.Value));
+                                break;
+                            case "bad-prefix":
+                                // <warnings bad-prefix="DSCN1004.JPG" />
+                                warnings.Add(Localization.GetString("UploadWarning_BadPrefix", i.Value));
+                                break;
+                            case "duplicate-archive":
+                                // <warnings duplicate-archive="Deleted file.png" />
+                                warnings.Add(Localization.GetString("UploadWarning_DuplicateArchive", i.Value));
+                                break;
+                            case "exists":
+                                // <warnings exists="File.png" />
+                                // Should be handled when getting the edit token
+                                warnings.Add(Localization.GetString("FilenameClash"));
+                                break;
+                            case "exists-normalized":
+                                // <warnings exists-normalized="A.jpeg" />
+                                warnings.Add(Localization.GetString("UploadWarning_ExistsNormalized", i.Value));
+                                break;
+                            case "thumb": // Not sure exactly what this is...
+                            case "thumb-name":
+                                // <warnings thumb-name="180px-File.png" />
+                                warnings.Add(Localization.GetString("UploadWarning_ThumbName", i.Value));
+                                break;
+                                // Not handled: page-exists, ...
+                            default:
+                                warnings.Add(Localization.GetString("UploadWarning_Unknown", i.LocalName, i.Value));
+                                break;
+                        }
+                    }
+                    foreach (XmlNode i in xmlWarnings[0].ChildNodes)
+                    {
+                        if (i.NodeType != XmlNodeType.Element)
+                            continue;
+                        switch (i.LocalName)
+                        {
+                            case "duplicate":
+                                // <warnings>
+                                //   <duplicate>
+                                //     <duplicate>First file name</duplicate>
+                                //     <duplicate>Second file name</duplicate>
+                                //     ...
+                                //   </duplicate>
+                                // </warnings>
+                                string warning = Localization.GetString("UploadWarning_Duplicate") + "\n";
+                                foreach (XmlNode j in i.ChildNodes)
+                                    if (j.NodeType == XmlNodeType.Element)
+                                        warning += j.InnerText + "\n";
+                                warnings.Add(warning.TrimEnd());
+                                break;
+                            default:
+                                warnings.Add(i.OuterXml);
+                                break;
+                        }
+                    }
+                }
+                if (warnings.Count > 0)
+                {
+                    ErrorHandler(Localization.GetString("Warnings1") + "\n\n• " + String.Join("\n• ", warnings.ToArray()) + 
+                        "\n\n" + Localization.GetString("Warnings2"), MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // more to upload?
+                if (--selectedRevisionIndex >= 0)
+                    UploadEachRevision(filename, selectedRevisionIndex, false, null, token);
+                else
+                    UploadSuccess();
+            };
+
+            MorebitsDotNet.UploadFile(Wiki.Commons, uploadQuery, ImageDatas[SelectedRevisions[selectedRevisionIndex]],
+                filename, "file", callbackAfterEach, ErrorHandler);
+        }
+
+        private void UploadSuccess()
+        {
+            Invoke((MethodInvoker) delegate()
+            {
+                lnkCommonsFile.Enabled = true;
+                lnkCommonsFile.Tag = txtNormName.Text;
+            });
+
+            // log the transfer, if requested
+            if (Settings.LogTransfers)
+            {
+                string logText = "# " +
+                    DateTime.UtcNow.ToString(Localization.GetString("LogFileTimestampFormat"), System.Globalization.DateTimeFormatInfo.InvariantInfo) +
+                    " (UTC): ";
+                if (CurrentFileName == txtNormName.Text.Substring(5))
+                    logText += "[[:" + txtNormName.Text + "]]\r\n";
+                else
+                    logText += "[[:File:" + CurrentFileName + "]] → [[:" + txtNormName.Text + "]]\r\n";
+                try
+                {
+                    File.AppendAllText("CommonsTransfers.log", logText, Encoding.UTF8);
+                }
+                catch (Exception x)
+                {
+                    ErrorHandler(Localization.GetString("LogFileWriteFailed") + "\n\n" + x.Message);
+                    EnableForm(true);
+                    return;
+                }
+            }
+
+            // this is invoked when all is finished
+            MethodInvoker showSuccess = delegate()
+            {
+                Invoke((MethodInvoker) ClearWarnings);
+                AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
+                AddWarning(Localization.GetString("HotcatHint_Label"), WarningBoxType.Success);
+                if (Settings.OpenBrowserLocal)
+                    lnkLocalFile_LinkClicked(null, null);
+                if (Settings.OpenBrowserAutomatically)
+                    lnkCommonsFile_LinkClicked(null, null);
+                if (CurrentFileSource != FileSources.Category)
+                    Invoke((MethodInvoker) delegate() { btnRandomFile.Focus(); });
+            };
+
+            // finished?
+            if (!chkDeleteAfter.Checked)
+            {
+                EnableForm(true);
+                showSuccess();
+                return;
+            }
+
+            // continue with deleting/tagging with {{now Commons}}
+
+            MorebitsDotNetLoginSuccess innerAction = delegate()
+            {
+                if (Settings.LocalSysop)
+                {
+                    DeleteLocal();
+                    return;
+                }
+
+                StringDictionary enTokenQuery = new StringDictionary 
+                    {
+                        { "action", "query" },
+                        { "prop", "info|revisions" },
+                        { "intoken", "edit" },
+                        { "titles", "File:" + CurrentFileName },  // old filename
+                        { "rvprop", "content" }
+                    };
+                MorebitsDotNet.PostApi(Wiki.Local, enTokenQuery, delegate(XmlDocument enDoc)
+                {
+                    if (enDoc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
+                    {
+                        ErrorHandler(Localization.GetString("LocalFileDeleted"));
                         return;
                     }
 
-                    string newFilename = Regex.Replace(txtNormName.Text, "^(Image|File):", "");
-                    string token = doc.GetElementsByTagName("page")[0].Attributes["edittoken"].Value;
+                    string enToken = enDoc.GetElementsByTagName("page")[0].Attributes["edittoken"].Value;
 
-                    // add categories from CoolCat
-                    string textForCommons = txtCommonsText.Text.Trim()
-                        .Replace("<!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->", "");
-                    IEnumerable<string> categories = coolCat.Categories;
-                    bool haveAddedCats = false;
-                    foreach (string i in categories)
+                    string enText = Regex.Replace(enDoc.GetElementsByTagName("rev")[0].FirstChild.Value, "{{orphan image[^}]*}}", "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                    string nowcommonsTag = "{{" + LocalWikiData.NowCommonsTag + "|" + txtNormName.Text + "|date=" + DateTime.UtcNow.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "}}\n";
+                    string newText = Regex.Replace(enText, LocalWikiData.CopyToCommonsRegex, nowcommonsTag, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                    bool replaced = true;
+                    if (enText == newText)
                     {
-                        if (!haveAddedCats)
-                        {
-                            textForCommons += "\n";
-                            haveAddedCats = true;
-                        }
-                        textForCommons += "\n[[Category:" + i + "]]";
+                        newText = nowcommonsTag + newText;
+                        replaced = false;
                     }
 
-                    StringDictionary uploadQuery = new StringDictionary 
-                    {
-                        { "action", "upload" },
-                        { "filename", newFilename },
-                        { "text", textForCommons },
-                        // Note: this upload comment is not localised, since Commons uses English as lingua franca
-                        { "comment", "Transferred from " + Settings.LocalDomain + ": see original upload log above" },
-                        { "token", token }
-                    };
-                    if (chkIgnoreWarnings.Checked)
-                        uploadQuery.Add("ignorewarnings", "true");
-                    MorebitsDotNet.UploadFile(Wiki.Commons, uploadQuery, ImageData, newFilename, "file", delegate(XmlDocument innerDoc)
-                    {
-                        // assuming success...
-
-                        Invoke((MethodInvoker) delegate()
+                    StringDictionary enEditQuery = new StringDictionary 
                         {
-                            lnkCommonsFile.Enabled = true;
-                            lnkCommonsFile.Tag = txtNormName.Text;
-                        });
-
-                        XmlNodeList warnings = innerDoc.GetElementsByTagName("warnings");
-                        if (warnings.Count > 0 && !chkIgnoreWarnings.Checked)
+                            { "action", "edit" },
+                            { "token", enToken },
+                            { "title", "File:" + CurrentFileName },
+                            { "text", newText },
+                            { "summary", (replaced ? LocalWikiData.NowCommonsReplacingTagEditSummary : LocalWikiData.NowCommonsAddingTagEditSummary) +
+                                " ([[" + LocalWikiData.LocalFtcgPage + "|FtCG]])" },
+                            { "nocreate", "true" },
+                            { "redirects", "true" }
+                        };
+                    MorebitsDotNet.PostApi(Wiki.Local, enEditQuery, delegate(XmlDocument enInnerDoc)
+                    {
+                        EnableForm(true);
+                        string editResult = enInnerDoc.GetElementsByTagName("edit")[0].Attributes["result"].Value.ToLower();
+                        if (editResult != "success")
                         {
-                            ErrorHandler(Localization.GetString("Warnings1") + "\n\n" + warnings[0].OuterXml + "\n\n" + Localization.GetString("Warnings2"), MessageBoxIcon.Warning);
+                            ErrorHandler(Localization.GetString("NowCommonsFailed") + " " + editResult, MessageBoxIcon.Information);
                             return;
                         }
-
-                        // log the transfer, if requested
-                        if (Settings.LogTransfers)
-                        {
-                            string logText = "# " +
-                                DateTime.UtcNow.ToString(Localization.GetString("LogFileTimestampFormat"), System.Globalization.DateTimeFormatInfo.InvariantInfo) +
-                                " (UTC): ";
-                            if (filename == txtNormName.Text)
-                                logText += "[[:" + txtNormName.Text + "]]\r\n";
-                            else
-                                logText += "[[:" + filename + "]] → [[:" + txtNormName.Text + "]]\r\n";
-                            try
-                            {
-                                File.AppendAllText("CommonsTransfers.log", logText, Encoding.UTF8);
-                            }
-                            catch (Exception x)
-                            {
-                                ErrorHandler(Localization.GetString("LogFileWriteFailed") + "\n\n" + x.Message);
-                                EnableForm(true);
-                                return;
-                            }
-                        }
-
-                        // this is invoked when all is finished
-                        MethodInvoker showSuccess = delegate()
-                        {
-                            Invoke((MethodInvoker) ClearWarnings);
-                            AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
-                            AddWarning(Localization.GetString("HotcatHint_Label"), WarningBoxType.Success);
-                            if (Settings.OpenBrowserLocal)
-                                lnkLocalFile_LinkClicked(null, null);
-                            if (Settings.OpenBrowserAutomatically)
-                                lnkCommonsFile_LinkClicked(null, null);
-                            if (CurrentFileSource != FileSources.Category)
-                                Invoke((MethodInvoker) delegate() { btnRandomFile.Focus(); });
-                        };
-
-                        // finished?
-                        if (!chkDeleteAfter.Checked)
-                        {
-                            EnableForm(true);
-                            showSuccess();
-                            return;
-                        }
-
-                        // continue with deleting/tagging with {{now Commons}}
-
-                        MorebitsDotNetLoginSuccess innerAction = delegate()
-                        {
-                            if (Settings.LocalSysop)
-                            {
-                                DeleteLocal();
-                                return;
-                            }
-
-                            StringDictionary enTokenQuery = new StringDictionary 
-                            {
-                                { "action", "query" },
-                                { "prop", "info|revisions" },
-                                { "intoken", "edit" },
-                                { "titles", filename },  // old filename
-                                { "rvprop", "content" }
-                            };
-                            MorebitsDotNet.PostApi(Wiki.Local, enTokenQuery, delegate(XmlDocument enDoc)
-                            {
-                                if (enDoc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
-                                {
-                                    ErrorHandler(Localization.GetString("LocalFileDeleted"));
-                                    return;
-                                }
-
-                                string enToken = enDoc.GetElementsByTagName("page")[0].Attributes["edittoken"].Value;
-
-                                string enText = Regex.Replace(enDoc.GetElementsByTagName("rev")[0].FirstChild.Value, "{{orphan image[^}]*}}", "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-                                string nowcommonsTag = "{{" + LocalWikiData.NowCommonsTag + "|" + txtNormName.Text + "|date=" + DateTime.UtcNow.ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "}}\n";
-                                string newText = Regex.Replace(enText, LocalWikiData.CopyToCommonsRegex, nowcommonsTag, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-                                bool replaced = true;
-                                if (enText == newText)
-                                {
-                                    newText = nowcommonsTag + newText;
-                                    replaced = false;
-                                }
-
-                                StringDictionary enEditQuery = new StringDictionary 
-                                {
-                                    { "action", "edit" },
-                                    { "token", enToken },
-                                    { "title", filename },
-                                    { "text", newText },
-                                    { "summary", (replaced ? LocalWikiData.NowCommonsReplacingTagEditSummary : LocalWikiData.NowCommonsAddingTagEditSummary) +
-                                        " ([[" + LocalWikiData.LocalFtcgPage + "|FtCG]])" },
-                                    { "nocreate", "true" },
-                                    { "redirects", "true" }
-                                };
-                                MorebitsDotNet.PostApi(Wiki.Local, enEditQuery, delegate(XmlDocument enInnerDoc)
-                                {
-                                    EnableForm(true);
-                                    string editResult = enInnerDoc.GetElementsByTagName("edit")[0].Attributes["result"].Value.ToLower();
-                                    if (editResult != "success")
-                                    {
-                                        ErrorHandler(Localization.GetString("NowCommonsFailed") + " " + editResult, MessageBoxIcon.Information);
-                                        return;
-                                    }
-                                    showSuccess();
-                                }, ErrorHandler);
-                            }, ErrorHandler);
-                        };
-
-                        if (!MorebitsDotNet.LoginSessions[Wiki.Local].LoggedIn)
-                            MorebitsDotNet.LogIn(Wiki.Local, Settings.LocalUserName,
-                                Settings.LocalPassword, innerAction, ErrorHandler);
-                        else
-                            innerAction();
+                        showSuccess();
                     }, ErrorHandler);
                 }, ErrorHandler);
             };
 
-            if (!MorebitsDotNet.LoginSessions[Wiki.Commons].LoggedIn)
-                MorebitsDotNet.LogIn(Wiki.Commons, Settings.CommonsUserName, Settings.CommonsPassword,
-                    action, ErrorHandler);
+            if (!MorebitsDotNet.LoginSessions[Wiki.Local].LoggedIn)
+                MorebitsDotNet.LogIn(Wiki.Local, Settings.LocalUserName,
+                    Settings.LocalPassword, innerAction, ErrorHandler);
             else
-                action();
+                innerAction();
         }
 
         private void DeleteLocal()
@@ -1314,7 +1452,7 @@ namespace ForTheCommonGood
                     { "action", "query" },
                     { "prop", "info" },
                     { "intoken", "delete" },
-                    { "titles", filename },
+                    { "titles", "File:" + CurrentFileName },
                     { "redirects", "true" }
                 };
                 MorebitsDotNet.PostApi(Wiki.Local, query, delegate(XmlDocument doc)
@@ -1331,7 +1469,7 @@ namespace ForTheCommonGood
                         { "action", "delete" },
                         { "reason", LocalWikiData.NowCommonsDeletionSummary + ": [[" + lnkCommonsFile.Tag.ToString() + "]]" },
                         { "token", token },
-                        { "title", filename },
+                        { "title", "File:" + CurrentFileName },
                         { "redirects", "true" }
                     };
 
@@ -1509,7 +1647,7 @@ namespace ForTheCommonGood
         {
             try
             {
-                Process.Start(MorebitsDotNet.GetProtocol() + "://" + MorebitsDotNet.GetDomain(Wiki.Local) + "/wiki/" + filename);
+                Process.Start(MorebitsDotNet.GetProtocol() + "://" + MorebitsDotNet.GetDomain(Wiki.Local) + "/wiki/File:" + CurrentFileName);
             }
             catch (Exception)
             {
@@ -1547,19 +1685,20 @@ namespace ForTheCommonGood
             frmRevisionBrowse form = new frmRevisionBrowse();
             bool first = true;
 
-            foreach (XmlNode i in iis)
+            for (int i = 0; i < ImageInfos.Count; i++)
             {
+                XmlNode n = ImageInfos[i];
                 ListViewItem item = new ListViewItem(new string[] {
                     "", 
-                    (first ? (Localization.GetString("CurrentVersion_Label") + "\n") : "") + FormatTimestamp(i),
-                    FormatDimensions(i),
-                    i.Attributes["user"] == null ? Localization.GetString("UserNameHidden") : i.Attributes["user"].Value,
-                    i.Attributes["comment"] == null ? Localization.GetString("CommentHidden") : i.Attributes["comment"].Value
+                    (first ? (Localization.GetString("CurrentVersion_Label") + "\n") : "") + FormatTimestamp(n),
+                    FormatDimensions(n),
+                    n.Attributes["user"] == null ? Localization.GetString("UserNameHidden") : n.Attributes["user"].Value,
+                    n.Attributes["comment"] == null ? Localization.GetString("CommentHidden") : n.Attributes["comment"].Value
                 });
                 item.Tag = i;
 
                 // download thumbnail
-                if (i.Attributes["thumburl"] != null && i.Attributes["thumburl"].Value != "")
+                if (n.Attributes["thumburl"] != null && n.Attributes["thumburl"].Value != "")
                 {
                     WebClient cl = new WebClient();
                     cl.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
@@ -1587,7 +1726,7 @@ namespace ForTheCommonGood
                                 Bitmap img = new Bitmap(150, 150, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                                 using (Graphics g = Graphics.FromImage(img))
                                 {
-                                    g.FillRectangle(checker, 0, 0, img.Width, img.Height);
+                                    g.FillRectangle(CheckerBrush, 0, 0, img.Width, img.Height);
                                     if (original.Width > original.Height)
                                     {
                                         float newHeight = ((float) original.Height) / ((float) original.Width / 150);
@@ -1606,7 +1745,7 @@ namespace ForTheCommonGood
                                 }
                             });
                         });
-                    cl.DownloadDataAsync(new Uri(i.Attributes["thumburl"].Value));
+                    cl.DownloadDataAsync(new Uri(n.Attributes["thumburl"].Value));
                 }
                 else
                 {
@@ -1624,20 +1763,25 @@ namespace ForTheCommonGood
                 }
                 form.listView.Items.Add(item);
 
+                if (Array.IndexOf(SelectedRevisions, i) != -1)
+                    item.Selected = true;
+
                 first = false;
             }
 
             if (form.ShowDialog() == DialogResult.Cancel)
                 return;
 
-            if (form.listView.SelectedItems.Count != 1)
+            if (form.listView.SelectedItems.Count == 0)
             {
                 ErrorHandler(Localization.GetString("NoRevisionSelected"));
                 return;
             }
 
-            ImageData = null;
-            DownloadFileAndDisplayThumb((XmlNode) form.listView.SelectedItems[0].Tag);
+            SelectedRevisions = new int[form.listView.SelectedItems.Count];
+            for (int i = 0; i < form.listView.SelectedItems.Count; i++)
+                SelectedRevisions[i] = (int) form.listView.SelectedItems[i].Tag;
+            DownloadFileAndDisplayThumb();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -1786,7 +1930,7 @@ namespace ForTheCommonGood
                 Image original = null;
                 try
                 {
-                    original = Image.FromStream(new MemoryStream(ImageData));
+                    original = Image.FromStream(new MemoryStream(ImageDatas[SelectedRevisions[0]]));
                 }
                 catch (Exception)
                 {
@@ -1796,7 +1940,7 @@ namespace ForTheCommonGood
                 Bitmap img = new Bitmap(original.Width, original.Height);
                 using (Graphics g = Graphics.FromImage(img))
                 {
-                    g.FillRectangle(checker, 0, 0, img.Width, img.Height);
+                    g.FillRectangle(CheckerBrush, 0, 0, img.Width, img.Height);
                     g.DrawImage(original, 0, 0, img.Width, img.Height);
                 }
                 BackgroundImage = img;
@@ -1807,7 +1951,7 @@ namespace ForTheCommonGood
                 BackColor = Color.DimGray;
 
                 Click += AbandonLightbox;
-                panRoot.Visible = false;
+                panRoot.Visible = panRoot.Enabled = false;
             }
         }
 
@@ -1815,7 +1959,7 @@ namespace ForTheCommonGood
         {
             BackgroundImage = null;
             BackColor = DefaultBackColor;
-            panRoot.Visible = true;
+            panRoot.Visible = panRoot.Enabled = true;
             Click -= AbandonLightbox;
         }
 
@@ -1895,7 +2039,7 @@ namespace ForTheCommonGood
         {
             try
             {
-                Process.Start("http://www.google.com/searchbyimage?hl=" + Localization.GetString("LanguageCode") + "&image_url=" + Uri.EscapeDataString(iis[0].Attributes["url"].Value));
+                Process.Start("http://www.google.com/searchbyimage?hl=" + Localization.GetString("LanguageCode") + "&image_url=" + Uri.EscapeDataString(ImageInfos[SelectedRevisions[0]].Attributes["url"].Value));
             }
             catch (Exception)
             {
