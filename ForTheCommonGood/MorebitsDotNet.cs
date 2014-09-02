@@ -151,6 +151,37 @@ namespace ForTheCommonGood
 
         }
 
+        /// <summary>
+        /// Makes an HTTP GET request to the specified MediaWiki API endpoint.
+        /// </summary>
+        /// <param name="wiki">The <see cref="Wiki"/> to contact.</param>
+        /// <param name="queryString">The query string, to be appended to the URL after a "?" character.
+        /// No escaping is performed.</param>
+        /// <param name="userToken">A custom object that is passed on to the callback, for state tracking.
+        /// Set to null if not required.</param>
+        /// <param name="onSuccess">A function that will be called when the request is successful.
+        /// The function is passed the string of response received, as well as the value of <paramref name="userToken"/>.</param>
+        public static void GetApi(Wiki wiki, string queryString, object userToken, 
+            MorebitsDotNetGetSuccess onSuccess)
+        {
+            WebClient cl = new WebClient();
+            cl.Headers.Add("User-Agent", UserAgent);
+            cl.CachePolicy = new RequestCachePolicy(RequestCacheLevel.Default);
+            cl.DownloadStringCompleted += delegate(object sender, DownloadStringCompletedEventArgs e)
+            {
+                if (e.Error == null)
+                    onSuccess(e.Result, e.UserState);
+            };
+
+            try
+            {
+                cl.DownloadStringAsync(new Uri(GetApiUri(wiki) + "?" + queryString), userToken);
+            }
+            catch (WebException)
+            {
+                // no error handler yet...
+            }
+        }
         public static void PostApi(Wiki wiki, StringDictionary query, MorebitsDotNetPostSuccess onSuccess)
         {
             PostApi(wiki, query, onSuccess, DefaultErrorHandler, false, false);

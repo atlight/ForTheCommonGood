@@ -38,6 +38,9 @@
             this.lblExifNotice = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblLocalFileDesc = new System.Windows.Forms.Label();
+            this.panCommonsText = new System.Windows.Forms.Panel();
+            this.coolCat = new ForTheCommonGood.CoolCat();
+            this.panCategorySeparator = new System.Windows.Forms.Panel();
             this.lblCommonsFileDesc = new System.Windows.Forms.Label();
             this.lblNormName = new System.Windows.Forms.Label();
             this.txtNormName = new System.Windows.Forms.TextBox();
@@ -46,7 +49,7 @@
             this.lnkLocalFile = new System.Windows.Forms.LinkLabel();
             this.lnkCommonsFile = new System.Windows.Forms.LinkLabel();
             this.btnRandomFile = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panTopSeparator = new System.Windows.Forms.Panel();
             this.chkDeleteAfter = new System.Windows.Forms.CheckBox();
             this.optCategory1 = new System.Windows.Forms.RadioButton();
             this.optCategory2 = new System.Windows.Forms.RadioButton();
@@ -61,7 +64,7 @@
             this.lblWarningHeading = new System.Windows.Forms.Label();
             this.optOther = new System.Windows.Forms.RadioButton();
             this.panRoot = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panTransferSeparator = new System.Windows.Forms.Panel();
             this.toolBarLinks = new System.Windows.Forms.ToolStrip();
             this.btnPreview = new System.Windows.Forms.ToolStripButton();
             this.btnLinkify = new System.Windows.Forms.ToolStripButton();
@@ -80,6 +83,7 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.updateChecker = new System.ComponentModel.BackgroundWorker();
             this.tableLayoutPanel1.SuspendLayout();
+            this.panCommonsText.SuspendLayout();
             this.panWarning.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoWarning)).BeginInit();
             this.panRoot.SuspendLayout();
@@ -135,11 +139,11 @@
             this.txtCommonsText.AcceptsReturn = true;
             this.txtCommonsText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCommonsText.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCommonsText.Location = new System.Drawing.Point(487, 16);
+            this.txtCommonsText.Location = new System.Drawing.Point(0, 0);
             this.txtCommonsText.Multiline = true;
             this.txtCommonsText.Name = "txtCommonsText";
             this.txtCommonsText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtCommonsText.Size = new System.Drawing.Size(478, 404);
+            this.txtCommonsText.Size = new System.Drawing.Size(478, 207);
             this.txtCommonsText.TabIndex = 3;
             this.txtCommonsText.WordWrap = false;
             // 
@@ -175,8 +179,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.lblLocalFileDesc, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panCommonsText, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.txtLocalText, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.txtCommonsText, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.lblCommonsFileDesc, 1, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 56);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -194,6 +198,41 @@
             this.lblLocalFileDesc.Size = new System.Drawing.Size(113, 13);
             this.lblLocalFileDesc.TabIndex = 0;
             this.lblLocalFileDesc.Text = "<local file desc page>";
+            // 
+            // panCommonsText
+            // 
+            this.panCommonsText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panCommonsText.Controls.Add(this.txtCommonsText);
+            this.panCommonsText.Controls.Add(this.coolCat);
+            this.panCommonsText.Controls.Add(this.panCategorySeparator);
+            this.panCommonsText.Location = new System.Drawing.Point(487, 16);
+            this.panCommonsText.Name = "panCommonsText";
+            this.panCommonsText.Size = new System.Drawing.Size(478, 244);
+            this.panCommonsText.TabIndex = 33;
+            // 
+            // coolCat
+            // 
+            this.coolCat.AutoSize = true;
+            this.coolCat.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.coolCat.Enabled = false;
+            this.coolCat.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.coolCat.Location = new System.Drawing.Point(0, 207);
+            this.coolCat.MinimumSize = new System.Drawing.Size(410, 4);
+            this.coolCat.Name = "coolCat";
+            this.coolCat.Padding = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.coolCat.Size = new System.Drawing.Size(478, 36);
+            this.coolCat.TabIndex = 2;
+            // 
+            // panCategorySeparator
+            // 
+            this.panCategorySeparator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panCategorySeparator.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panCategorySeparator.Location = new System.Drawing.Point(0, 243);
+            this.panCategorySeparator.Name = "panCategorySeparator";
+            this.panCategorySeparator.Size = new System.Drawing.Size(478, 1);
+            this.panCategorySeparator.TabIndex = 33;
             // 
             // lblCommonsFileDesc
             // 
@@ -283,13 +322,13 @@
             this.btnRandomFile.UseVisualStyleBackColor = true;
             this.btnRandomFile.Click += new System.EventHandler(this.RandomImage);
             // 
-            // panel1
+            // panTopSeparator
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(365, 8);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1, 40);
-            this.panel1.TabIndex = 3;
+            this.panTopSeparator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panTopSeparator.Location = new System.Drawing.Point(365, 8);
+            this.panTopSeparator.Name = "panTopSeparator";
+            this.panTopSeparator.Size = new System.Drawing.Size(1, 40);
+            this.panTopSeparator.TabIndex = 3;
             // 
             // chkDeleteAfter
             // 
@@ -444,7 +483,7 @@
             this.panRoot.Controls.Add(this.txtNormName);
             this.panRoot.Controls.Add(this.chkIgnoreWarnings);
             this.panRoot.Controls.Add(this.chkDeleteAfter);
-            this.panRoot.Controls.Add(this.panel2);
+            this.panRoot.Controls.Add(this.panTransferSeparator);
             this.panRoot.Controls.Add(this.textBox1);
             this.panRoot.Controls.Add(this.toolBarLinks);
             this.panRoot.Controls.Add(this.lnkGoogleImageSearch);
@@ -469,7 +508,7 @@
             this.panRoot.Controls.Add(this.btnSettings);
             this.panRoot.Controls.Add(this.optCategory2);
             this.panRoot.Controls.Add(this.optCategory1);
-            this.panRoot.Controls.Add(this.panel1);
+            this.panRoot.Controls.Add(this.panTopSeparator);
             this.panRoot.Controls.Add(this.lnkLocalFile);
             this.panRoot.Controls.Add(this.btnRandomFile);
             this.panRoot.Controls.Add(this.lnkCommonsFile);
@@ -479,14 +518,14 @@
             this.panRoot.Size = new System.Drawing.Size(985, 542);
             this.panRoot.TabIndex = 0;
             // 
-            // panel2
+            // panTransferSeparator
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Location = new System.Drawing.Point(712, 488);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1, 204);
-            this.panel2.TabIndex = 21;
+            this.panTransferSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.panTransferSeparator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panTransferSeparator.Location = new System.Drawing.Point(712, 326);
+            this.panTransferSeparator.Name = "panTransferSeparator";
+            this.panTransferSeparator.Size = new System.Drawing.Size(1, 206);
+            this.panTransferSeparator.TabIndex = 21;
             // 
             // toolBarLinks
             // 
@@ -704,6 +743,8 @@
             this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.panCommonsText.ResumeLayout(false);
+            this.panCommonsText.PerformLayout();
             this.panWarning.ResumeLayout(false);
             this.panWarning.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoWarning)).EndInit();
@@ -738,7 +779,7 @@
         private System.Windows.Forms.LinkLabel lnkLocalFile;
         private System.Windows.Forms.LinkLabel lnkCommonsFile;
         private System.Windows.Forms.Button btnRandomFile;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panTopSeparator;
         private System.Windows.Forms.CheckBox chkDeleteAfter;
         private System.Windows.Forms.RadioButton optCategory1;
         private System.Windows.Forms.RadioButton optCategory2;
@@ -762,7 +803,7 @@
         private System.Windows.Forms.Label lblViewExif;
         private System.Windows.Forms.ListBox lstFileLinks;
         private System.Windows.Forms.Label lblFileLinks;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panTransferSeparator;
         private System.Windows.Forms.LinkLabel lnkGoToFileLink;
         private System.Windows.Forms.Panel panFileLinks;
         private System.Windows.Forms.LinkLabel lnkGoogleImageSearch;
@@ -772,6 +813,9 @@
         private System.Windows.Forms.ToolStripButton btnPreview;
         private System.Windows.Forms.FlowLayoutPanel panWarningTexts;
         private System.ComponentModel.BackgroundWorker updateChecker;
+        private CoolCat coolCat;
+        private System.Windows.Forms.Panel panCommonsText;
+        private System.Windows.Forms.Panel panCategorySeparator;
     }
 }
 

@@ -51,6 +51,13 @@ Successful_Label=Successful
 # LOCALIZATION NOTE: "potential", adjective ~= "possible"
 PotentialProblems_Label=Potential problems
 
+# Category selector
+AddCategory_Tooltip=Add a category
+RemoveCategory_Tooltip=Remove
+ModifyCategory_Tooltip=Modify
+CategoryExists_Tooltip=Category exists
+CategoryDoesNotExist_Tooltip=Category does not exist
+
 # General
 OK_Button=OK
 Cancel_Button=Cancel

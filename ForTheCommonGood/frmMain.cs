@@ -313,9 +313,10 @@ namespace ForTheCommonGood
             {
                 // enable those controls which are initially disabled
                 btnTransfer.Enabled = txtNormName.Enabled = chkDeleteAfter.Enabled =
-                    chkIgnoreWarnings.Enabled = toolBarLinks.Enabled = true;
+                    chkIgnoreWarnings.Enabled = toolBarLinks.Enabled = coolCat.Enabled = true;
 
                 txtLocalText.Text = txtCommonsText.Text = lblName.Text = lblRevision.Text = lblDimensions.Text = "";
+                coolCat.ClearCategories();
                 pictureBox1.Image = null;
                 pictureBox1.Cursor = Cursors.Default;
                 lblPastRevisions.Visible = btnPastRevisions.Visible = lblViewExif.Visible =
@@ -1136,11 +1137,26 @@ namespace ForTheCommonGood
                     string newFilename = Regex.Replace(txtNormName.Text, "^(Image|File):", "");
                     string token = doc.GetElementsByTagName("page")[0].Attributes["edittoken"].Value;
 
+                    // add categories from CoolCat
+                    string textForCommons = txtCommonsText.Text.Trim()
+                        .Replace("<!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->", "");
+                    IEnumerable<string> categories = coolCat.Categories;
+                    bool haveAddedCats = false;
+                    foreach (string i in categories)
+                    {
+                        if (!haveAddedCats)
+                        {
+                            textForCommons += "\n";
+                            haveAddedCats = true;
+                        }
+                        textForCommons += "\n[[Category:" + i + "]]";
+                    }
+
                     StringDictionary uploadQuery = new StringDictionary 
                     {
                         { "action", "upload" },
                         { "filename", newFilename },
-                        { "text", txtCommonsText.Text.Replace("<!-- " + Localization.GetString("ChangeIfNotOwnWork") + " -->", "") },
+                        { "text", textForCommons },
                         // Note: this upload comment is not localised, since Commons uses English as lingua franca
                         { "comment", "Transferred from " + Settings.LocalDomain + ": see original upload log above" },
                         { "token", token }

@@ -63,6 +63,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoolCat.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CoolCat.Designer.cs">
+      <DependentUpon>CoolCat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CoolCatItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CoolCatItem.Designer.cs">
+      <DependentUpon>CoolCatItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,8 +114,15 @@
     <Compile Include="Localization.cs" />
     <Compile Include="LocalWikiData.cs" />
     <Compile Include="MorebitsDotNet.cs" />
+    <Compile Include="PlatformSpecificUI.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CoolCat.resx">
+      <DependentUpon>CoolCat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CoolCatItem.resx">
+      <DependentUpon>CoolCatItem.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmPreview.resx">
       <DependentUpon>frmPreview.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,6 +185,8 @@
   <ItemGroup>
     <Content Include="ForTheCommonGood.lang">
     </Content>
+    <Content Include="Resources\Small-check.png" />
+    <Content Include="Resources\Small-cross.png" />
     <None Include="Resources\Internet_link_02p.png" />
     <None Include="Resources\Magnifying_glass_icon.png" />
     <None Include="DefaultStrings.lang" />
