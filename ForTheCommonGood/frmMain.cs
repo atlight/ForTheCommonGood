@@ -88,7 +88,7 @@ namespace ForTheCommonGood
             lblViewExif.Text = Localization.GetString("ContainsExifMetadata_Label");
             btnViewExif.Text = Localization.GetString("ViewMetadata_Button");
             lblFileLinks.Text = Localization.GetString("ImageUsage_Label");
-            lnkGoToFileLink.Text = Localization.GetString("Go_Button") + " →";
+            lnkGoToFileLink.Text = Localization.GetString("Go_Button") + " >";
             lblNormName.Text = Localization.GetString("NewFilenameOnCommons_TextBox");
             chkIgnoreWarnings.Text = Localization.GetString("IgnoreWarnings_CheckBox");
             chkDeleteAfter.Text = Localization.GetString("TagLocalFileWithNowCommons_Label");
