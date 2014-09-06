@@ -869,9 +869,8 @@ namespace ForTheCommonGood
             // download files
             SetTransferButtonDownloading(true);
             int currentIndexIndex = 0;  // the index into SelectedRevisions (an array of indexes). So meta!
-            ImageDataDownloader = new WebClient();
-            ImageDataDownloader.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
-            ImageDataDownloader.DownloadDataCompleted += new DownloadDataCompletedEventHandler(
+            DownloadDataCompletedEventHandler displayThumbHandler = null;
+            displayThumbHandler = new DownloadDataCompletedEventHandler(
                 delegate(object s, DownloadDataCompletedEventArgs v)
                 {
                     if (v.Cancelled)
@@ -910,8 +909,20 @@ namespace ForTheCommonGood
                     }
 
                     if (++currentIndexIndex < SelectedRevisions.Length)
+                    {
+                        ImageDataDownloader = new WebClient();
+                        ImageDataDownloader.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
+                        ImageDataDownloader.DownloadDataCompleted += displayThumbHandler;
                         ImageDataDownloader.DownloadDataAsync(new Uri(ImageInfos[SelectedRevisions[currentIndexIndex]].Attributes["url"].Value));
+                    }
+                    else
+                    {
+                        SetTransferButtonDownloading(false);
+                    }
                 });
+            ImageDataDownloader = new WebClient();
+            ImageDataDownloader.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
+            ImageDataDownloader.DownloadDataCompleted += displayThumbHandler;
             ImageDataDownloader.DownloadDataAsync(new Uri(ImageInfos[SelectedRevisions[currentIndexIndex]].Attributes["url"].Value));
         }
 
@@ -1286,7 +1297,6 @@ namespace ForTheCommonGood
                                 warnings.Add(Localization.GetString("UploadWarning_ThumbName", i.Value));
                                 break;
                             // Not handled: page-exists, ...
-                                // Not handled: page-exists, ...
                             default:
                                 warnings.Add(Localization.GetString("UploadWarning_Unknown", i.LocalName, i.Value));
                                 break;
