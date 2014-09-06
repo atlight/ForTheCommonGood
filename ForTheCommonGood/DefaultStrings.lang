@@ -101,6 +101,10 @@ LocalWikiDataHint_Label=You can load different datasets that allow For the Commo
 LocalWikiDataLoad_Button=Import...
 LocalWikiDataReset_Button=Reset
 LocalWikiDataCurrent_Label=Currently using:
+LocalWikiDataUseLoaded_Option=Use imported file:
+LocalWikiDataUseHosted_Option=Use live data from the Internet:
+LocalWikiDataUseDefault_Option=Use built-in local wiki data (English Wikipedia)
+LocalWikiDataNoneSelected_Option=(none selected)
 UseHttps_CheckBox=Use HTTPS (secure connection)
 
 # "About box" area of Settings window
@@ -201,14 +205,16 @@ ReadSettingsError=An error occurred when trying to read the settings file.
 SaveSettingsError=An error occurred when trying to save the settings file.
 LocalWikiDataLoadFailed=Failed to load local wiki data file. Please make sure all lines are valid and are not misspelt.
 FileNotFoundLocal=The file "{0}" could not be found.
-LocalWikiDataWrongDomain=The data file you chose is intended for use on {0}. It is suggested that you change the "local wiki" option to match.
-LocalWikiDataReset=The default data file is intended for use on English Wikipedia (en.wikipedia). You should change the "local wiki" option to "en.wikipedia" for optimum performance.
+LocalWikiDataWrongDomain=The local wiki data file you chose is intended for use on {0}. It is suggested that you change the "local wiki" option to match.
 ParsePageFailed=Failed to fetch the preview from the server.
 # LOCALIZATION NOTE: {0} is the TalkPage localized string, {1} is something like " (1,234 bytes)"
 ContentOnTalkPage=The file has a {0}{1} - copy it over manually if relevant.
 TalkPage=talk page
 LocalWikiDataError=There is an error in the currently loaded local wiki data file. If you think you have already corrected this problem, please go back to the Settings dialog and load the file again.
 LocalWikiDataRegexError=The regular expression provided for "{0}" is invalid.
+FailedToLoadHostedLocalWikiData=Failed to download the live local wiki data file at {0}. If the problem persists, go to Settings and choose a different local wiki data source. For now, you will be using the default English Wikipedia local wiki data file.
+FailedToLoadHostedLocalWikiDataList=Failed to load the list of live local wiki data files. Please try again later.
+ContinueAnyway=Continue anyway?
 
 # MediaWiki upload warnings
 UploadWarning_BadFilename=The filename is not acceptable in its current form. It will be altered to "{0}".

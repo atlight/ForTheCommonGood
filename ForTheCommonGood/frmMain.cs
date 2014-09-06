@@ -1634,8 +1634,21 @@ namespace ForTheCommonGood
             }
 
             // local wiki data
-            LocalWikiData.LoadWikiData((Settings.LocalWikiData == "" ? Properties.Resources.en_wikipedia : Settings.LocalWikiData)
-                .Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+            if (Settings.LocalWikiData != "")
+            {
+                LocalWikiData.LoadWikiData(Settings.LocalWikiData);
+            }
+            else if (Settings.LocalWikiDataHosted != "" && Settings.LocalWikiDataHosted.IndexOf("|") != -1 &&
+                Settings.LocalWikiDataHosted.IndexOf("|") == Settings.LocalWikiDataHosted.LastIndexOf("|"))
+            {
+                if (!LocalWikiData.LoadWikiDataHosted(Settings.LocalWikiDataHosted.Substring(Settings.LocalWikiDataHosted.IndexOf("|") + 1)))
+                    LocalWikiData.LoadWikiData(Properties.Resources.en_wikipedia);
+            }
+            else
+            {
+                LocalWikiData.LoadWikiData(Properties.Resources.en_wikipedia);
+            }
+
             optCategory1.Text = LocalWikiData.CategoryNamespace + ":" + LocalWikiData.Category1;
             optCategory2.Visible = LocalWikiData.Category2 != "";
             optCategory2.Text = LocalWikiData.CategoryNamespace + ":" + LocalWikiData.Category2;

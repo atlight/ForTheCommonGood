@@ -46,7 +46,7 @@
             this.lblLocalDomain = new System.Windows.Forms.Label();
             this.lblLocalUserName = new System.Windows.Forms.Label();
             this.lblLocalPassword = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panHorizLine = new System.Windows.Forms.Panel();
             this.lblVersion = new System.Windows.Forms.Label();
             this.lnkThisThatOther = new System.Windows.Forms.LinkLabel();
             this.lblLicense = new System.Windows.Forms.Label();
@@ -57,14 +57,17 @@
             this.chkSaveCreds = new System.Windows.Forms.CheckBox();
             this.lblLocalDataHint = new System.Windows.Forms.Label();
             this.grpLocalData = new System.Windows.Forms.GroupBox();
-            this.lblLocalCurrent = new System.Windows.Forms.Label();
-            this.lblLocalCurrentLabel = new System.Windows.Forms.Label();
-            this.btnLocalDataReset = new System.Windows.Forms.Button();
+            this.cboLocalDataHosted = new System.Windows.Forms.ComboBox();
+            this.optLocalDataDefault = new System.Windows.Forms.RadioButton();
+            this.optLocalDataHosted = new System.Windows.Forms.RadioButton();
+            this.optLocalDataFile = new System.Windows.Forms.RadioButton();
             this.btnLocalDataLoad = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.chkUseHttps = new System.Windows.Forms.CheckBox();
             this.panRightSide = new System.Windows.Forms.Panel();
             this.chkLogTransfers = new System.Windows.Forms.CheckBox();
+            this.panVertLine = new System.Windows.Forms.Panel();
+            this.hostedListLoader = new System.ComponentModel.BackgroundWorker();
             this.grpCommons.SuspendLayout();
             this.grpLocal.SuspendLayout();
             this.grpLocalData.SuspendLayout();
@@ -110,7 +113,7 @@
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnCancel.Location = new System.Drawing.Point(615, 248);
+            this.btnCancel.Location = new System.Drawing.Point(613, 322);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 4;
@@ -121,7 +124,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnOK.Location = new System.Drawing.Point(535, 248);
+            this.btnOK.Location = new System.Drawing.Point(533, 322);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 3;
@@ -256,21 +259,20 @@
             this.lblLocalPassword.TabIndex = 6;
             this.lblLocalPassword.Text = "<password>";
             // 
-            // panel1
+            // panHorizLine
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(8, 278);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(680, 1);
-            this.panel1.TabIndex = 5;
+            this.panHorizLine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.panHorizLine.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panHorizLine.Location = new System.Drawing.Point(8, 272);
+            this.panHorizLine.Name = "panHorizLine";
+            this.panHorizLine.Size = new System.Drawing.Size(311, 1);
+            this.panHorizLine.TabIndex = 5;
             // 
             // lblVersion
             // 
             this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblVersion.AutoSize = true;
-            this.lblVersion.Location = new System.Drawing.Point(8, 302);
+            this.lblVersion.Location = new System.Drawing.Point(8, 296);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(56, 18);
             this.lblVersion.TabIndex = 7;
@@ -281,7 +283,7 @@
             // 
             this.lnkThisThatOther.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkThisThatOther.AutoSize = true;
-            this.lnkThisThatOther.Location = new System.Drawing.Point(8, 322);
+            this.lnkThisThatOther.Location = new System.Drawing.Point(8, 316);
             this.lnkThisThatOther.Name = "lnkThisThatOther";
             this.lnkThisThatOther.Size = new System.Drawing.Size(52, 13);
             this.lnkThisThatOther.TabIndex = 8;
@@ -293,7 +295,7 @@
             // 
             this.lblLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblLicense.AutoSize = true;
-            this.lblLicense.Location = new System.Drawing.Point(8, 338);
+            this.lblLicense.Location = new System.Drawing.Point(8, 332);
             this.lblLicense.Name = "lblLicense";
             this.lblLicense.Size = new System.Drawing.Size(90, 18);
             this.lblLicense.TabIndex = 9;
@@ -305,7 +307,7 @@
             this.lnkAppName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkAppName.AutoSize = true;
             this.lnkAppName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lnkAppName.Location = new System.Drawing.Point(8, 286);
+            this.lnkAppName.Location = new System.Drawing.Point(8, 280);
             this.lnkAppName.Name = "lnkAppName";
             this.lnkAppName.Size = new System.Drawing.Size(131, 18);
             this.lnkAppName.TabIndex = 6;
@@ -370,63 +372,81 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblLocalDataHint.Location = new System.Drawing.Point(10, 20);
             this.lblLocalDataHint.Name = "lblLocalDataHint";
-            this.lblLocalDataHint.Size = new System.Drawing.Size(198, 56);
+            this.lblLocalDataHint.Size = new System.Drawing.Size(342, 42);
             this.lblLocalDataHint.TabIndex = 0;
             this.lblLocalDataHint.Text = "<local data hint>";
             // 
             // grpLocalData
             // 
-            this.grpLocalData.Controls.Add(this.lblLocalCurrent);
-            this.grpLocalData.Controls.Add(this.lblLocalCurrentLabel);
-            this.grpLocalData.Controls.Add(this.btnLocalDataReset);
+            this.grpLocalData.Controls.Add(this.cboLocalDataHosted);
+            this.grpLocalData.Controls.Add(this.optLocalDataDefault);
+            this.grpLocalData.Controls.Add(this.optLocalDataHosted);
+            this.grpLocalData.Controls.Add(this.optLocalDataFile);
             this.grpLocalData.Controls.Add(this.btnLocalDataLoad);
             this.grpLocalData.Controls.Add(this.lblLocalDataHint);
             this.grpLocalData.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.grpLocalData.Location = new System.Drawing.Point(0, 146);
             this.grpLocalData.Name = "grpLocalData";
-            this.grpLocalData.Size = new System.Drawing.Size(360, 84);
+            this.grpLocalData.Size = new System.Drawing.Size(360, 148);
             this.grpLocalData.TabIndex = 6;
             this.grpLocalData.TabStop = false;
             this.grpLocalData.Text = "<local wiki data>";
             // 
-            // lblLocalCurrent
+            // cboLocalDataHosted
             // 
-            this.lblLocalCurrent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblLocalCurrent.Location = new System.Drawing.Point(211, 61);
-            this.lblLocalCurrent.Name = "lblLocalCurrent";
-            this.lblLocalCurrent.Size = new System.Drawing.Size(144, 16);
-            this.lblLocalCurrent.TabIndex = 4;
-            this.lblLocalCurrent.Text = "<wiki domain>";
-            this.lblLocalCurrent.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.cboLocalDataHosted.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboLocalDataHosted.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.cboLocalDataHosted.FormattingEnabled = true;
+            this.cboLocalDataHosted.Location = new System.Drawing.Point(240, 68);
+            this.cboLocalDataHosted.Name = "cboLocalDataHosted";
+            this.cboLocalDataHosted.Size = new System.Drawing.Size(112, 21);
+            this.cboLocalDataHosted.TabIndex = 6;
+            this.cboLocalDataHosted.SelectedIndexChanged += new System.EventHandler(this.cboLocalDataHosted_SelectedIndexChanged);
             // 
-            // lblLocalCurrentLabel
+            // optLocalDataDefault
             // 
-            this.lblLocalCurrentLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblLocalCurrentLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblLocalCurrentLabel.Location = new System.Drawing.Point(211, 44);
-            this.lblLocalCurrentLabel.Name = "lblLocalCurrentLabel";
-            this.lblLocalCurrentLabel.Size = new System.Drawing.Size(144, 16);
-            this.lblLocalCurrentLabel.TabIndex = 3;
-            this.lblLocalCurrentLabel.Text = "<currently using>";
-            this.lblLocalCurrentLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.optLocalDataDefault.AutoSize = true;
+            this.optLocalDataDefault.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.optLocalDataDefault.Location = new System.Drawing.Point(8, 122);
+            this.optLocalDataDefault.Name = "optLocalDataDefault";
+            this.optLocalDataDefault.Size = new System.Drawing.Size(101, 18);
+            this.optLocalDataDefault.TabIndex = 5;
+            this.optLocalDataDefault.TabStop = true;
+            this.optLocalDataDefault.Text = "<use default>";
+            this.optLocalDataDefault.UseVisualStyleBackColor = true;
+            this.optLocalDataDefault.CheckedChanged += new System.EventHandler(this.optLocalDataXyz_CheckChange);
             // 
-            // btnLocalDataReset
+            // optLocalDataHosted
             // 
-            this.btnLocalDataReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLocalDataReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnLocalDataReset.Location = new System.Drawing.Point(288, 16);
-            this.btnLocalDataReset.Name = "btnLocalDataReset";
-            this.btnLocalDataReset.Size = new System.Drawing.Size(67, 23);
-            this.btnLocalDataReset.TabIndex = 2;
-            this.btnLocalDataReset.Text = "<reset>";
-            this.btnLocalDataReset.UseVisualStyleBackColor = true;
-            this.btnLocalDataReset.Click += new System.EventHandler(this.btnLocalDataReset_Click);
+            this.optLocalDataHosted.AutoSize = true;
+            this.optLocalDataHosted.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.optLocalDataHosted.Location = new System.Drawing.Point(8, 70);
+            this.optLocalDataHosted.Name = "optLocalDataHosted";
+            this.optLocalDataHosted.Size = new System.Drawing.Size(100, 18);
+            this.optLocalDataHosted.TabIndex = 5;
+            this.optLocalDataHosted.TabStop = true;
+            this.optLocalDataHosted.Text = "<use hosted>";
+            this.optLocalDataHosted.UseVisualStyleBackColor = true;
+            this.optLocalDataHosted.CheckedChanged += new System.EventHandler(this.optLocalDataXyz_CheckChange);
+            // 
+            // optLocalDataFile
+            // 
+            this.optLocalDataFile.AutoSize = true;
+            this.optLocalDataFile.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.optLocalDataFile.Location = new System.Drawing.Point(8, 98);
+            this.optLocalDataFile.Name = "optLocalDataFile";
+            this.optLocalDataFile.Size = new System.Drawing.Size(99, 18);
+            this.optLocalDataFile.TabIndex = 5;
+            this.optLocalDataFile.TabStop = true;
+            this.optLocalDataFile.Text = "<use loaded>";
+            this.optLocalDataFile.UseVisualStyleBackColor = true;
+            this.optLocalDataFile.CheckedChanged += new System.EventHandler(this.optLocalDataXyz_CheckChange);
             // 
             // btnLocalDataLoad
             // 
             this.btnLocalDataLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLocalDataLoad.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnLocalDataLoad.Location = new System.Drawing.Point(208, 16);
+            this.btnLocalDataLoad.Location = new System.Drawing.Point(278, 95);
             this.btnLocalDataLoad.Name = "btnLocalDataLoad";
             this.btnLocalDataLoad.Size = new System.Drawing.Size(75, 23);
             this.btnLocalDataLoad.TabIndex = 1;
@@ -463,7 +483,7 @@
             this.panRightSide.Controls.Add(this.chkAutoUpdate);
             this.panRightSide.Location = new System.Drawing.Point(328, 8);
             this.panRightSide.Name = "panRightSide";
-            this.panRightSide.Size = new System.Drawing.Size(360, 232);
+            this.panRightSide.Size = new System.Drawing.Size(360, 306);
             this.panRightSide.TabIndex = 2;
             // 
             // chkLogTransfers
@@ -477,19 +497,33 @@
             this.chkLogTransfers.Text = "<log transfers>";
             this.chkLogTransfers.UseVisualStyleBackColor = true;
             // 
+            // panVertLine
+            // 
+            this.panVertLine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.panVertLine.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panVertLine.Location = new System.Drawing.Point(319, 272);
+            this.panVertLine.Name = "panVertLine";
+            this.panVertLine.Size = new System.Drawing.Size(1, 73);
+            this.panVertLine.TabIndex = 10;
+            // 
+            // hostedListLoader
+            // 
+            this.hostedListLoader.DoWork += new System.ComponentModel.DoWorkEventHandler(this.hostedListLoader_DoWork);
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(696, 358);
+            this.ClientSize = new System.Drawing.Size(696, 352);
+            this.Controls.Add(this.panVertLine);
             this.Controls.Add(this.panRightSide);
             this.Controls.Add(this.lnkAppName);
             this.Controls.Add(this.lblLicense);
             this.Controls.Add(this.lnkThisThatOther);
             this.Controls.Add(this.lblVersion);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panHorizLine);
             this.Controls.Add(this.grpLocal);
             this.Controls.Add(this.grpCommons);
             this.Controls.Add(this.btnOK);
@@ -508,6 +542,7 @@
             this.grpLocal.ResumeLayout(false);
             this.grpLocal.PerformLayout();
             this.grpLocalData.ResumeLayout(false);
+            this.grpLocalData.PerformLayout();
             this.panRightSide.ResumeLayout(false);
             this.panRightSide.PerformLayout();
             this.ResumeLayout(false);
@@ -531,7 +566,7 @@
         private System.Windows.Forms.TextBox txtLocalPassword;
         private System.Windows.Forms.Label lblLocalSysopHint;
         private System.Windows.Forms.CheckBox chkLocalSysop;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panHorizLine;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.LinkLabel lnkThisThatOther;
         private System.Windows.Forms.Label lblLicense;
@@ -546,13 +581,16 @@
         private System.Windows.Forms.CheckBox chkLocalSameAsCommons;
         private System.Windows.Forms.Label lblLocalDataHint;
         private System.Windows.Forms.GroupBox grpLocalData;
-        private System.Windows.Forms.Label lblLocalCurrent;
-        private System.Windows.Forms.Label lblLocalCurrentLabel;
         private System.Windows.Forms.Button btnLocalDataLoad;
-        private System.Windows.Forms.Button btnLocalDataReset;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.CheckBox chkUseHttps;
         private System.Windows.Forms.Panel panRightSide;
         private System.Windows.Forms.CheckBox chkLogTransfers;
+        private System.Windows.Forms.Panel panVertLine;
+        private System.Windows.Forms.RadioButton optLocalDataHosted;
+        private System.Windows.Forms.RadioButton optLocalDataFile;
+        private System.Windows.Forms.ComboBox cboLocalDataHosted;
+        private System.Windows.Forms.RadioButton optLocalDataDefault;
+        private System.ComponentModel.BackgroundWorker hostedListLoader;
     }
 }

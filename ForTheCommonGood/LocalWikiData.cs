@@ -53,7 +53,7 @@ namespace ForTheCommonGood
         public static KeyValuePair<string, string>[] Replacements { get; private set; }
         public static KeyValuePair<string, string>[] SelfLicenseReplacements { get; private set; }
 
-        public static void LoadWikiData(string[] lines)
+        public static void LoadWikiData(string data)
         {
             LocalDomain = Category1 = Category2 = Category3 = Information = Description =
                 Date = Source = Author = Permission = Other_versions = Summary = Licensing = "";
@@ -70,6 +70,7 @@ namespace ForTheCommonGood
             LocalFtcgPage = "w:en:WP:FTCG";
             FileTalkMinimumSize = "120";  // small default
 
+            string[] lines = data.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < lines.Length; i++)
             {
                 string l = lines[i];
@@ -107,7 +108,7 @@ namespace ForTheCommonGood
                     try
                     {
                         // a very naughty little bit of covert reflection here
-                        typeof(LocalWikiData).GetProperty(l.Substring(0, l.IndexOf('=')), BindingFlags.Static | BindingFlags.Public)
+                        typeof(LocalWikiData).GetProperty(l.Substring(0, l.IndexOf('=')), BindingFlags.Static | BindingFlags.Public | BindingFlags.IgnoreCase)
                             .SetValue(null, l.Substring(l.IndexOf('=') + 1), null);
                     }
                     catch (Exception)
@@ -128,6 +129,25 @@ namespace ForTheCommonGood
             PotentialProblems = problems.ToArray();
             Replacements = replaces.ToArray();
             SelfLicenseReplacements = selfReplaces.ToArray();
+        }
+
+        public static bool LoadWikiDataHosted(string uri)
+        {
+            WebClient loader = new WebClient();
+            loader.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
+            loader.Encoding = Encoding.UTF8;
+            string result;
+            try
+            {
+                result = loader.DownloadString(new Uri(uri));
+            }
+            catch (Exception)
+            {
+                MorebitsDotNet.DefaultErrorHandler(Localization.GetString("FailedToLoadHostedLocalWikiData", uri));
+                return false;
+            }
+            LocalWikiData.LoadWikiData(result);
+            return true;
         }
     }
 }

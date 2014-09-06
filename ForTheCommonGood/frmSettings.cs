@@ -13,9 +13,36 @@ namespace ForTheCommonGood
     public partial class frmSettings: Form
     {
         string localWikiDataFile = "";
+        string localWikiDataDomain = "en.wikipedia";
+
+        bool loginOnly;
+
+        private struct HostedLocalWikiDataEntry
+        {
+            public string displayName;
+            public string uri;
+
+            public HostedLocalWikiDataEntry(string displayName, string uri)
+            {
+                this.displayName = displayName;
+                this.uri = uri;
+            }
+
+            public override string ToString()
+            {
+                return displayName;
+            }
+
+            public string GetFull()
+            {
+                return displayName + "|" + uri;
+            }
+        }
 
         public frmSettings(bool loginOnly, bool showInTaskbar)
         {
+            this.loginOnly = loginOnly;
+            
             InitializeComponent();
             lblVersion.Text = Localization.GetString("Version_Format", Application.ProductVersion.ToString());
 
@@ -38,8 +65,10 @@ namespace ForTheCommonGood
             grpLocalData.Text = Localization.GetString("LocalWikiData_Label");
             lblLocalDataHint.Text = Localization.GetString("LocalWikiDataHint_Label");
             btnLocalDataLoad.Text = Localization.GetString("LocalWikiDataLoad_Button");
-            btnLocalDataReset.Text = Localization.GetString("LocalWikiDataReset_Button");
-            lblLocalCurrentLabel.Text = Localization.GetString("LocalWikiDataCurrent_Label");
+            optLocalDataFile.Tag = Localization.GetString("LocalWikiDataUseLoaded_Option").TrimEnd() + " ";
+            optLocalDataFile.Text = (string) optLocalDataFile.Tag + Localization.GetString("LocalWikiDataNoneSelected_Option");
+            optLocalDataHosted.Text = Localization.GetString("LocalWikiDataUseHosted_Option");
+            optLocalDataDefault.Text = Localization.GetString("LocalWikiDataUseDefault_Option");
             btnOK.Text = Localization.GetString("OK_Button");
             btnCancel.Text = Localization.GetString("Cancel_Button");
 
@@ -59,10 +88,11 @@ namespace ForTheCommonGood
             if (loginOnly)
             {
                 txtCommonsUserName.Enabled = txtLocalDomain.Enabled = txtLocalUserName.Enabled =
-                    chkLocalSameAsCommons.Enabled = lblLocalSysopHint.Visible = chkLocalSysop.Visible = 
-                    panRightSide.Visible = false;
+                    chkLocalSameAsCommons.Enabled = lblLocalSysopHint.Visible = chkLocalSysop.Visible =
+                    panRightSide.Visible = panVertLine.Visible = false;
                 Text = Localization.GetString("LogIn_WindowTitle");
-                ClientSize = new Size(grpCommons.Width + 18, ClientSize.Height + 32);
+                ClientSize = new Size(grpCommons.Width + 18, ClientSize.Height + 40);
+                btnCancel.Top = btnOK.Top = grpLocal.Bottom + 8;
             }
             else
             {
@@ -79,6 +109,14 @@ namespace ForTheCommonGood
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (!loginOnly && localWikiDataDomain != "" && localWikiDataDomain != txtLocalDomain.Text)
+            {
+                if (MessageBox.Show(this, Localization.GetString("LocalWikiDataWrongDomain", localWikiDataDomain) + "\n\n" +
+                    Localization.GetString("ContinueAnyway"), Application.ProductName, MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                    return;
+            }
+
             Settings.LocalDomain = txtLocalDomain.Text;
             Settings.LocalUserName = chkLocalSameAsCommons.Checked ? txtCommonsUserName.Text : txtLocalUserName.Text;
             Settings.LocalPassword = chkLocalSameAsCommons.Checked ? txtCommonsPassword.Text : txtLocalPassword.Text;
@@ -86,12 +124,25 @@ namespace ForTheCommonGood
             Settings.CommonsUserName = txtCommonsUserName.Text;
             Settings.CommonsPassword = txtCommonsPassword.Text;
             Settings.SaveCreds = chkSaveCreds.Checked;
-            Settings.UseHttps = chkUseHttps.Checked;
-            Settings.LogTransfers = chkLogTransfers.Checked;
-            Settings.OpenBrowserAutomatically = chkOpenBrowserAutomatically.Checked;
-            Settings.OpenBrowserLocal = chkOpenBrowserLocal.Checked;
-            Settings.AutoUpdate = chkAutoUpdate.Checked;
-            Settings.LocalWikiData = localWikiDataFile;
+
+            if (!loginOnly)
+            {
+                Settings.UseHttps = chkUseHttps.Checked;
+                Settings.LogTransfers = chkLogTransfers.Checked;
+                Settings.OpenBrowserAutomatically = chkOpenBrowserAutomatically.Checked;
+                Settings.OpenBrowserLocal = chkOpenBrowserLocal.Checked;
+                Settings.AutoUpdate = chkAutoUpdate.Checked;
+                Settings.LocalWikiData = optLocalDataFile.Checked ? localWikiDataFile : "";
+                if (optLocalDataHosted.Checked && cboLocalDataHosted.SelectedIndex != -1 &&
+                    cboLocalDataHosted.SelectedItem is HostedLocalWikiDataEntry)
+                {
+                    Settings.LocalWikiDataHosted = ((HostedLocalWikiDataEntry) cboLocalDataHosted.SelectedItem).GetFull();
+                }
+                else
+                {
+                    Settings.LocalWikiDataHosted = "";
+                }
+            }
 
             // save settings
             Settings.WriteSettings();
@@ -123,19 +174,34 @@ namespace ForTheCommonGood
             if (Settings.CommonsPassword != null)
                 txtCommonsPassword.Text = Settings.CommonsPassword;
             chkSaveCreds.Checked = Settings.SaveCreds;
-            chkUseHttps.Checked = Settings.UseHttps;
-            chkLogTransfers.Checked = Settings.LogTransfers;
-            chkOpenBrowserAutomatically.Checked = Settings.OpenBrowserAutomatically;
-            chkOpenBrowserLocal.Checked = Settings.OpenBrowserLocal;
-            chkAutoUpdate.Checked = Settings.AutoUpdate;
 
-            if (Settings.LocalWikiData != "")
+            if (!loginOnly)
             {
-                localWikiDataFile = Settings.LocalWikiData;
-                lblLocalCurrent.Text = LocalWikiData.LocalDomain;
+                chkUseHttps.Checked = Settings.UseHttps;
+                chkLogTransfers.Checked = Settings.LogTransfers;
+                chkOpenBrowserAutomatically.Checked = Settings.OpenBrowserAutomatically;
+                chkOpenBrowserLocal.Checked = Settings.OpenBrowserLocal;
+                chkAutoUpdate.Checked = Settings.AutoUpdate;
+
+                if (Settings.LocalWikiData != "")
+                {
+                    optLocalDataFile.Checked = true;
+                    localWikiDataFile = Settings.LocalWikiData;
+                    localWikiDataDomain = LocalWikiData.LocalDomain;
+                    optLocalDataFile.Text = (string) optLocalDataFile.Tag + localWikiDataDomain;
+                }
+                else if (Settings.LocalWikiDataHosted != "")
+                {
+                    optLocalDataHosted.Checked = true;
+                    localWikiDataDomain = Settings.LocalWikiDataHosted.Substring(0, Settings.LocalWikiDataHosted.IndexOf("|"));
+                }
+                else
+                {
+                    optLocalDataDefault.Checked = true;
+                }
+
+                optLocalDataXyz_CheckChange(null, null);
             }
-            else
-                lblLocalCurrent.Text = Settings.DefaultLocalDomain + " (Default)"; // TODO: localize
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -146,7 +212,7 @@ namespace ForTheCommonGood
             }
             catch (Exception)
             {
-                MessageBox.Show(Localization.GetString("LinkVisitFailed"));
+                MessageBox.Show(this, Localization.GetString("LinkVisitFailed"), Application.ProductName);
             }
         }
 
@@ -158,7 +224,7 @@ namespace ForTheCommonGood
             }
             catch (Exception)
             {
-                MessageBox.Show(Localization.GetString("LinkVisitFailed"));
+                MessageBox.Show(this, Localization.GetString("LinkVisitFailed"), Application.ProductName);
             }
         }
 
@@ -182,25 +248,95 @@ namespace ForTheCommonGood
                 return;
             if (!File.Exists(openFileDialog1.FileName))
             {
-                MessageBox.Show(Localization.GetString("FileNotFoundLocal", openFileDialog1.FileName));
+                MessageBox.Show(this, Localization.GetString("FileNotFoundLocal", openFileDialog1.FileName), Application.ProductName);
                 return;
             }
             localWikiDataFile = File.ReadAllText(openFileDialog1.FileName, Encoding.UTF8);
-            lblLocalCurrent.Text = Regex.Match(localWikiDataFile, "LocalDomain=([^\r\n]+)[\r\n]").Groups[1].Value;
-            if (lblLocalCurrent.Text != txtLocalDomain.Text)
+
+            localWikiDataDomain = Regex.Match(localWikiDataFile, "LocalDomain=([^\r\n]+)[\r\n]").Groups[1].Value;
+            optLocalDataFile.Text = (string) optLocalDataFile.Tag + localWikiDataDomain;
+            if (localWikiDataDomain != txtLocalDomain.Text)
             {
-                MessageBox.Show(Localization.GetString("LocalWikiDataWrongDomain", lblLocalCurrent.Text.Trim()));
+                MessageBox.Show(this, Localization.GetString("LocalWikiDataWrongDomain", localWikiDataDomain.Trim()), Application.ProductName);
             }
         }
 
-        private void btnLocalDataReset_Click(object sender, EventArgs e)
+        private void optLocalDataXyz_CheckChange(object sender, EventArgs e)
         {
-            localWikiDataFile = "";
-            lblLocalCurrent.Text = Settings.DefaultLocalDomain + " (Default)";
-            if (txtLocalDomain.Text != Settings.DefaultLocalDomain)
+            btnLocalDataLoad.Enabled = optLocalDataFile.Checked;
+            cboLocalDataHosted.Enabled = optLocalDataHosted.Checked;
+
+            if (optLocalDataFile.Checked && localWikiDataFile != "")
             {
-                MessageBox.Show(Localization.GetString("LocalWikiDataReset", Settings.DefaultLocalDomain));
+                localWikiDataDomain = Regex.Match(localWikiDataFile, "LocalDomain=([^\r\n]+)[\r\n]").Groups[1].Value;
             }
+            else if (optLocalDataHosted.Checked)
+            {
+                if (cboLocalDataHosted.Items.Count == 0)
+                {
+                    cboLocalDataHosted.ForeColor = SystemColors.GrayText;
+                    cboLocalDataHosted.Items.Add("Loading...");
+                    cboLocalDataHosted.SelectedIndex = 0;
+                    hostedListLoader.RunWorkerAsync();
+                }
+                else if (cboLocalDataHosted.SelectedIndex != -1)
+                {
+                    localWikiDataDomain = cboLocalDataHosted.SelectedItem.ToString();
+                }
+                else
+                {
+                    localWikiDataDomain = "";
+                }
+            }
+            else
+            {
+                localWikiDataDomain = "";
+            }
+        }
+
+        private void hostedListLoader_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            WebClient loader = new WebClient();
+            loader.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
+            try
+            {
+                string result = loader.DownloadString(new Uri("http://en.wikipedia.org/w/index.php?action=raw&ctype=text/css&title=User:This,%20that%20and%20the%20other/FtCG%20local%20wiki%20data%20files.css"));
+                Invoke((MethodInvoker) delegate()
+                {
+                    try
+                    {
+                        cboLocalDataHosted.Items.Clear();
+                        cboLocalDataHosted.ForeColor = SystemColors.WindowText;
+                        foreach (string line in result.Split('\n'))
+                        {
+                            string[] parts = line.Split('|');
+                            if (parts.Length == 2)
+                            {
+                                HostedLocalWikiDataEntry item = new HostedLocalWikiDataEntry(parts[0], parts[1]);
+                                cboLocalDataHosted.Items.Add(item);
+                                if (Settings.LocalWikiDataHosted.StartsWith(item.displayName + "|"))
+                                    cboLocalDataHosted.SelectedItem = item;
+                            }
+                        }
+                        if (cboLocalDataHosted.Items.Count > 0 && cboLocalDataHosted.SelectedIndex == -1)
+                            cboLocalDataHosted.SelectedIndex = 0;
+                    }
+                    catch (Exception)
+                    {
+                        MorebitsDotNet.DefaultErrorHandler(Localization.GetString("FailedToLoadHostedLocalWikiDataList"));
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is InvalidOperationException))
+                    MorebitsDotNet.DefaultErrorHandler(Localization.GetString("FailedToLoadHostedLocalWikiDataList"));
+            }
+        }
+
+        private void cboLocalDataHosted_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            localWikiDataDomain = cboLocalDataHosted.SelectedItem.ToString();
         }
     }
 
@@ -223,6 +359,7 @@ namespace ForTheCommonGood
         public static bool AutoUpdate { get; set; }
 
         public static string LocalWikiData { get; set; }
+        public static string LocalWikiDataHosted { get; set; }
 
         public static string CurrentSourceOption { get; set; }
         public static string SourceCategory { get; set; }
@@ -238,7 +375,7 @@ namespace ForTheCommonGood
             LocalDomain = DefaultLocalDomain;
             CommonsDomain = DefaultCommonsDomain;
             LocalUserName = LocalPassword = CommonsPassword = CommonsUserName =
-                LocalWikiData =
+                LocalWikiData = LocalWikiDataHosted =
                 CurrentSourceOption = SourceCategory = SourceTextFile = "";
             LocalSysop = LogTransfers = OpenBrowserAutomatically = OpenBrowserLocal = false;
             SaveCreds = UseHttps = AutoUpdate = true;
@@ -276,6 +413,8 @@ namespace ForTheCommonGood
                         Settings.AutoUpdate = l.Substring("AutoUpdate=".Length) != "false";
                     if (l.StartsWith("LocalWikiData="))
                         Settings.LocalWikiData = Encoding.UTF8.GetString(Convert.FromBase64String(l.Substring("LocalWikiData=".Length)));
+                    if (l.StartsWith("LocalWikiDataHosted="))
+                        Settings.LocalWikiDataHosted = l.Substring("LocalWikiDataHosted=".Length);
                     if (l.StartsWith("CurrentSourceOption="))
                         Settings.CurrentSourceOption = l.Substring("CurrentSourceOption=".Length);
                     if (l.StartsWith("SourceCategory="))
@@ -312,6 +451,7 @@ namespace ForTheCommonGood
                     "OpenBrowserLocal=" + (Settings.OpenBrowserLocal ? "true" : "false"),
                     "AutoUpdate=" + (Settings.AutoUpdate ? "true" : "false"),
                     "LocalWikiData=" + Convert.ToBase64String(Encoding.UTF8.GetBytes(Settings.LocalWikiData)),
+                    "LocalWikiDataHosted=" + Settings.LocalWikiDataHosted,
                     "CurrentSourceOption=" + Settings.CurrentSourceOption,
                     "SourceCategory=" + Settings.SourceCategory,
                     "SourceTextFile=" + Settings.SourceTextFile,
