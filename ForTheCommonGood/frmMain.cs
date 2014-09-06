@@ -966,6 +966,7 @@ namespace ForTheCommonGood
             {
                 if (RandomImageCache.Count == 0)
                 {
+                    EnableForm(false);
                     StringDictionary query = new StringDictionary 
                     {
                         { "action", "query" },
@@ -1207,7 +1208,7 @@ namespace ForTheCommonGood
 
                 if (doc.GetElementsByTagName("page")[0].Attributes["missing"] == null && !chkIgnoreWarnings.Checked)
                 {
-                    ErrorHandler(Localization.GetString("FilenameClash"));
+                    ErrorHandler(Localization.GetString("FilenameClash") + "\n\n" + Localization.GetString("Warnings2"));
                     return;
                 }
 
@@ -1379,8 +1380,11 @@ namespace ForTheCommonGood
             MethodInvoker showSuccess = delegate()
             {
                 Invoke((MethodInvoker) ClearWarnings);
-                AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
-                AddWarning(Localization.GetString("HotcatHint_Label"), WarningBoxType.Success);
+                AddWarning(Localization.GetString("Success_Label",
+                    Settings.CommonsDomain == Settings.DefaultCommonsDomain ?
+                    Localization.GetString("ViewFilePageOnLocalWiki_Hyperlink_Format", Settings.CommonsDomain) :
+                    lnkCommonsFile.Text = Localization.GetString("ViewFilePageOnWikimediaCommons_Hyperlink")),
+                    WarningBoxType.Success);
                 if (Settings.OpenBrowserLocal)
                     lnkLocalFile_LinkClicked(null, null);
                 if (Settings.OpenBrowserAutomatically)

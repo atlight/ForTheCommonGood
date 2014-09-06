@@ -41,8 +41,9 @@ DeleteLocalFile_Label=Delete local file &after transfer
 Transfer_Button=&Transfer
 ViewFilePageOnLocalWiki_Hyperlink_Format=View file pag&e on {0}
 ViewFilePageOnWikimediaCommons_Hyperlink=View file page on Wikimedia &Commons
-DontForgetToCategorize_Label=Don't forget to add categories on Commons!
-HotcatHint_Label=(Click the "Wikimedia Commons" link to the right and use HotCat if you like.)
+# LOCALIZATION NOTE: {0} is either ViewFilePageOnLocalWiki_Hyperlink_Format or
+#                    ViewFilePageOnWikimediaCommons_Hyperlink
+Success_Label=Click "{0}" to view your transferred file.
 # LOCALIZATION NOTE: "check" is a noun here, I think; consider translating as "check with Google" - 
 #                    but it must be kept short!
 GoogleCheck_Hyperlink=Google check
