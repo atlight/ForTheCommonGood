@@ -169,6 +169,16 @@ namespace ForTheCommonGood
             EnableForm(true);
         }
 
+        void SetTransferButtonDownloading(bool downloading)
+        {
+            Invoke((MethodInvoker) delegate()
+            {
+                btnTransfer.Enabled = !downloading;
+                btnTransfer.Text = downloading ? Localization.GetString("Downloading") :
+                    Localization.GetString("Transfer_Button");
+            });
+        }
+
         string FormatTimestamp(XmlNode n)
         {
             return DateTime.Parse(n.Attributes["timestamp"].Value).ToUniversalTime().ToString("HH:mm, d MMMM yyyy", DateTimeFormatInfo.InvariantInfo);
@@ -348,6 +358,7 @@ namespace ForTheCommonGood
                 ClearWarnings();
                 lnkCommonsFile.Enabled = lnkLocalFile.Enabled = lnkGoogleImageSearch.Enabled =
                     lnkGoToFileLink.Enabled = false;
+                SetTransferButtonDownloading(true);
 
                 textBox1.Text = textBox1.Text.Trim();
             });
@@ -856,6 +867,7 @@ namespace ForTheCommonGood
             }
 
             // download files
+            SetTransferButtonDownloading(true);
             int currentIndexIndex = 0;  // the index into SelectedRevisions (an array of indexes). So meta!
             ImageDataDownloader = new WebClient();
             ImageDataDownloader.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
@@ -863,10 +875,14 @@ namespace ForTheCommonGood
                 delegate(object s, DownloadDataCompletedEventArgs v)
                 {
                     if (v.Cancelled)
+                    {
+                        SetTransferButtonDownloading(false);
                         return;
+                    }
                     if (v.Error != null)
                     {
                         ErrorHandler(Localization.GetString("FailedToDownload") + "\n\n" + v.Error.Message);
+                        SetTransferButtonDownloading(false);
                         return;
                     }
 
@@ -1269,6 +1285,7 @@ namespace ForTheCommonGood
                                 // <warnings thumb-name="180px-File.png" />
                                 warnings.Add(Localization.GetString("UploadWarning_ThumbName", i.Value));
                                 break;
+                            // Not handled: page-exists, ...
                                 // Not handled: page-exists, ...
                             default:
                                 warnings.Add(Localization.GetString("UploadWarning_Unknown", i.LocalName, i.Value));
@@ -1303,7 +1320,6 @@ namespace ForTheCommonGood
                 }
                 if (warnings.Count > 0)
                 {
-                    ErrorHandler(Localization.GetString("Warnings1") + "\n\n• " + String.Join("\n• ", warnings.ToArray()) + 
                         "\n\n" + Localization.GetString("Warnings2"), MessageBoxIcon.Warning);
                     return;
                 }

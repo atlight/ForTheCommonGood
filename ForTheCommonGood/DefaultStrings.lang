@@ -148,6 +148,7 @@ Welcome2=The next dialog will ask for your wiki login credentials. If you choose
 NowCommonsPotentialProblem=The file is tagged with {{now Commons}}, so it has probably already been transferred.
 ChangeIfNotOwnWork=change this if not own work
 Loading=Loading...
+Downloading=Downloading...
 AlreadyCommons=File is already on Commons; can't do anything.
 ImageMissing=File does not exist on local wiki.
 NoFile=There seems to be a problem; perhaps the file is actually a redirect.
