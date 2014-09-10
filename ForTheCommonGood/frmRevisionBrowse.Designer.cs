@@ -59,7 +59,7 @@
             this.listView.Name = "listView";
             this.listView.Size = new System.Drawing.Size(688, 483);
             this.listView.SmallImageList = this.imageList;
-            this.listView.TabIndex = 0;
+            this.listView.TabIndex = 1;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
             // 
@@ -102,7 +102,7 @@
             this.button1.Location = new System.Drawing.Point(542, 517);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
+            this.button1.TabIndex = 3;
             this.button1.Text = "<ok>";
             this.button1.UseVisualStyleBackColor = true;
             // 
@@ -114,7 +114,7 @@
             this.button2.Location = new System.Drawing.Point(622, 517);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
+            this.button2.TabIndex = 4;
             this.button2.Text = "<cancel>";
             this.button2.UseVisualStyleBackColor = true;
             // 
@@ -124,7 +124,7 @@
             this.lblBlurb.Location = new System.Drawing.Point(8, 8);
             this.lblBlurb.Name = "lblBlurb";
             this.lblBlurb.Size = new System.Drawing.Size(47, 13);
-            this.lblBlurb.TabIndex = 2;
+            this.lblBlurb.TabIndex = 0;
             this.lblBlurb.Text = "<blurb>";
             // 
             // btnSelectAll
@@ -133,7 +133,7 @@
             this.btnSelectAll.Location = new System.Drawing.Point(8, 517);
             this.btnSelectAll.Name = "btnSelectAll";
             this.btnSelectAll.Size = new System.Drawing.Size(96, 23);
-            this.btnSelectAll.TabIndex = 3;
+            this.btnSelectAll.TabIndex = 2;
             this.btnSelectAll.Text = "<select all>";
             this.btnSelectAll.UseVisualStyleBackColor = true;
             this.btnSelectAll.Click += new System.EventHandler(this.btnSelectAll_Click);

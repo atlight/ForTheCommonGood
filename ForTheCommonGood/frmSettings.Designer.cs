@@ -400,7 +400,7 @@
             this.cboLocalDataHosted.Location = new System.Drawing.Point(240, 68);
             this.cboLocalDataHosted.Name = "cboLocalDataHosted";
             this.cboLocalDataHosted.Size = new System.Drawing.Size(112, 21);
-            this.cboLocalDataHosted.TabIndex = 6;
+            this.cboLocalDataHosted.TabIndex = 2;
             this.cboLocalDataHosted.SelectedIndexChanged += new System.EventHandler(this.cboLocalDataHosted_SelectedIndexChanged);
             // 
             // optLocalDataDefault
@@ -423,7 +423,7 @@
             this.optLocalDataHosted.Location = new System.Drawing.Point(8, 70);
             this.optLocalDataHosted.Name = "optLocalDataHosted";
             this.optLocalDataHosted.Size = new System.Drawing.Size(100, 18);
-            this.optLocalDataHosted.TabIndex = 5;
+            this.optLocalDataHosted.TabIndex = 1;
             this.optLocalDataHosted.TabStop = true;
             this.optLocalDataHosted.Text = "<use hosted>";
             this.optLocalDataHosted.UseVisualStyleBackColor = true;
@@ -436,7 +436,7 @@
             this.optLocalDataFile.Location = new System.Drawing.Point(8, 98);
             this.optLocalDataFile.Name = "optLocalDataFile";
             this.optLocalDataFile.Size = new System.Drawing.Size(99, 18);
-            this.optLocalDataFile.TabIndex = 5;
+            this.optLocalDataFile.TabIndex = 3;
             this.optLocalDataFile.TabStop = true;
             this.optLocalDataFile.Text = "<use loaded>";
             this.optLocalDataFile.UseVisualStyleBackColor = true;
@@ -449,7 +449,7 @@
             this.btnLocalDataLoad.Location = new System.Drawing.Point(278, 95);
             this.btnLocalDataLoad.Name = "btnLocalDataLoad";
             this.btnLocalDataLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnLocalDataLoad.TabIndex = 1;
+            this.btnLocalDataLoad.TabIndex = 4;
             this.btnLocalDataLoad.Text = "<load>";
             this.btnLocalDataLoad.UseVisualStyleBackColor = true;
             this.btnLocalDataLoad.Click += new System.EventHandler(this.btnLocalDataLoad_Click);

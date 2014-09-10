@@ -39,7 +39,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblLocalFileDesc = new System.Windows.Forms.Label();
             this.panCommonsText = new System.Windows.Forms.Panel();
-            this.coolCat = new ForTheCommonGood.CoolCat();
             this.panCategorySeparator = new System.Windows.Forms.Panel();
             this.lblCommonsFileDesc = new System.Windows.Forms.Label();
             this.lblNormName = new System.Windows.Forms.Label();
@@ -82,6 +81,7 @@
             this.icoInfo = new System.Windows.Forms.PictureBox();
             this.lblStatus = new System.Windows.Forms.Label();
             this.updateChecker = new System.ComponentModel.BackgroundWorker();
+            this.coolCat = new ForTheCommonGood.CoolCat();
             this.tableLayoutPanel1.SuspendLayout();
             this.panCommonsText.SuspendLayout();
             this.panWarning.SuspendLayout();
@@ -144,7 +144,7 @@
             this.txtCommonsText.Name = "txtCommonsText";
             this.txtCommonsText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtCommonsText.Size = new System.Drawing.Size(478, 207);
-            this.txtCommonsText.TabIndex = 3;
+            this.txtCommonsText.TabIndex = 0;
             this.txtCommonsText.WordWrap = false;
             // 
             // btnTransfer
@@ -210,20 +210,7 @@
             this.panCommonsText.Location = new System.Drawing.Point(487, 16);
             this.panCommonsText.Name = "panCommonsText";
             this.panCommonsText.Size = new System.Drawing.Size(478, 244);
-            this.panCommonsText.TabIndex = 33;
-            // 
-            // coolCat
-            // 
-            this.coolCat.AutoSize = true;
-            this.coolCat.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.coolCat.Enabled = false;
-            this.coolCat.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.coolCat.Location = new System.Drawing.Point(0, 207);
-            this.coolCat.MinimumSize = new System.Drawing.Size(410, 36);
-            this.coolCat.Name = "coolCat";
-            this.coolCat.Padding = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.coolCat.Size = new System.Drawing.Size(478, 36);
-            this.coolCat.TabIndex = 2;
+            this.panCommonsText.TabIndex = 3;
             // 
             // panCategorySeparator
             // 
@@ -232,7 +219,7 @@
             this.panCategorySeparator.Location = new System.Drawing.Point(0, 243);
             this.panCategorySeparator.Name = "panCategorySeparator";
             this.panCategorySeparator.Size = new System.Drawing.Size(478, 1);
-            this.panCategorySeparator.TabIndex = 33;
+            this.panCategorySeparator.TabIndex = 2;
             // 
             // lblCommonsFileDesc
             // 
@@ -440,7 +427,7 @@
             this.panWarningTexts.Location = new System.Drawing.Point(6, 45);
             this.panWarningTexts.Name = "panWarningTexts";
             this.panWarningTexts.Size = new System.Drawing.Size(219, 74);
-            this.panWarningTexts.TabIndex = 2;
+            this.panWarningTexts.TabIndex = 1;
             this.panWarningTexts.WrapContents = false;
             // 
             // icoWarning
@@ -542,7 +529,8 @@
             this.toolBarLinks.Name = "toolBarLinks";
             this.toolBarLinks.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.toolBarLinks.Size = new System.Drawing.Size(48, 25);
-            this.toolBarLinks.TabIndex = 32;
+            this.toolBarLinks.TabIndex = 10;
+            this.toolBarLinks.TabStop = true;
             // 
             // btnPreview
             // 
@@ -724,6 +712,19 @@
             // updateChecker
             // 
             this.updateChecker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.updateChecker_DoWork);
+            // 
+            // coolCat
+            // 
+            this.coolCat.AutoSize = true;
+            this.coolCat.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.coolCat.Enabled = false;
+            this.coolCat.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.coolCat.Location = new System.Drawing.Point(0, 207);
+            this.coolCat.MinimumSize = new System.Drawing.Size(410, 36);
+            this.coolCat.Name = "coolCat";
+            this.coolCat.Padding = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.coolCat.Size = new System.Drawing.Size(478, 36);
+            this.coolCat.TabIndex = 1;
             // 
             // frmMain
             // 
