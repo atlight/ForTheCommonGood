@@ -171,8 +171,8 @@
             // 
             // CoolCatItem
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.panView);
             this.Controls.Add(this.panEdit);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
