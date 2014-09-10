@@ -133,6 +133,9 @@ namespace ForTheCommonGood
 
         public static bool LoadWikiDataHosted(string uri)
         {
+            if (uri.StartsWith("//"))
+                uri = MorebitsDotNet.GetProtocol() + ":" + uri;
+            
             WebClient loader = new WebClient();
             loader.Headers.Add("User-Agent", MorebitsDotNet.UserAgent);
             loader.Encoding = Encoding.UTF8;
