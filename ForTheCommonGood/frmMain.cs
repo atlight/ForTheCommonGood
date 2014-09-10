@@ -1348,6 +1348,7 @@ namespace ForTheCommonGood
                 }
                 if (warnings.Count > 0)
                 {
+                    ErrorHandler(Localization.GetString("Warnings1") + "\n\n• " + String.Join("\n• ", warnings.ToArray()) + 
                         "\n\n" + Localization.GetString("Warnings2"), MessageBoxIcon.Warning);
                     return;
                 }
