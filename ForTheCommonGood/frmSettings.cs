@@ -42,9 +42,13 @@ namespace ForTheCommonGood
         public frmSettings(bool loginOnly, bool showInTaskbar)
         {
             this.loginOnly = loginOnly;
-            
+
             InitializeComponent();
-            lblVersion.Text = Localization.GetString("Version_Format", Application.ProductVersion.ToString());
+
+            string version = Application.ProductVersion;
+            while (version.EndsWith(".0"))
+                version = version.Substring(0, version.Length - 2);
+            lblVersion.Text = Localization.GetString("Version_Format", version);
 
             grpLocal.Text = Localization.GetString("LocalLoginDetails_Label");
             lblCommonsUserName.Text = lblLocalUserName.Text = Localization.GetString("UserName_TextBox");
