@@ -378,7 +378,8 @@ namespace ForTheCommonGood
                 LocalWikiData = LocalWikiDataHosted =
                 CurrentSourceOption = SourceCategory = SourceTextFile = "";
             LocalSysop = LogTransfers = OpenBrowserAutomatically = OpenBrowserLocal = false;
-            SaveCreds = UseHttps = AutoUpdate = true;
+            SaveCreds = AutoUpdate = true;
+            UseHttps = !PlatformSpecific.IsMono();  // default to false on Mono, as HTTPS doesn't work there
         }
 
         public static void ReadSettings()

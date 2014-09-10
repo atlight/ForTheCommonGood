@@ -152,6 +152,23 @@ namespace ForTheCommonGood
             }
 
             InitSettings();
+
+            if (PlatformSpecific.IsMono())
+            {
+                tableLayoutPanel1.Resize += delegate(object sender, EventArgs e)
+                {
+                    tableLayoutPanel1.SuspendLayout();
+                    txtLocalText.Height = panCommonsText.Height = 0;
+                    tableLayoutPanel1.ResumeLayout(true);
+                };
+                btnViewExif.Visible = lblViewExif.Visible = btnPastRevisions.Visible =
+                    lblPastRevisions.Visible = panWarning.Visible = true;
+                Load += delegate(object sender, EventArgs e)
+                {
+                    btnViewExif.Visible = lblViewExif.Visible = btnPastRevisions.Visible =
+                         lblPastRevisions.Visible = panWarning.Visible = false;
+                };
+            }
         }
 
         // Miscellaneous helper methods

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace ForTheCommonGood
 {
-    internal static class PlatformSpecificUI
+    internal static class PlatformSpecific
     {
         // Windows
 
@@ -25,6 +25,11 @@ namespace ForTheCommonGood
                 return;
             mouse_event(MOUSEEVENTF_MOVE, 4, 0, 0, GetMessageExtraInfo());
             mouse_event(MOUSEEVENTF_MOVE, -4, 0, 0, GetMessageExtraInfo());
+        }
+
+        internal static bool IsMono()
+        {
+            return Type.GetType("Mono.Runtime") != null;
         }
     }
 }

@@ -79,7 +79,7 @@ namespace ForTheCommonGood
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -115,7 +115,7 @@ namespace ForTheCommonGood
         private void btnRemove_Click(object sender, EventArgs e)
         {
             if (RemoveClicked != null)
-                RemoveClicked(this, new EventArgs());
+                RemoveClicked(this, EventArgs.Empty);
         }
 
         private void btnModify_Click(object sender, EventArgs e)
@@ -127,12 +127,14 @@ namespace ForTheCommonGood
         {
             LeaveEditingMode();
             Text = cboCatName.Text.Trim();
+            if (Text == "" && RemoveClicked != null)
+                RemoveClicked(this, EventArgs.Empty);
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             if (IsInitialEditing && RemoveClicked != null)
-                RemoveClicked(this, new EventArgs());
+                RemoveClicked(this, EventArgs.Empty);
             LeaveEditingMode();
         }
 
@@ -171,7 +173,7 @@ namespace ForTheCommonGood
                 return;
 
             // needed to avoid overzealous mouse pointer hiding on Windows
-            PlatformSpecificUI.FakeMouseMovement();
+            PlatformSpecific.FakeMouseMovement();
 
             DateTime now = DateTime.Now;
             latestDate = now;
@@ -240,6 +242,10 @@ namespace ForTheCommonGood
 
         private void FinishCategoryAutoComplete(Array results, string extraResult)
         {
+            // This code causes hangs under Mono. Need to fix
+            if (PlatformSpecific.IsMono())
+                return;
+            
             string text = cboCatName.Text;
 
             cboCatName.Items.Clear();

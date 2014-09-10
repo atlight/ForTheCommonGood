@@ -112,7 +112,7 @@
     <Compile Include="Localization.cs" />
     <Compile Include="LocalWikiData.cs" />
     <Compile Include="MorebitsDotNet.cs" />
-    <Compile Include="PlatformSpecificUI.cs" />
+    <Compile Include="PlatformSpecific.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CoolCat.resx">

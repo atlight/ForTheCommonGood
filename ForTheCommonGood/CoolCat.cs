@@ -24,6 +24,9 @@ namespace ForTheCommonGood
         {
             if (!DesignMode)
                 toolTips.SetToolTip(btnAdd, Localization.GetString("AddCategory_Tooltip"));
+
+            if (PlatformSpecific.IsMono())
+                AutoSize = false;
         }
 
         /// <summary>
@@ -56,6 +59,21 @@ namespace ForTheCommonGood
             item.RemoveClicked += new EventHandler(item_RemoveClicked);
             item.LeftEditingMode += new EventHandler(item_LeftEditingMode);
             item.Focus();
+
+            if (PlatformSpecific.IsMono())
+            {
+                item.Resize += new EventHandler(item_Resize_Mono);
+                item_Resize_Mono(null, null);
+            }
+        }
+
+        void item_Resize_Mono(object sender, EventArgs e)
+        {
+            flowLayout.PerformLayout();
+            Control lastControl = flowLayout.Controls[flowLayout.Controls.Count - 1];
+            Height = lastControl.Bottom + lastControl.Margin.Bottom +
+                flowLayout.Padding.Bottom + flowLayout.Margin.Bottom +
+                Padding.Bottom;
         }
 
         void item_RemoveClicked(object sender, EventArgs e)

@@ -235,20 +235,22 @@ namespace ForTheCommonGood
             // login doesn't seem to work properly when done asynchronously
             if (loggingIn)
             {
-                Stream s = req.GetRequestStream();
                 byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
+                req.ContentLength = bytes.Length;
+                Stream s = req.GetRequestStream();
                 s.Write(bytes, 0, bytes.Length);
                 s.Close();
             }
             else if (method != WebRequestMethods.Http.Get)
             {
+                byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
+                req.ContentLength = bytes.Length;
                 req.BeginGetRequestStream(delegate(IAsyncResult innerResult)
                 {
                     try
                     {
                         using (Stream s = req.EndGetRequestStream(innerResult))
                         {
-                            byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
                             s.Write(bytes, 0, bytes.Length);
                             s.Close();
                         }

@@ -30,8 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.btnModify = new System.Windows.Forms.Button();
-            this.btnParentCat = new System.Windows.Forms.Button();
-            this.btnSubCat = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
@@ -59,36 +57,6 @@
             this.btnModify.Text = "±";
             this.btnModify.UseVisualStyleBackColor = true;
             this.btnModify.Click += new System.EventHandler(this.btnModify_Click);
-            // 
-            // btnParentCat
-            // 
-            this.btnParentCat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnParentCat.Enabled = false;
-            this.btnParentCat.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnParentCat.Location = new System.Drawing.Point(78, 0);
-            this.btnParentCat.Margin = new System.Windows.Forms.Padding(0);
-            this.btnParentCat.Name = "btnParentCat";
-            this.btnParentCat.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.btnParentCat.Size = new System.Drawing.Size(24, 24);
-            this.btnParentCat.TabIndex = 4;
-            this.btnParentCat.Text = "↑";
-            this.btnParentCat.UseVisualStyleBackColor = true;
-            this.btnParentCat.Visible = false;
-            // 
-            // btnSubCat
-            // 
-            this.btnSubCat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSubCat.Enabled = false;
-            this.btnSubCat.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSubCat.Location = new System.Drawing.Point(54, 0);
-            this.btnSubCat.Margin = new System.Windows.Forms.Padding(0);
-            this.btnSubCat.Name = "btnSubCat";
-            this.btnSubCat.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.btnSubCat.Size = new System.Drawing.Size(24, 24);
-            this.btnSubCat.TabIndex = 3;
-            this.btnSubCat.Text = "↓";
-            this.btnSubCat.UseVisualStyleBackColor = true;
-            this.btnSubCat.Visible = false;
             // 
             // btnRemove
             // 
@@ -195,12 +163,10 @@
             this.panView.Controls.Add(this.lnkCatLink);
             this.panView.Controls.Add(this.btnRemove);
             this.panView.Controls.Add(this.btnModify);
-            this.panView.Controls.Add(this.btnSubCat);
-            this.panView.Controls.Add(this.btnParentCat);
             this.panView.Location = new System.Drawing.Point(0, 0);
             this.panView.MaximumSize = new System.Drawing.Size(99999, 40);
             this.panView.Name = "panView";
-            this.panView.Size = new System.Drawing.Size(102, 24);
+            this.panView.Size = new System.Drawing.Size(54, 24);
             this.panView.TabIndex = 9;
             // 
             // CoolCatItem
@@ -227,8 +193,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnModify;
-        private System.Windows.Forms.Button btnParentCat;
-        private System.Windows.Forms.Button btnSubCat;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
