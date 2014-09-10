@@ -1399,8 +1399,8 @@ namespace ForTheCommonGood
                 Invoke((MethodInvoker) ClearWarnings);
                 AddWarning(Localization.GetString("Success_Label",
                     Settings.CommonsDomain == Settings.DefaultCommonsDomain ?
-                    Localization.GetString("ViewFilePageOnLocalWiki_Hyperlink_Format", Settings.CommonsDomain) :
-                    lnkCommonsFile.Text = Localization.GetString("ViewFilePageOnWikimediaCommons_Hyperlink")),
+                    Localization.GetString("ViewFilePageOnWikimediaCommons_Hyperlink") :
+                    Localization.GetString("ViewFilePageOnLocalWiki_Hyperlink_Format", Settings.CommonsDomain)),
                     WarningBoxType.Success);
                 if (Settings.OpenBrowserLocal)
                     lnkLocalFile_LinkClicked(null, null);

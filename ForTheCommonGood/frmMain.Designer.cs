@@ -39,6 +39,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lblLocalFileDesc = new System.Windows.Forms.Label();
             this.panCommonsText = new System.Windows.Forms.Panel();
+            this.coolCat = new ForTheCommonGood.CoolCat();
             this.panCategorySeparator = new System.Windows.Forms.Panel();
             this.lblCommonsFileDesc = new System.Windows.Forms.Label();
             this.lblNormName = new System.Windows.Forms.Label();
@@ -81,7 +82,6 @@
             this.icoInfo = new System.Windows.Forms.PictureBox();
             this.lblStatus = new System.Windows.Forms.Label();
             this.updateChecker = new System.ComponentModel.BackgroundWorker();
-            this.coolCat = new ForTheCommonGood.CoolCat();
             this.tableLayoutPanel1.SuspendLayout();
             this.panCommonsText.SuspendLayout();
             this.panWarning.SuspendLayout();
@@ -211,6 +211,19 @@
             this.panCommonsText.Name = "panCommonsText";
             this.panCommonsText.Size = new System.Drawing.Size(478, 244);
             this.panCommonsText.TabIndex = 33;
+            // 
+            // coolCat
+            // 
+            this.coolCat.AutoSize = true;
+            this.coolCat.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.coolCat.Enabled = false;
+            this.coolCat.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.coolCat.Location = new System.Drawing.Point(0, 207);
+            this.coolCat.MinimumSize = new System.Drawing.Size(410, 36);
+            this.coolCat.Name = "coolCat";
+            this.coolCat.Padding = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.coolCat.Size = new System.Drawing.Size(478, 36);
+            this.coolCat.TabIndex = 2;
             // 
             // panCategorySeparator
             // 
@@ -599,7 +612,7 @@
             this.lnkGoToFileLink.Size = new System.Drawing.Size(61, 16);
             this.lnkGoToFileLink.TabIndex = 2;
             this.lnkGoToFileLink.TabStop = true;
-            this.lnkGoToFileLink.Text = "<go> →";
+            this.lnkGoToFileLink.Text = "<go>";
             this.lnkGoToFileLink.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.lnkGoToFileLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkGoToFileLink_LinkClicked);
             // 
@@ -711,19 +724,6 @@
             // updateChecker
             // 
             this.updateChecker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.updateChecker_DoWork);
-            // 
-            // coolCat
-            // 
-            this.coolCat.AutoSize = true;
-            this.coolCat.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.coolCat.Enabled = false;
-            this.coolCat.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.coolCat.Location = new System.Drawing.Point(0, 207);
-            this.coolCat.MinimumSize = new System.Drawing.Size(410, 4);
-            this.coolCat.Name = "coolCat";
-            this.coolCat.Padding = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.coolCat.Size = new System.Drawing.Size(478, 36);
-            this.coolCat.TabIndex = 2;
             // 
             // frmMain
             // 
