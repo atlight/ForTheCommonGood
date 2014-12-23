@@ -186,19 +186,17 @@ namespace ForTheCommonGood
                     if (latestDate > ((DateTime) date))
                         return;
 
+                    string[] results;
+                    
                     // we take advantage of the fact that [ is not a legal character in wiki page titles
                     // To be honest, this whole thing is crass, but I don't want to bring in a full JSON
                     // parser just for this
-                    string resultsPart = json.Substring(json.IndexOf('[', 2) + 2);
-                    string[] results;
-                    if (resultsPart.Length < 2)
+                    string resultsPart = json.Substring(json.IndexOf('[', 2) + 1);
+                    // ...and taking advantage of the fact that ] is not legal either!
+                    if (resultsPart.IndexOf(']') > 0)
                     {
-                        // no results
-                        results = new string[0];
-                    }
-                    else
-                    {
-                        // we have results, so parse out character escapes
+                        // we have results, so trim off the trailing junk and parse out character escapes
+                        resultsPart = resultsPart.Substring(1, resultsPart.IndexOf(']') - 2);
                         resultsPart.Replace("\\\\", "#");
                         int location;
                         string charValue;
@@ -209,7 +207,12 @@ namespace ForTheCommonGood
                                 Char.ConvertFromUtf32(int.Parse(charValue, NumberStyles.AllowHexSpecifier)));
                         }
                         resultsPart = resultsPart.Replace("\\\"", "\"").Replace("#", "\\");
-                        results = resultsPart.Substring(0, resultsPart.Length - 3).Split(new string[] { "\",\"" }, StringSplitOptions.None);
+                        results = resultsPart.Split(new string[] { "\",\"" }, StringSplitOptions.None);
+                    }
+                    else
+                    {
+                        // no results
+                        results = new string[0];
                     }
                     //MessageBox.Show(json + "\n\n====================\n\n" + string.Join("\n", results));
 
@@ -240,7 +243,9 @@ namespace ForTheCommonGood
             );
         }
 
-        private void FinishCategoryAutoComplete(Array results, string extraResult)
+        const int MaxAutoCompleteItems = 22;
+
+        private void FinishCategoryAutoComplete(string[] results, string extraResult)
         {
             // This code causes hangs under Mono. Need to fix
             if (PlatformSpecific.IsMono())
@@ -252,8 +257,9 @@ namespace ForTheCommonGood
             if (results.Length > 0)
             {
                 //Array.Sort(results);
-                foreach (string i in results)
-                    cboCatName.Items.Add(i.Substring("Category:".Length));
+                int numResultsToUse = Math.Min(results.Length, MaxAutoCompleteItems - (extraResult == null ? 1 : 0));
+                for (int i = 0; i < numResultsToUse; i++)
+                    cboCatName.Items.Add(results[i].Substring("Category:".Length));
             }
             if (extraResult != null)
                 cboCatName.Items.Add(CoolCat.NormalizeCatName(extraResult));
