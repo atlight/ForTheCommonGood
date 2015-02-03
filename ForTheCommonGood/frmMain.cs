@@ -1282,7 +1282,8 @@ namespace ForTheCommonGood
                 // any warnings?
                 XmlNodeList xmlWarnings = doc.GetElementsByTagName("warnings");
                 List<string> warnings = new List<string>();
-                if (xmlWarnings.Count > 0 && !chkIgnoreWarnings.Checked)
+                // TODO: get rid of isEarliestRevision here, change warnings dialog to a yes/no type thing
+                if (xmlWarnings.Count > 0 && !chkIgnoreWarnings.Checked && isEarliestRevision)
                 {
                     foreach (XmlAttribute i in xmlWarnings[0].Attributes)
                     {
