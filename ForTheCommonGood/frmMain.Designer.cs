@@ -165,7 +165,7 @@
             this.lblExifNotice.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblExifNotice.Location = new System.Drawing.Point(320, 519);
             this.lblExifNotice.Name = "lblExifNotice";
-            this.lblExifNotice.Size = new System.Drawing.Size(304, 13);
+            this.lblExifNotice.Size = new System.Drawing.Size(304, 15);
             this.lblExifNotice.TabIndex = 15;
             this.lblExifNotice.Text = "<exif rotation warning>";
             this.lblExifNotice.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -280,7 +280,7 @@
             this.lnkLocalFile.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkLocalFile.Location = new System.Drawing.Point(720, 447);
             this.lnkLocalFile.Name = "lnkLocalFile";
-            this.lnkLocalFile.Size = new System.Drawing.Size(256, 13);
+            this.lnkLocalFile.Size = new System.Drawing.Size(256, 15);
             this.lnkLocalFile.TabIndex = 27;
             this.lnkLocalFile.TabStop = true;
             this.lnkLocalFile.Text = "<view on local wiki>";
@@ -293,7 +293,7 @@
             this.lnkCommonsFile.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkCommonsFile.Location = new System.Drawing.Point(720, 467);
             this.lnkCommonsFile.Name = "lnkCommonsFile";
-            this.lnkCommonsFile.Size = new System.Drawing.Size(256, 13);
+            this.lnkCommonsFile.Size = new System.Drawing.Size(256, 15);
             this.lnkCommonsFile.TabIndex = 28;
             this.lnkCommonsFile.TabStop = true;
             this.lnkCommonsFile.Text = "<view on commons>";
@@ -360,7 +360,7 @@
             this.lblName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblName.Location = new System.Drawing.Point(320, 327);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(384, 13);
+            this.lblName.Size = new System.Drawing.Size(384, 15);
             this.lblName.TabIndex = 11;
             this.lblName.UseMnemonic = false;
             // 
@@ -369,7 +369,7 @@
             this.lblRevision.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblRevision.Location = new System.Drawing.Point(320, 345);
             this.lblRevision.Name = "lblRevision";
-            this.lblRevision.Size = new System.Drawing.Size(236, 13);
+            this.lblRevision.Size = new System.Drawing.Size(236, 15);
             this.lblRevision.TabIndex = 12;
             // 
             // lblDimensions
@@ -377,7 +377,7 @@
             this.lblDimensions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDimensions.Location = new System.Drawing.Point(320, 363);
             this.lblDimensions.Name = "lblDimensions";
-            this.lblDimensions.Size = new System.Drawing.Size(236, 13);
+            this.lblDimensions.Size = new System.Drawing.Size(236, 15);
             this.lblDimensions.TabIndex = 13;
             // 
             // lblPastRevisions
@@ -386,7 +386,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPastRevisions.Location = new System.Drawing.Point(560, 345);
             this.lblPastRevisions.Name = "lblPastRevisions";
-            this.lblPastRevisions.Size = new System.Drawing.Size(138, 13);
+            this.lblPastRevisions.Size = new System.Drawing.Size(138, 15);
             this.lblPastRevisions.TabIndex = 16;
             this.lblPastRevisions.Text = "<X earlier versions>";
             this.lblPastRevisions.Visible = false;
@@ -561,7 +561,7 @@
             this.lnkGoogleImageSearch.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkGoogleImageSearch.Location = new System.Drawing.Point(720, 487);
             this.lnkGoogleImageSearch.Name = "lnkGoogleImageSearch";
-            this.lnkGoogleImageSearch.Size = new System.Drawing.Size(256, 13);
+            this.lnkGoogleImageSearch.Size = new System.Drawing.Size(256, 15);
             this.lnkGoogleImageSearch.TabIndex = 29;
             this.lnkGoogleImageSearch.TabStop = true;
             this.lnkGoogleImageSearch.Text = "<search Google>";
@@ -647,7 +647,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblViewExif.Location = new System.Drawing.Point(560, 387);
             this.lblViewExif.Name = "lblViewExif";
-            this.lblViewExif.Size = new System.Drawing.Size(138, 13);
+            this.lblViewExif.Size = new System.Drawing.Size(138, 15);
             this.lblViewExif.TabIndex = 18;
             this.lblViewExif.Text = "<contains EXIF>";
             this.lblViewExif.Visible = false;
