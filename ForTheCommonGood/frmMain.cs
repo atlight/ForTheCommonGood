@@ -775,7 +775,8 @@ namespace ForTheCommonGood
                 { "action", "query" },
                 { "list", "imageusage" },
                 { "iulimit", "20" },
-                { "iutitle", "File:" + CurrentFileName }
+                { "iutitle", "File:" + CurrentFileName },
+                { "rawcontinue", "" },
             };
             // prevent race conditions
             object current = new object();
@@ -993,6 +994,7 @@ namespace ForTheCommonGood
                         { "cmsort", "timestamp" },
                         { "cmprop", "title" },
                         { "cmlimit", "500" },
+                        { "rawcontinue", "" },
                     };
                     if (RandomContinue != null)
                         query.Add("cmcontinue", RandomContinue);
