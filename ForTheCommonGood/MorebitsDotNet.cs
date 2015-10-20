@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Cache;
@@ -349,7 +350,7 @@ namespace ForTheCommonGood
                 session.CookieJar = new CookieContainer();
             ((HttpWebRequest) req).CookieContainer = session.CookieJar;
 
-            string boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x");
+            string boundary = "---------------------------" + DateTime.Now.Ticks.ToString("x", CultureInfo.InvariantCulture);
             req.ContentType = "multipart/form-data; boundary=" + boundary;
 
             req.BeginGetRequestStream(delegate(IAsyncResult innerResult)
@@ -358,7 +359,8 @@ namespace ForTheCommonGood
 
                 foreach (DictionaryEntry e in query)
                 {
-                    string item = String.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n{2}\r\n",
+                    string item = String.Format(CultureInfo.InvariantCulture,
+                        "--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n{2}\r\n",
                         boundary, e.Key.ToString(), e.Value.ToString());
                     byte[] bytes = Encoding.UTF8.GetBytes(item);
                     stream.Write(bytes, 0, bytes.Length);
@@ -366,7 +368,8 @@ namespace ForTheCommonGood
 
                 if (file != null)
                 {
-                    string header = String.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"\r\nContent-Type: {3}\r\n\r\n",
+                    string header = String.Format(CultureInfo.InvariantCulture,
+                        "--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"\r\nContent-Type: {3}\r\n\r\n",
                         boundary, fileParamName, fileName, "text/plain; charset=UTF-8");  // last param was |fileMimeType|
                     byte[] headerbytes = Encoding.UTF8.GetBytes(header);
                     stream.Write(headerbytes, 0, headerbytes.Length);

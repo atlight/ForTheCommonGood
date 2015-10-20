@@ -196,17 +196,17 @@ namespace ForTheCommonGood
             });
         }
 
-        string FormatTimestamp(XmlNode n)
+        static string FormatTimestamp(XmlNode n)
         {
             return DateTime.Parse(n.Attributes["timestamp"].Value).ToUniversalTime().ToString("HH:mm, d MMMM yyyy", DateTimeFormatInfo.InvariantInfo);
         }
 
-        string FormatIsoDate(XmlNode n)
+        static string FormatIsoDate(XmlNode n)
         {
             return DateTime.Parse(n.Attributes["timestamp"].Value).ToUniversalTime().ToString("yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo);
         }
 
-        string FormatDimensions(XmlNode n)
+        static string FormatDimensions(XmlNode n)
         {
             if (n.Attributes["width"].Value == "0")
                 return n.Attributes["size"].Value + " bytes";  // not formatted, since it may be some weird format .NET doesn't know about
@@ -216,7 +216,7 @@ namespace ForTheCommonGood
                     int.Parse(n.Attributes["size"].Value).ToString("n0", CultureInfo.InvariantCulture) + " bytes)";
         }
 
-        string GetCurrentLanguageCode()
+        static string GetCurrentLanguageCode()
         {
             string result = Settings.LocalDomain.Substring(0, Settings.LocalDomain.IndexOf('.'));
             if (result == "simple")
@@ -226,7 +226,7 @@ namespace ForTheCommonGood
             return result;
         }
 
-        string GetCurrentInterwikiPrefix(bool forUvTemplate)
+        static string GetCurrentInterwikiPrefix(bool forUvTemplate)
         {
             string result = null;
             switch (Settings.LocalDomain.Substring(Settings.LocalDomain.IndexOf('.') + 1))
@@ -1167,7 +1167,8 @@ namespace ForTheCommonGood
                 RandomFileSource = FileSources.Category;
                 Settings.CurrentSourceOption = "CustomCategory";
                 SourceTag = Settings.SourceCategory = form.txtCategory.Text.Substring(
-                    form.txtCategory.Text.ToLower().StartsWith("category:") ? "category:".Length : 0);
+                    form.txtCategory.Text.ToLower(CultureInfo.InvariantCulture).StartsWith("category:", StringComparison.InvariantCulture)
+                    ? "category:".Length : 0);
                 Settings.SourceTextFile = "";
                 RandomImageCache.Clear();
             }
@@ -1300,7 +1301,7 @@ namespace ForTheCommonGood
                                 warnings.Add(Localization.GetString("UploadWarning_BadPrefix", i.Value));
                                 break;
                             case "duplicate-archive":
-                                // <warnings duplicate-archive="Deleted file.png" />
+                                // <warnings duplicate-archive="Deleted_file.png" />
                                 warnings.Add(Localization.GetString("UploadWarning_DuplicateArchive", i.Value));
                                 break;
                             case "exists":
@@ -1317,6 +1318,11 @@ namespace ForTheCommonGood
                                 // <warnings thumb-name="180px-File.png" />
                                 warnings.Add(Localization.GetString("UploadWarning_ThumbName", i.Value));
                                 break;
+                            //case "was-deleted":
+                                // Let's not bother with this warning.
+                                // <warnings was-deleted="Deleted_file.png" />
+                                //warnings.Add(Localization.GetString("UploadWarning_WasDeleted", i.Value));
+                                //break;
                             // Not handled: page-exists, ...
                             default:
                                 warnings.Add(Localization.GetString("UploadWarning_Unknown", i.LocalName, i.Value));
@@ -2030,7 +2036,7 @@ namespace ForTheCommonGood
         private void lstFileLinks_SelectedIndexChanged(object sender, EventArgs e)
         {
             lnkGoToFileLink.Enabled = (lstFileLinks.SelectedIndex != -1 &&
-                !lstFileLinks.SelectedItem.ToString().StartsWith("<<"));
+                !lstFileLinks.SelectedItem.ToString().StartsWith("<<", StringComparison.InvariantCulture));
         }
 
         private void lnkGoToFileLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
