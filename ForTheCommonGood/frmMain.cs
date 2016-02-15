@@ -1288,70 +1288,77 @@ namespace ForTheCommonGood
                 // TODO: get rid of isEarliestRevision here, change warnings dialog to a yes/no type thing
                 if (xmlWarnings.Count > 0 && !chkIgnoreWarnings.Checked && isEarliestRevision)
                 {
-                    foreach (XmlAttribute i in xmlWarnings[0].Attributes)
+                    foreach (XmlNode xmlWarningNode in xmlWarnings)
                     {
-                        switch (i.LocalName)
+                        foreach (XmlAttribute i in xmlWarningNode.Attributes)
                         {
-                            case "badfilename":
-                                // <warnings badfilename="new, corrected filename" />
-                                warnings.Add(Localization.GetString("UploadWarning_BadFilename", i.Value));
-                                break;
-                            case "bad-prefix":
-                                // <warnings bad-prefix="DSCN1004.JPG" />
-                                warnings.Add(Localization.GetString("UploadWarning_BadPrefix", i.Value));
-                                break;
-                            case "duplicate-archive":
-                                // <warnings duplicate-archive="Deleted_file.png" />
-                                warnings.Add(Localization.GetString("UploadWarning_DuplicateArchive", i.Value));
-                                break;
-                            case "exists":
-                                // <warnings exists="File.png" />
-                                // Should be handled when getting the edit token
-                                warnings.Add(Localization.GetString("FilenameClash"));
-                                break;
-                            case "exists-normalized":
-                                // <warnings exists-normalized="A.jpeg" />
-                                warnings.Add(Localization.GetString("UploadWarning_ExistsNormalized", i.Value));
-                                break;
-                            case "thumb": // Not sure exactly what this is...
-                            case "thumb-name":
-                                // <warnings thumb-name="180px-File.png" />
-                                warnings.Add(Localization.GetString("UploadWarning_ThumbName", i.Value));
-                                break;
-                            //case "was-deleted":
+                            switch (i.LocalName)
+                            {
+                                case "badfilename":
+                                    // <warnings badfilename="new, corrected filename" />
+                                    warnings.Add(Localization.GetString("UploadWarning_BadFilename", i.Value));
+                                    break;
+                                case "bad-prefix":
+                                    // <warnings bad-prefix="DSCN1004.JPG" />
+                                    warnings.Add(Localization.GetString("UploadWarning_BadPrefix", i.Value));
+                                    break;
+                                case "duplicate-archive":
+                                    // <warnings duplicate-archive="Deleted_file.png" />
+                                    warnings.Add(Localization.GetString("UploadWarning_DuplicateArchive", i.Value));
+                                    break;
+                                case "exists":
+                                    // <warnings exists="File.png" />
+                                    // Should be handled when getting the edit token
+                                    warnings.Add(Localization.GetString("FilenameClash"));
+                                    break;
+                                case "exists-normalized":
+                                    // <warnings exists-normalized="A.jpeg" />
+                                    warnings.Add(Localization.GetString("UploadWarning_ExistsNormalized", i.Value));
+                                    break;
+                                case "thumb": // Not sure exactly what this is...
+                                case "thumb-name":
+                                    // <warnings thumb-name="180px-File.png" />
+                                    warnings.Add(Localization.GetString("UploadWarning_ThumbName", i.Value));
+                                    break;
+                                //case "was-deleted":
                                 // Let's not bother with this warning.
                                 // <warnings was-deleted="Deleted_file.png" />
                                 //warnings.Add(Localization.GetString("UploadWarning_WasDeleted", i.Value));
                                 //break;
-                            // Not handled: page-exists, ...
-                            default:
-                                warnings.Add(Localization.GetString("UploadWarning_Unknown", i.LocalName, i.Value));
-                                break;
+                                // Not handled: page-exists, ...
+                                default:
+                                    warnings.Add(Localization.GetString("UploadWarning_Unknown", i.LocalName, i.Value));
+                                    break;
+                            }
                         }
-                    }
-                    foreach (XmlNode i in xmlWarnings[0].ChildNodes)
-                    {
-                        if (i.NodeType != XmlNodeType.Element)
-                            continue;
-                        switch (i.LocalName)
+                        foreach (XmlNode i in xmlWarningNode.ChildNodes)
                         {
-                            case "duplicate":
-                                // <warnings>
-                                //   <duplicate>
-                                //     <duplicate>First file name</duplicate>
-                                //     <duplicate>Second file name</duplicate>
-                                //     ...
-                                //   </duplicate>
-                                // </warnings>
-                                string warning = Localization.GetString("UploadWarning_Duplicate") + "\n";
-                                foreach (XmlNode j in i.ChildNodes)
-                                    if (j.NodeType == XmlNodeType.Element)
-                                        warning += j.InnerText + "\n";
-                                warnings.Add(warning.TrimEnd());
-                                break;
-                            default:
-                                warnings.Add(i.OuterXml);
-                                break;
+                            if (i.NodeType != XmlNodeType.Element)
+                                continue;
+                            switch (i.LocalName)
+                            {
+                                case "duplicate":
+                                    // <warnings>
+                                    //   <duplicate>
+                                    //     <duplicate>First file name</duplicate>
+                                    //     <duplicate>Second file name</duplicate>
+                                    //     ...
+                                    //   </duplicate>
+                                    // </warnings>
+                                    string warning = Localization.GetString("UploadWarning_Duplicate") + "\n";
+                                    foreach (XmlNode j in i.ChildNodes)
+                                        if (j.NodeType == XmlNodeType.Element)
+                                            warning += j.InnerText + "\n";
+                                    warnings.Add(warning.TrimEnd());
+                                    break;
+                                case "main":
+                                    if (i.InnerText != "HTTP used when HTTPS was expected")
+                                        goto default;
+                                    break;
+                                default:
+                                    warnings.Add(i.OuterXml);
+                                    break;
+                            }
                         }
                     }
                 }
