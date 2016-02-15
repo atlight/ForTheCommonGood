@@ -126,7 +126,7 @@ namespace ForTheCommonGood
             };
             PostApi(wiki, query, delegate(XmlDocument doc)
             {
-                XmlNode login = doc.GetElementsByTagName("login")[0];
+                XmlNode login = doc.SelectSingleNode("/api/login");
                 if (login.Attributes["result"].Value != "NeedToken")
                 {
                     onError(Localization.GetString("MorebitsDotNet_LoginFailure", login.Attributes["result"].Value));
@@ -142,7 +142,7 @@ namespace ForTheCommonGood
                 };
                 PostApi(wiki, loginQuery, delegate(XmlDocument innerDoc)
                 {
-                    XmlNode innerLogin = innerDoc.GetElementsByTagName("login")[0];
+                    XmlNode innerLogin = innerDoc.SelectSingleNode("/api/login");
                     LoginSessions[wiki].UserName = innerLogin.Attributes["lgusername"].Value;
                     LoginSessions[wiki].UserID = innerLogin.Attributes["lguserid"].Value;
                     LoginSessions[wiki].LoggedIn = true;
@@ -285,7 +285,7 @@ namespace ForTheCommonGood
                     // have to handle login errors (wrong password, etc.) before cookies are read
                     try
                     {
-                        XmlNode login = doc.GetElementsByTagName("login")[0];
+                        XmlNode login = doc.SelectSingleNode("/api/login");
                         if (login.Attributes["result"].Value != "Success")
                         {
                             onError(Localization.GetString("MorebitsDotNet_LoginFailure", login.Attributes["result"].Value));
