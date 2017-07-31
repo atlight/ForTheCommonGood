@@ -30,6 +30,14 @@ ViewMetadata_Button=View &metadata
 ImageUsage_Label=Pages using this file:
 NoImageUsages_Label=No pages use this file
 SeeWikiForFullList_Label=see wiki for full list
+# LOCALIZATION NOTE: these two items appear in a menu when you right-click on an entry
+# in the "pages using this file" list. "Title" refers to the title of the page on which
+# the image is used. "Copy title" and "Copy titles" will never be shown together; nor
+# will "Copy URL" and "Copy URLs"
+CopyTitle_MenuItem=&Copy title
+CopyUrl_MenuItem=Copy &URL
+CopyTitles_MenuItem=&Copy titles
+CopyUrls_MenuItem=Copy &URLs
 # LOCALIZATION NOTE: do not translate "File:" (this namespace name works on all wikis)
 NewFilenameOnCommons_TextBox=New &filename on Commons (with File: prefix):
 NewFilenameOnTarget_TextBox=New &filename on {0} (with File: prefix):

@@ -17,6 +17,8 @@ namespace ForTheCommonGood
 
         public void SetContent(string html)
         {
+        
+        // TODO use headhtml property of action=parse to avoid the need for this
             string text = "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" /><link rel=\"stylesheet\" " +
                 "href=\"http://bits.wikimedia.org/commons.wikimedia.org/load.php?debug=false&amp;lang=en&amp;modules=filepage%7Cmediawiki.legacy.shared%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector&amp;*\" />" +
                 "<link rel=\"stylesheet\" " +

@@ -88,6 +88,8 @@ namespace ForTheCommonGood
             lblViewExif.Text = Localization.GetString("ContainsExifMetadata_Label");
             btnViewExif.Text = Localization.GetString("ViewMetadata_Button");
             lblFileLinks.Text = Localization.GetString("ImageUsage_Label");
+            mnuFileLinksCopyTitle.Text = Localization.GetString("CopyTitle_MenuItem");
+            mnuFileLinksCopyUrl.Text = Localization.GetString("CopyUrl_MenuItem");
             lnkGoToFileLink.Text = Localization.GetString("Go_Button") + " >";
             lblNormName.Text = Localization.GetString("NewFilenameOnCommons_TextBox");
             chkIgnoreWarnings.Text = Localization.GetString("IgnoreWarnings_CheckBox");
@@ -133,6 +135,7 @@ namespace ForTheCommonGood
             txtLocalText.Text = welcome.ToString();
 
             toolBarLinks.Renderer = new SimpleToolStripRenderer();
+            lstFileLinks.ContextMenu = mnuFileLinksContext;
 
             // time to load settings
             if (File.Exists("ForTheCommonGood.cfg"))
@@ -791,10 +794,12 @@ namespace ForTheCommonGood
                     XmlNodeList ius = doc.GetElementsByTagName("iu");
                     if (ius.Count == 0)
                     {
+                        lstFileLinks.Enabled = false;
                         lstFileLinks.Items.Add(Localization.GetString("NoImageUsages_Label"));
                         return;
                     }
 
+                    lstFileLinks.Enabled = true;
                     lstFileLinks.ForeColor = SystemColors.ControlText;
                     foreach (XmlNode i in ius)
                         lstFileLinks.Items.Add(i.Attributes["title"].Value);
@@ -1250,7 +1255,6 @@ namespace ForTheCommonGood
                     textForCommons += "\n[[Category:" + i + "]]";
                 }
 
-                // Note: the upload comment is not localised, since Commons uses English as lingua franca
                 UploadEachRevision(newFilename, SelectedRevisions.Length - 1, true, textForCommons, token);
             }, ErrorHandler);
         }
@@ -1267,6 +1271,7 @@ namespace ForTheCommonGood
             if (isEarliestRevision)
                 uploadQuery.Add("text", text);
 
+            // Note: the upload comment is not localised, since Commons uses English as lingua franca
             if (selectedRevisionIndex == 0)  // latest revision?
                 uploadQuery.Add("comment", "Transferred from " + Settings.LocalDomain + ": see original upload log above");
             else
@@ -2042,19 +2047,66 @@ namespace ForTheCommonGood
 
         private void lstFileLinks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lnkGoToFileLink.Enabled = (lstFileLinks.SelectedIndex != -1 &&
-                !lstFileLinks.SelectedItem.ToString().StartsWith("<<", StringComparison.InvariantCulture));
+            lnkGoToFileLink.Enabled = false;
+            foreach (string s in lstFileLinks.SelectedItems)
+            {
+                if (!lstFileLinks.SelectedItem.ToString().StartsWith("<<", StringComparison.InvariantCulture))
+                {
+                    lnkGoToFileLink.Enabled = true;
+                    break;
+                }
+            }
         }
 
         private void lnkGoToFileLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/" + ((string) lstFileLinks.SelectedItem).Replace(" ", "_"));
+                foreach (string s in lstFileLinks.SelectedItems)
+                    if (!s.StartsWith("<<", StringComparison.InvariantCulture))
+                        Process.Start(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/" + s.Replace(" ", "_"));
             }
             catch (Exception)
             {
                 ErrorHandler(Localization.GetString("LinkVisitFailed"));
+            }
+        }
+
+        private void mnuFileLinksCopyTitle_Click(object sender, EventArgs e)
+        {
+            StringBuilder clipboardText = new StringBuilder();
+            foreach (string s in lstFileLinks.SelectedItems)
+                if (!s.StartsWith("<<", StringComparison.InvariantCulture))
+                    clipboardText.AppendLine(s);
+            Clipboard.SetText(clipboardText.ToString().TrimEnd());
+        }
+
+        private void mnuFileLinksCopyUrl_Click(object sender, EventArgs e)
+        {
+            StringBuilder clipboardText = new StringBuilder();
+            foreach (string s in lstFileLinks.SelectedItems)
+                if (!s.StartsWith("<<", StringComparison.InvariantCulture))
+                    clipboardText.AppendLine(MorebitsDotNet.GetProtocol() + "://" + Settings.LocalDomain + ".org/wiki/" + s.Replace(" ", "_"));
+            Clipboard.SetText(clipboardText.ToString().TrimEnd());
+        }
+
+        private void mnuFileLinksContext_Popup(object sender, EventArgs e)
+        {
+            if (lstFileLinks.SelectedIndices.Count == 0 || !lstFileLinks.Enabled)
+            {
+                mnuFileLinksCopyTitle.Enabled = mnuFileLinksCopyUrl.Enabled = false;
+            }
+            else if (lstFileLinks.SelectedIndices.Count == 1)
+            {
+                mnuFileLinksCopyTitle.Enabled = mnuFileLinksCopyUrl.Enabled = true;
+                mnuFileLinksCopyTitle.Text = Localization.GetString("CopyTitle_MenuItem");
+                mnuFileLinksCopyUrl.Text = Localization.GetString("CopyUrl_MenuItem");
+            }
+            else
+            {
+                mnuFileLinksCopyTitle.Enabled = mnuFileLinksCopyUrl.Enabled = true;
+                mnuFileLinksCopyTitle.Text = Localization.GetString("CopyTitles_MenuItem");
+                mnuFileLinksCopyUrl.Text = Localization.GetString("CopyUrls_MenuItem");
             }
         }
 

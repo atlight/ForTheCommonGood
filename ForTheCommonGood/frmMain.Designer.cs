@@ -82,6 +82,9 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.updateChecker = new System.ComponentModel.BackgroundWorker();
             this.coolCat = new ForTheCommonGood.CoolCat();
+            this.mnuFileLinksContext = new System.Windows.Forms.ContextMenu();
+            this.mnuFileLinksCopyTitle = new System.Windows.Forms.MenuItem();
+            this.mnuFileLinksCopyUrl = new System.Windows.Forms.MenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.panCommonsText.SuspendLayout();
             this.panWarning.SuspendLayout();
@@ -726,6 +729,25 @@
             this.coolCat.Size = new System.Drawing.Size(478, 36);
             this.coolCat.TabIndex = 1;
             // 
+            // mnuFileLinksContext
+            // 
+            this.mnuFileLinksContext.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuFileLinksCopyTitle,
+            this.mnuFileLinksCopyUrl});
+            this.mnuFileLinksContext.Popup += new System.EventHandler(this.mnuFileLinksContext_Popup);
+            // 
+            // mnuFileLinksCopyTitle
+            // 
+            this.mnuFileLinksCopyTitle.Index = 0;
+            this.mnuFileLinksCopyTitle.Text = "<copy title>";
+            this.mnuFileLinksCopyTitle.Click += new System.EventHandler(this.mnuFileLinksCopyTitle_Click);
+            // 
+            // mnuFileLinksCopyUrl
+            // 
+            this.mnuFileLinksCopyUrl.Index = 1;
+            this.mnuFileLinksCopyUrl.Text = "<copy URL>";
+            this.mnuFileLinksCopyUrl.Click += new System.EventHandler(this.mnuFileLinksCopyUrl_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -817,6 +839,9 @@
         private CoolCat coolCat;
         private System.Windows.Forms.Panel panCommonsText;
         private System.Windows.Forms.Panel panCategorySeparator;
+        private System.Windows.Forms.ContextMenu mnuFileLinksContext;
+        private System.Windows.Forms.MenuItem mnuFileLinksCopyTitle;
+        private System.Windows.Forms.MenuItem mnuFileLinksCopyUrl;
     }
 }
 
