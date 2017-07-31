@@ -472,7 +472,8 @@ namespace ForTheCommonGood
                 {
                     try
                     {
-                        text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n"),
+                        text = Regex.Replace(text, replacement.Key, replacement.Value.Replace("\\n", "\n")
+                            .Replace("%%OriginalUploader%%", origUploader).Replace("%%InterwikiLinkPrefix%%", prefix),
                             RegexOptions.IgnoreCase);
                     }
                     catch (ArgumentException e)

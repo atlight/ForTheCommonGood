@@ -10,8 +10,8 @@ LocalFtcgPage=w:en:WP:FTCG
 
 Category1=Copy to Wikimedia Commons
 Category2=Copy to Wikimedia Commons (bot-assessed)
-Category3=Move to Commons Priority Candidates
-DefaultCategory=3
+Category3=
+DefaultCategory=1
 
 Information=Information
 Description=Description
@@ -98,6 +98,10 @@ ReplaceWith=
 [Replacement]
 LookFor={{category ordered by date[^\}]*}}
 ReplaceWith=
+
+[Replacement]
+LookFor={{(svgmtc|convert to svg and (copy|move) to (wikimedia )?commons)[^\}]*}}
+ReplaceWith={{Convert to SVG}}
 
 [Replacement]
 LookFor== *I .*created this (image|work) entirely by myself.?
