@@ -2138,7 +2138,7 @@ namespace ForTheCommonGood
             StringDictionary query = new StringDictionary 
             {
                 { "action", "parse" },
-                { "prop", "text" },
+                { "prop", "text|categorieshtml|headhtml" },
                 { "pst", "true" },
                 { "text", txtCommonsText.Text },
                 { "title", txtNormName.Text },
@@ -2148,16 +2148,31 @@ namespace ForTheCommonGood
             };
             MorebitsDotNet.PostApi(Wiki.Commons, query, delegate(XmlDocument doc)
             {
-                XmlNodeList l = doc.GetElementsByTagName("parse");
-                if (l.Count < 1)
+                string pageHtml = null, categoriesHtml = null, headHtml = null;
+                XmlNodeList parseNodes = doc.SelectNodes("//parse/*");
+                foreach (XmlNode n in parseNodes)
+                {
+                    switch (n.Name)
+                    {
+                        case "text":
+                            pageHtml = n.InnerText;
+                            break;
+                        case "categorieshtml":
+                            categoriesHtml = n.InnerText;
+                            break;
+                        case "headhtml":
+                            headHtml = n.InnerText;
+                            break;
+                    }
+                }
+                if (pageHtml == null || categoriesHtml == null || headHtml == null)
                 {
                     ErrorHandler(Localization.GetString("ParsePageFailed"), MessageBoxIcon.Information); // TODO - error message better
                     prv.Invoke((MethodInvoker) prv.Close);
                     return;
                 }
 
-                string pageHtml = l[0].InnerText;
-                prv.Invoke((MethodInvoker) delegate() { prv.SetContent(pageHtml); });
+                prv.Invoke((MethodInvoker) delegate() { prv.SetContent(headHtml + pageHtml + categoriesHtml); });
             }, delegate(string msg)
             {
                 ErrorHandler(msg);
