@@ -568,7 +568,7 @@ namespace ForTheCommonGood
                     }
 
                     if (languageCode.Length > 0 && !text.Contains("{{" + languageCode + "|"))
-                        text = Regex.Replace(text, @"({{Information[\r\n]* *\| ?Description *= *)([^\r\n ][^\r\n]+)([\r\n])",
+                        text = Regex.Replace(text, @"({{Information(?:{{[^{}]*}}|[^{}])*\|\s*Description *= *)([^\r\n ][^\r\n]+)([\r\n])",
                             "$1{{" + languageCode + "|1=$2}}$3", RegexOptions.IgnoreCase);
 
                     Match infoTagMatch = Regex.Match(text, @"{{\s*information\s*(\|({{[^{}]*}}|[^{}])*)?}}", RegexOptions.IgnoreCase);
