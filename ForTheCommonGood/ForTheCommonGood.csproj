@@ -115,6 +115,7 @@
     <Compile Include="PlatformSpecific.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileSequence.cs" />
     <EmbeddedResource Include="CoolCat.resx">
       <DependentUpon>CoolCat.cs</DependentUpon>
     </EmbeddedResource>

@@ -75,6 +75,7 @@ Cancel_Button=Cancel
 # Other Source window
 RandomSource_WindowTitle=Select source of random files
 FilesInCategory_Option=Files in category:
+FilesUploadedByUser_Option=Files uploaded by user:
 Browse_Button=Browse...
 FilesFromTextFile_Option=Files from text file on disk (one filename per line):
 # LOCALIZATION NOTE: "open" is a verb
@@ -168,10 +169,6 @@ NoFile=There seems to be a problem; perhaps the file is actually a redirect.
 FailedToDownload=Failed to download the file. Perhaps try again later.
 FailedToReadTextFile=Could not read the text file "{0}". Click the "Other source..." option to choose a different file.
 NoMoreFiles=That category contains no more files. Perhaps you misspelt it... or perhaps the backlog is finally clear :)
-RandomCacheEmpty1=No more files in the random cache. Click "Random file" again to find more files.
-RandomCacheEmpty2=(This cannot be done automatically due to the possibility of never-ending loops.)
-# LOCALIZATION NOTE: This is an instruction to the user ("please do not do it!"), not an option that can be chosen.
-RandomCacheEmpty3=Do not transfer the file that is currently displayed.
 PotentialProblemsGoAhead=This file has potential problems which may prevent or affect the transfer. Do you still want to transfer this file to Commons?
 StillDownloading=The file hasn't been downloaded yet. Try again in a few moments.
 OldVersionTransferAdvice=You are transferring an old version of this file. You will need to manually clean up the "original upload log" section of the new wikitext. Click Cancel and do this (or click OK if you have already done so).

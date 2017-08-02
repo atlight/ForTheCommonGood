@@ -367,6 +367,7 @@ namespace ForTheCommonGood
 
         public static string CurrentSourceOption { get; set; }
         public static string SourceCategory { get; set; }
+        public static string SourceUserName { get; set; }
         public static string SourceTextFile { get; set; }
 
         const string settingsFileName = "ForTheCommonGood.cfg";
@@ -380,7 +381,7 @@ namespace ForTheCommonGood
             CommonsDomain = DefaultCommonsDomain;
             LocalUserName = LocalPassword = CommonsPassword = CommonsUserName =
                 LocalWikiData = LocalWikiDataHosted =
-                CurrentSourceOption = SourceCategory = SourceTextFile = "";
+                CurrentSourceOption = SourceCategory = SourceUserName = SourceTextFile = "";
             LocalSysop = LogTransfers = OpenBrowserAutomatically = OpenBrowserLocal = false;
             SaveCreds = AutoUpdate = true;
             UseHttps = !PlatformSpecific.IsMono();  // default to false on Mono, as HTTPS doesn't work there
@@ -424,6 +425,8 @@ namespace ForTheCommonGood
                         Settings.CurrentSourceOption = l.Substring("CurrentSourceOption=".Length);
                     if (l.StartsWith("SourceCategory="))
                         Settings.SourceCategory = l.Substring("SourceCategory=".Length);
+                    if (l.StartsWith("SourceUserName="))
+                        Settings.SourceUserName = l.Substring("SourceUserName=".Length);
                     if (l.StartsWith("SourceTextFile="))
                         Settings.SourceTextFile = l.Substring("SourceTextFile=".Length);
                 }
@@ -459,6 +462,7 @@ namespace ForTheCommonGood
                     "LocalWikiDataHosted=" + Settings.LocalWikiDataHosted,
                     "CurrentSourceOption=" + Settings.CurrentSourceOption,
                     "SourceCategory=" + Settings.SourceCategory,
+                    "SourceUserName=" + Settings.SourceUserName,
                     "SourceTextFile=" + Settings.SourceTextFile,
                 });
                 if (Settings.CommonsDomain != Settings.DefaultCommonsDomain)

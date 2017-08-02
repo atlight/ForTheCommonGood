@@ -12,8 +12,9 @@ namespace ForTheCommonGood
 
             Text = Localization.GetString("RandomSource_WindowTitle");
             optCategory.Text = Localization.GetString("FilesInCategory_Option");
-            button3.Text = Localization.GetString("Browse_Button");
+            optUserUpload.Text = Localization.GetString("FilesUploadedByUser_Option");
             optTextFile.Text = Localization.GetString("FilesFromTextFile_Option");
+            btnFileNameBrowse.Text = Localization.GetString("Browse_Button");
             btnOK.Text = Localization.GetString("OK_Button");
             btnCancel.Text = Localization.GetString("Cancel_Button");
             openFileDialog1.Title = Localization.GetString("OpenTextFile_WindowTitle");
@@ -31,7 +32,8 @@ namespace ForTheCommonGood
         private void CheckChange(object sender, EventArgs e)
         {
             txtCategory.Enabled = optCategory.Checked;
-            txtFileName.Enabled = button3.Enabled = optTextFile.Checked;
+            txtUserName.Enabled = optUserUpload.Checked;
+            txtFileName.Enabled = btnFileNameBrowse.Enabled = optTextFile.Checked;
         }
 
         private void frmRandomSource_FormClosing(object sender, FormClosingEventArgs e)

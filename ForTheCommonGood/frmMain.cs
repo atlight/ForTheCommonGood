@@ -42,18 +42,9 @@ namespace ForTheCommonGood
         WebClient ImageDataDownloader;
 
         // Stuff to support the "random file" feature
-        enum FileSources
-        {
-            ManualInput,
-            Category,
-            TextFile
-        }
-        FileSources CurrentFileSource;
-        FileSources RandomFileSource;
-        string SourceTag;  // category name or name of text file
-
-        List<string> TextFileCache = new List<string>();
-        int RandomCurrentIndex;
+        bool CurrentFileWasManuallyInput = false;
+        FileSequence CurrentFileSequence;
+        string CurrentRandomFileOption;
 
         // Cached global resources
         Cursor ZoomInCursor;
@@ -347,7 +338,7 @@ namespace ForTheCommonGood
 
         private void button1_Click(object sender, EventArgs e)
         {
-            CurrentFileSource = FileSources.ManualInput;
+            CurrentFileWasManuallyInput = true;
             try
             {
                 DownloadAndProcess();
@@ -374,6 +365,7 @@ namespace ForTheCommonGood
                     btnViewExif.Visible = false;
                 lstFileLinks.ForeColor = SystemColors.GrayText;
                 lstFileLinks.Items.Clear();
+                txtNormName.ReadOnly = false;
                 chkIgnoreWarnings.Checked = false;
                 ClearWarnings();
                 lnkCommonsFile.Enabled = lnkLocalFile.Enabled = lnkGoogleImageSearch.Enabled =
@@ -404,9 +396,9 @@ namespace ForTheCommonGood
                 if (Regex.IsMatch(text, "{{((db-)?now ?commons|" + Regex.Escape(LocalWikiData.NowCommonsTag) + ")", RegexOptions.IgnoreCase))
                 {
                     potentialProblems.Add("• " + Localization.GetString("NowCommonsPotentialProblem"));
-                    if (CurrentFileSource == FileSources.Category)
+                    if (CurrentFileSequence != null) 
                     {
-                        RandomBlacklist.Add(RandomCurrentIndex);  // don't turn up this file again
+                        CurrentFileSequence.BlacklistFile(textBox1.Text);  // don't turn up this file again
                         RandomImage(null, null);
                         return;
                     }
@@ -701,7 +693,7 @@ namespace ForTheCommonGood
                         lblPastRevisions.Visible = btnPastRevisions.Visible = false;
                 });
 
-                // notify about presence of file talk page (if it is over 120 bytes in size)
+                // notify about presence of file talk page (if it is over a set minimum size)
                 XmlNode fileTalkPage = doc.SelectSingleNode("//page[@ns=7]");
                 if (fileTalkPage.Attributes["missing"] == null)
                 {
@@ -959,165 +951,80 @@ namespace ForTheCommonGood
         // Random File feature
         // ===================
 
-        List<string> RandomImageCache = new List<string>(500);
-        Random rand = new Random();
-        string RandomContinue;
-        List<int> RandomBlacklist = new List<int>();  // to avoid weird infinite loops and other silliness
+        FileSequence RandomSequence;
 
         private void RandomImage(object sender, EventArgs e)
         {
             EnableForm(false);
-
-            if (RandomFileSource == FileSources.TextFile)
-            {
-                if (TextFileCache.Count == 0)
-                {
-                    try
-                    {
-                        TextFileCache.AddRange(File.ReadAllLines(SourceTag));
-                    }
-                    catch (Exception x)
-                    {
-                        ErrorHandler(Localization.GetString("FailedToReadTextFile", SourceTag) + "\n\n" + x.Message);
-                        EnableForm(true);
-                        return;
-                    }
-                    TextFileCache.RemoveAll(str => String.IsNullOrEmpty(str));
-                }
-                RandomImageTextFileCore();
+            
+            if (CurrentFileSequence == null) {
+                // what to do?
+                throw new NotImplementedException();
             }
-            else if (RandomFileSource == FileSources.Category)
+
+
+            CurrentFileSequence.NextFile(RandomImageCore, ErrorHandler, () => ErrorHandler(Localization.GetString("NoMoreFiles")));
+        }
+
+        private void RandomImageCore(string fileName)
+        {
+            Invoke((MethodInvoker) delegate()
             {
-                if (RandomImageCache.Count == 0)
-                {
-                    EnableForm(false);
-                    StringDictionary query = new StringDictionary 
-                    {
-                        { "action", "query" },
-                        { "list", "categorymembers" },
-                        { "cmtitle", "Category:" + SourceTag },
-                        { "cmnamespace", "6" },  // File:, obviously
-                        { "cmsort", "timestamp" },
-                        { "cmprop", "title" },
-                        { "cmlimit", "500" },
-                        { "rawcontinue", "" },
-                    };
-                    if (RandomContinue != null)
-                        query.Add("cmcontinue", RandomContinue);
-                    MorebitsDotNet.PostApi(Wiki.Local, query, delegate(XmlDocument doc)
-                    {
-                        foreach (XmlNode i in doc.GetElementsByTagName("cm"))
-                            RandomImageCache.Add(i.Attributes["title"].Value);
-                        if (RandomImageCache.Count == 0)
-                        {
-                            ErrorHandler(Localization.GetString("NoMoreFiles"));
-                            return;
-                        }
+                textBox1.Text = fileName;
+            });
 
-                        XmlNodeList continues = doc.GetElementsByTagName("query-continue");
-                        if (continues.Count > 0)
-                            RandomContinue = continues[0].FirstChild.Attributes["cmcontinue"].Value;
-                        else
-                            RandomContinue = null;
-
-                        RandomImageCategoryCore();
-                    }, ErrorHandler, WebRequestMethods.Http.Get);
-                }
-                else
-                    RandomImageCategoryCore();
+            CurrentFileWasManuallyInput = false;
+            try
+            {
+                DownloadAndProcess();
             }
-            else
+            finally
             {
                 EnableForm(true);
-                throw new Exception("Internal error: the RandomFileSource is invalid.");
             }
         }
 
-        private void RandomImageCategoryCore()
+        private void optCategory_CheckedChanged(object sender, EventArgs e)
         {
-            if (RandomBlacklist.Count >= RandomImageCache.Count)
+            // if we're moving away from a text file source, give the user an opportunity
+            // to save changes to the text file they were working on
+            if (CurrentFileSequence is TextFileSequence && !TryTearDownTextFileSequence())
             {
-                ErrorHandler(Localization.GetString("RandomCacheEmpty1") + "\n\n" +
-                    Localization.GetString("RandomCacheEmpty2") + "\n\n" +
-                    Localization.GetString("RandomCacheEmpty3"));
-                RandomImageCache.Clear();
+                // this is extra annoying, but I don't know how else to do it!
+                optCategory1.CheckedChanged -= optCategory_CheckedChanged;
+                optCategory2.CheckedChanged -= optCategory_CheckedChanged;
+                optCategory3.CheckedChanged -= optCategory_CheckedChanged;
+                optOther.CheckedChanged -= optCategory_CheckedChanged;
+                optCategory1.Checked = optCategory2.Checked = optCategory3.Checked = false;
+                optOther.Checked = true;
+                optCategory1.CheckedChanged += optCategory_CheckedChanged;
+                optCategory2.CheckedChanged += optCategory_CheckedChanged;
+                optCategory3.CheckedChanged += optCategory_CheckedChanged;
+                optOther.CheckedChanged += optCategory_CheckedChanged;
                 return;
             }
-
-            int randIndex;
-            do
-            {
-                randIndex = rand.Next(RandomImageCache.Count);
-            } while (RandomBlacklist.Contains(randIndex));
-            Invoke((MethodInvoker) delegate()
-            {
-                textBox1.Text = RandomImageCache[randIndex];
-            });
-            RandomImageCache.RemoveAt(randIndex);
-
-            CurrentFileSource = FileSources.Category;
-            RandomCurrentIndex = randIndex;
-            try
-            {
-                DownloadAndProcess();
-            }
-            finally
-            {
-                EnableForm(true);
-            }
-        }
-
-        private void RandomImageTextFileCore()
-        {
-            // not really random - works through the file sequentially
-            Invoke((MethodInvoker) delegate()
-            {
-                textBox1.Text = TextFileCache[0];
-            });
-            TextFileCache.RemoveAt(0);
-
-            CurrentFileSource = FileSources.TextFile;
-            RandomCurrentIndex = 0;
-            try
-            {
-                DownloadAndProcess();
-            }
-            finally
-            {
-                EnableForm(true);
-            }
-        }
-
-        private void optCopyFoo_CheckedChanged(object sender, EventArgs e)
-        {
-            RandomImageCache.Clear();
-            RandomContinue = null;
-            RandomBlacklist = new List<int>();
-
+            
             if (optCategory1.Checked)
             {
-                RandomFileSource = FileSources.Category;
-                Settings.CurrentSourceOption = "Category1";
-                SourceTag = LocalWikiData.Category1;
+                CurrentRandomFileOption = optCategory1.Name;
+                CurrentFileSequence = new CategoryRandomApiFileSequence(LocalWikiData.Category1);
             }
             else if (optCategory2.Checked)
             {
-                RandomFileSource = FileSources.Category;
-                Settings.CurrentSourceOption = "Category2";
-                SourceTag = LocalWikiData.Category2;
+                CurrentRandomFileOption = optCategory2.Name;
+                CurrentFileSequence = new CategoryRandomApiFileSequence(LocalWikiData.Category2);
             }
             else if (optCategory3.Checked)
             {
-                RandomFileSource = FileSources.Category;
-                Settings.CurrentSourceOption = "Category3";
-                SourceTag = LocalWikiData.Category3;
+                CurrentRandomFileOption = optCategory3.Name;
+                CurrentFileSequence = new CategoryRandomApiFileSequence(LocalWikiData.Category3);
             }
             else
             {
                 // do nothing - "other source" is handled elsewhere
             }
 
-            btnRandomFile.Text = RandomFileSource == FileSources.TextFile ?
+            btnRandomFile.Text = CurrentFileSequence is TextFileSequence ?
                 Localization.GetString("NextFileInList_Button") :
                 Localization.GetString("RandomFile_Button");
         }
@@ -1125,7 +1032,7 @@ namespace ForTheCommonGood
         // Source selection
         // ================
 
-        private void optOther_CheckedChanged(object sender, EventArgs e)
+        private void optOther_Click(object sender, EventArgs e)
         {
             if (!optOther.Checked)
                 return;
@@ -1136,51 +1043,87 @@ namespace ForTheCommonGood
                 form.optTextFile.Checked = true;
                 form.txtFileName.Text = Settings.SourceTextFile;
             }
+            else if (!String.IsNullOrEmpty(Settings.SourceUserName))
+            {
+                form.optUserUpload.Checked = true;
+                form.txtUserName.Text = Settings.SourceUserName;
+            }
             else if (!String.IsNullOrEmpty(Settings.SourceCategory))
                 form.txtCategory.Text = Settings.SourceCategory;
 
             if (form.ShowDialog(this) == DialogResult.Cancel)
             {
-                switch (LocalWikiData.DefaultCategory)
+                if (CurrentRandomFileOption != optOther.Name)
                 {
-                    case "1":
-                        optCategory1.Checked = true;
-                        SourceTag = LocalWikiData.Category1;
-                        break;
-                    case "2":
-                        optCategory2.Checked = true;
-                        SourceTag = LocalWikiData.Category2;
-                        break;
-                    case "3":
-                        optCategory3.Checked = true;
-                        SourceTag = LocalWikiData.Category3;
-                        break;
+                    // this is extra annoying, but I don't know how else to do it!
+                    optCategory1.CheckedChanged -= optCategory_CheckedChanged;
+                    optCategory2.CheckedChanged -= optCategory_CheckedChanged;
+                    optCategory3.CheckedChanged -= optCategory_CheckedChanged;
+                    optOther.CheckedChanged -= optCategory_CheckedChanged;
+                    switch (CurrentRandomFileOption)
+                    {
+                        case "optCategory1":
+                            optCategory1.Checked = true;
+                            break;
+                        case "optCategory2":
+                            optCategory2.Checked = true;
+                            break;
+                        case "optCategory3":
+                            optCategory3.Checked = true;
+                            break;
+                    }
+                    optCategory1.CheckedChanged += optCategory_CheckedChanged;
+                    optCategory2.CheckedChanged += optCategory_CheckedChanged;
+                    optCategory3.CheckedChanged += optCategory_CheckedChanged;
+                    optOther.CheckedChanged += optCategory_CheckedChanged;
                 }
-                RandomFileSource = FileSources.Category;
                 return;
             }
 
+            // if we are changing to a different text file, or moving to a new text file, prompt
+            // the user to save changes. If they click Cancel, leave settings as they are
+            if (CurrentFileSequence is TextFileSequence &&
+                (form.optTextFile.Checked == false || form.txtFileName.Text != ((TextFileSequence) CurrentFileSequence).FileName) &&
+                !TryTearDownTextFileSequence())
+                return;
+
+            CurrentRandomFileOption = optOther.Name;
             if (form.optTextFile.Checked)
             {
-                RandomFileSource = FileSources.TextFile;
-                Settings.CurrentSourceOption = "TextFile";
-                SourceTag = Settings.SourceTextFile = form.txtFileName.Text;
+                if (!(CurrentFileSequence is TextFileSequence) || form.txtFileName.Text != ((TextFileSequence) CurrentFileSequence).FileName)
+                {
+                    CurrentFileSequence = new TextFileSequence(form.txtFileName.Text);
+                    Settings.CurrentSourceOption = "TextFile";
+                    Settings.SourceCategory = "";
+                    Settings.SourceUserName = "";
+                    Settings.SourceTextFile = form.txtFileName.Text;
+                }
+            }
+            else if (form.optUserUpload.Checked)
+            {
+                string user = form.txtUserName.Text.Substring(
+                       form.txtUserName.Text.ToLower(CultureInfo.InvariantCulture).StartsWith("user:", StringComparison.InvariantCulture)
+                       ? "user:".Length : 0);
+                CurrentFileSequence = new UserRandomApiFileSequence(user);
+                Settings.CurrentSourceOption = "UserUploads";
                 Settings.SourceCategory = "";
-                TextFileCache.Clear();
+                Settings.SourceUserName = user;
+                Settings.SourceTextFile = "";
             }
             else
             {
-                RandomFileSource = FileSources.Category;
-                Settings.CurrentSourceOption = "CustomCategory";
-                SourceTag = Settings.SourceCategory = form.txtCategory.Text.Substring(
+                string category = form.txtCategory.Text.Substring(
                     form.txtCategory.Text.ToLower(CultureInfo.InvariantCulture).StartsWith("category:", StringComparison.InvariantCulture)
                     ? "category:".Length : 0);
+                CurrentFileSequence = new CategoryRandomApiFileSequence(category);
+                Settings.CurrentSourceOption = "CustomCategory";
+                Settings.SourceCategory = category;
+                Settings.SourceUserName = "";
                 Settings.SourceTextFile = "";
-                RandomImageCache.Clear();
             }
 
             Settings.WriteSettings();
-            btnRandomFile.Text = RandomFileSource == FileSources.TextFile ?
+            btnRandomFile.Text = CurrentFileSequence is TextFileSequence ?
                 Localization.GetString("NextFileInList_Button") :
                 Localization.GetString("RandomFile_Button");
         }
@@ -1379,14 +1322,14 @@ namespace ForTheCommonGood
                 if (--selectedRevisionIndex >= 0)
                     UploadEachRevision(filename, selectedRevisionIndex, false, null, token);
                 else
-                    UploadSuccess();
+                    PerformPostUploadTasks();
             };
 
             MorebitsDotNet.UploadFile(Wiki.Commons, uploadQuery, ImageDatas[SelectedRevisions[selectedRevisionIndex]],
                 filename, "file", callbackAfterEach, ErrorHandler);
         }
 
-        private void UploadSuccess()
+        private void PerformPostUploadTasks()
         {
             Invoke((MethodInvoker) delegate()
             {
@@ -1416,28 +1359,11 @@ namespace ForTheCommonGood
                 }
             }
 
-            // this is invoked when all is finished
-            MethodInvoker showSuccess = delegate()
-            {
-                Invoke((MethodInvoker) ClearWarnings);
-                AddWarning(Localization.GetString("Success_Label",
-                    Settings.CommonsDomain == Settings.DefaultCommonsDomain ?
-                    Localization.GetString("ViewFilePageOnWikimediaCommons_Hyperlink") :
-                    Localization.GetString("ViewFilePageOnLocalWiki_Hyperlink_Format", Settings.CommonsDomain)),
-                    WarningBoxType.Success);
-                if (Settings.OpenBrowserLocal)
-                    lnkLocalFile_LinkClicked(null, null);
-                if (Settings.OpenBrowserAutomatically)
-                    lnkCommonsFile_LinkClicked(null, null);
-                if (CurrentFileSource != FileSources.Category)
-                    Invoke((MethodInvoker) delegate() { btnRandomFile.Focus(); });
-            };
-
             // finished?
             if (!chkDeleteAfter.Checked)
             {
                 EnableForm(true);
-                showSuccess();
+                UploadSuccess();
                 return;
             }
 
@@ -1499,7 +1425,7 @@ namespace ForTheCommonGood
                             ErrorHandler(Localization.GetString("NowCommonsFailed") + " " + editResult, MessageBoxIcon.Information);
                             return;
                         }
-                        showSuccess();
+                        UploadSuccess();
                     }, ErrorHandler);
                 }, ErrorHandler);
             };
@@ -1546,15 +1472,7 @@ namespace ForTheCommonGood
                     MorebitsDotNet.PostApi(Wiki.Local, deleteQuery, delegate(XmlDocument innerDoc)
                     {
                         EnableForm(true);
-                        AddWarning(Localization.GetString("LooksGood"), WarningBoxType.Success);
-                        if (Settings.CommonsDomain == Settings.DefaultCommonsDomain)
-                            AddWarning(Localization.GetString("DontForgetToCategorize_Label"), WarningBoxType.Success);
-                        if (Settings.OpenBrowserLocal)
-                            lnkLocalFile_LinkClicked(null, null);
-                        if (Settings.OpenBrowserAutomatically)
-                            lnkCommonsFile_LinkClicked(null, null);
-                        if (CurrentFileSource != FileSources.Category)
-                            Invoke((MethodInvoker) delegate() { btnRandomFile.Focus(); });
+                        UploadSuccess();
                     }, ErrorHandler);
                 }, ErrorHandler);
             };
@@ -1566,72 +1484,29 @@ namespace ForTheCommonGood
                 action();
         }
 
-        // "Decline transfer" feature removed, due to crashes
-        // Also, it was useless anyway, since bots would re-add {{copy to Commons}} regardless
+        private void UploadSuccess()
+        {
+            Invoke((MethodInvoker) ClearWarnings);
+            AddWarning(Localization.GetString("Success_Label",
+                Settings.CommonsDomain == Settings.DefaultCommonsDomain ?
+                Localization.GetString("ViewFilePageOnWikimediaCommons_Hyperlink") :
+                Localization.GetString("ViewFilePageOnLocalWiki_Hyperlink_Format", Settings.CommonsDomain)),
+                WarningBoxType.Success);
 
-        //private void DeclineTransfer(object sender, EventArgs e)
-        //{
-        //    Action action = delegate()
-        //    {
-        //        string summary = frmPrompt.Prompt(Localization.GetString("DeclineReasonPrompt1") + "\n" + Localization.GetString("DeclineReasonPrompt2"));
-        //        if (summary == null)
-        //            return;
+            Invoke((MethodInvoker) delegate()
+            {
+                txtNormName.ReadOnly = true;
+                chkDeleteAfter.Enabled = chkIgnoreWarnings.Enabled = btnTransfer.Enabled = false;
+            });
 
-        //        EnableForm(false);
+            if (Settings.OpenBrowserLocal)
+                lnkLocalFile_LinkClicked(null, null);
+            if (Settings.OpenBrowserAutomatically)
+                lnkCommonsFile_LinkClicked(null, null);
 
-        //        StringDictionary enTokenQuery = new StringDictionary 
-        //        {
-        //            { "action", "query" },
-        //            { "prop", "info|revisions" },
-        //            { "intoken", "edit" },
-        //            { "titles", filename },  // old filename
-        //            { "rvprop", "content" }
-        //        };
-        //        MorebitsDotNet.PostApi(Wiki.Local, enTokenQuery, delegate(XmlDocument enDoc)
-        //        {
-        //            if (enDoc.GetElementsByTagName("page")[0].Attributes["missing"] != null)
-        //            {
-        //                ErrorHandler(Localization.GetString("LocalFileDeleted"));
-        //                return;
-        //            }
-
-        //            string enToken = enDoc.GetElementsByTagName("page")[0].Attributes["edittoken"].Value;
-
-        //            string enText = enDoc.GetElementsByTagName("rev")[0].FirstChild.Value;
-        //            string newText =  Regex.Replace(enText, LocalWikiData.CopyToCommonsRegex, "", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        //            if (enText == newText)
-        //            {
-        //                ErrorHandler(Localization.GetString("CouldNotFindTag"));
-        //                return;
-        //            }
-
-        //            StringDictionary enEditQuery = new StringDictionary 
-        //            {
-        //                { "action", "edit" },
-        //                { "token", enToken },
-        //                { "title", filename },
-        //                { "text", newText },
-        //                { "summary", "Declining {{Copy to Commons}} request: " + summary + " ([[WP:FTCG|FtCG]])" },
-        //                { "nocreate", "true" }
-        //            };
-        //            MorebitsDotNet.PostApi(Wiki.Local, enEditQuery, delegate(XmlDocument enInnerDoc)
-        //            {
-        //                EnableForm(true);
-        //                string editResult = enInnerDoc.GetElementsByTagName("edit")[0].Attributes["result"].Value.ToLower();
-        //                if (editResult == "success")
-        //                    ShowWarningBox(true, "");
-        //                else
-        //                    ErrorHandler(Localization.GetString("FailedPlus") + " " + editResult, MessageBoxIcon.Information);
-        //            }, ErrorHandler, true);
-        //        }, ErrorHandler, true);
-        //    };
-
-        //    if (!MorebitsDotNet.LoginSessions[Wiki.Local].LoggedIn)
-        //        MorebitsDotNet.LogIn(Wiki.Local, Settings.LocalUserName, Settings.LocalPassword,
-        //            action, ErrorHandler);
-        //    else
-        //        action();
-        //}
+            if (!CurrentFileWasManuallyInput)
+                Invoke((MethodInvoker) delegate() { btnRandomFile.Focus(); });
+        }
 
         // Misc. UI backing code
         // =====================
@@ -1708,22 +1583,17 @@ namespace ForTheCommonGood
                     if (!optCategory2.Visible)
                         goto case "category1";
                     optCategory2.Checked = true;
-                    SourceTag = LocalWikiData.Category2;
                     break;
                 case "category3":
                     if (!optCategory3.Visible)
                         goto case "category2";
                     optCategory3.Checked = true;
-                    SourceTag = LocalWikiData.Category3;
                     break;
                 case "category1":
                 default:
                     optCategory1.Checked = true;
-                    SourceTag = LocalWikiData.Category1;
                     break;
             }
-            RandomFileSource = FileSources.Category;
-            RandomImageCache.Clear();
         }
 
         private void lnkLocalFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1910,11 +1780,15 @@ namespace ForTheCommonGood
             {
                 Settings.CurrentSourceOption = "Category3";
             }
-            else if (RandomFileSource == FileSources.Category)
+            else if (CurrentFileSequence is CategoryRandomApiFileSequence)
             {
                 Settings.CurrentSourceOption = "CustomCategory";
             }
-            else if (RandomFileSource == FileSources.TextFile)
+            else if (CurrentFileSequence is UserRandomApiFileSequence)
+            {
+                Settings.CurrentSourceOption = "UserUploads";
+            }
+            else if (CurrentFileSequence is TextFileSequence)
             {
                 Settings.CurrentSourceOption = "TextFile";
             }
@@ -1927,29 +1801,38 @@ namespace ForTheCommonGood
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (RandomFileSource == FileSources.TextFile && TextFileCache.Count > 0)
+            e.Cancel = !TryTearDownTextFileSequence();
+        }
+
+        private bool TryTearDownTextFileSequence()
+        {
+            if (CurrentFileSequence is TextFileSequence)
             {
-                switch (MessageBox.Show(Localization.GetString("TextFileAutoClean") + "\n\n" +
-                    Localization.GetString("SaveChanges", Path.GetFileName(SourceTag)),
-                    Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+                TextFileSequence textSeq = CurrentFileSequence as TextFileSequence;
+                string[] fileLines = textSeq.GetFileLines();
+                if (textSeq.IsDirty && fileLines.Length > 0)
                 {
-                    case DialogResult.Yes:
-                        try
-                        {
-                            File.WriteAllLines(SourceTag, TextFileCache.ToArray());
-                        }
-                        catch (Exception x)
-                        {
-                            ErrorHandler(Localization.GetString("TextFileSaveFailed") + "\n\n" + x.Message);
-                            e.Cancel = true;
-                            return;
-                        }
-                        break;
-                    case DialogResult.Cancel:
-                        e.Cancel = true;
-                        break;
+                    switch (MessageBox.Show(Localization.GetString("TextFileAutoClean") + "\n\n" +
+                        Localization.GetString("SaveChanges", Path.GetFileName(textSeq.FileName)),
+                        Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+                    {
+                        case DialogResult.Yes:
+                            try
+                            {
+                                File.WriteAllLines(textSeq.FileName, fileLines);
+                            }
+                            catch (Exception x)
+                            {
+                                ErrorHandler(Localization.GetString("TextFileSaveFailed") + "\n\n" + x.Message);
+                                return false;
+                            }
+                            break;
+                        case DialogResult.Cancel:
+                            return false;
+                    }
                 }
             }
+            return true;
         }
 
         private void frmMain_Resize(object sender, EventArgs e)

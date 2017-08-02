@@ -342,7 +342,7 @@
             this.optCategory1.TabIndex = 5;
             this.optCategory1.Text = "<category 1>";
             this.optCategory1.UseVisualStyleBackColor = true;
-            this.optCategory1.CheckedChanged += new System.EventHandler(this.optCopyFoo_CheckedChanged);
+            this.optCategory1.CheckedChanged += new System.EventHandler(this.optCategory_CheckedChanged);
             // 
             // optCategory2
             // 
@@ -353,7 +353,7 @@
             this.optCategory2.TabIndex = 6;
             this.optCategory2.Text = "<category 2>";
             this.optCategory2.UseVisualStyleBackColor = true;
-            this.optCategory2.CheckedChanged += new System.EventHandler(this.optCopyFoo_CheckedChanged);
+            this.optCategory2.CheckedChanged += new System.EventHandler(this.optCategory_CheckedChanged);
             // 
             // lblName
             // 
@@ -463,8 +463,8 @@
             this.optOther.TabIndex = 8;
             this.optOther.Text = "<other source>";
             this.optOther.UseVisualStyleBackColor = true;
-            this.optOther.CheckedChanged += new System.EventHandler(this.optCopyFoo_CheckedChanged);
-            this.optOther.Click += new System.EventHandler(this.optOther_CheckedChanged);
+            this.optOther.CheckedChanged += new System.EventHandler(this.optCategory_CheckedChanged);
+            this.optOther.Click += new System.EventHandler(this.optOther_Click);
             // 
             // panRoot
             // 
