@@ -44,11 +44,11 @@ IfContains={{di-
 Message=The file is tagged with a dated (DI) deletion tag.
 
 [PotentialProblem]
-IfContains={{puf
-Message=The file appears to be listed at PUF (Possibly unfree files). Check the discussion before transferring.
+IfContains={{proposed deletion
+Message=The file is tagged for proposed deletion (PROD).
 
 [PotentialProblem]
-IfContains={{ffd
+IfContains={{(ffd|puf)
 Message=The file appears to be nominated for deletion. Check the deletion discussion at FFD before transferring.
 
 [PotentialProblem]
