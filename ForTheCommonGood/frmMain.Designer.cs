@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.lblOriginalFilename = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtLocalName = new System.Windows.Forms.TextBox();
             this.btnGo = new System.Windows.Forms.Button();
             this.txtLocalText = new System.Windows.Forms.TextBox();
             this.txtCommonsText = new System.Windows.Forms.TextBox();
@@ -105,13 +105,13 @@
             this.lblOriginalFilename.TabIndex = 0;
             this.lblOriginalFilename.Text = "<name>";
             // 
-            // textBox1
+            // txtLocalName
             // 
-            this.textBox1.Location = new System.Drawing.Point(56, 18);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(224, 21);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.txtLocalName.Location = new System.Drawing.Point(56, 18);
+            this.txtLocalName.Name = "txtLocalName";
+            this.txtLocalName.Size = new System.Drawing.Size(224, 21);
+            this.txtLocalName.TabIndex = 1;
+            this.txtLocalName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtLocalName_KeyDown);
             // 
             // btnGo
             // 
@@ -121,7 +121,7 @@
             this.btnGo.TabIndex = 2;
             this.btnGo.Text = "<go>";
             this.btnGo.UseVisualStyleBackColor = true;
-            this.btnGo.Click += new System.EventHandler(this.button1_Click);
+            this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
             // 
             // txtLocalText
             // 
@@ -474,7 +474,7 @@
             this.panRoot.Controls.Add(this.chkIgnoreWarnings);
             this.panRoot.Controls.Add(this.chkDeleteAfter);
             this.panRoot.Controls.Add(this.panTransferSeparator);
-            this.panRoot.Controls.Add(this.textBox1);
+            this.panRoot.Controls.Add(this.txtLocalName);
             this.panRoot.Controls.Add(this.toolBarLinks);
             this.panRoot.Controls.Add(this.lnkGoogleImageSearch);
             this.panRoot.Controls.Add(this.lblExifNotice);
@@ -787,7 +787,7 @@
         #endregion
 
         private System.Windows.Forms.Label lblOriginalFilename;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtLocalName;
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox txtLocalText;

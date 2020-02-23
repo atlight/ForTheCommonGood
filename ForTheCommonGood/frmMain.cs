@@ -58,9 +58,9 @@ namespace ForTheCommonGood
             // to stop the main text boxes from being cut off
             Height = 720;
 
+            // initialise colors and resources that can't be set using the designer
             panStatus.Tag = Color.FromArgb(30, 144, 255);
             panWarning.Tag = Color.FromArgb(178, 34, 34);
-
             ZoomInCursor = new Cursor(new MemoryStream(Properties.Resources.zoomin_cur));
             CheckerBrush = new TextureBrush(Properties.Resources.Checker_16x16, System.Drawing.Drawing2D.WrapMode.Tile);
 
@@ -336,7 +336,7 @@ namespace ForTheCommonGood
             });
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnGo_Click(object sender, EventArgs e)
         {
             CurrentFileWasManuallyInput = true;
             try
@@ -372,12 +372,12 @@ namespace ForTheCommonGood
                     lnkGoToFileLink.Enabled = false;
                 SetTransferButtonDownloading(true);
 
-                textBox1.Text = textBox1.Text.Trim();
+                txtLocalName.Text = txtLocalName.Text.Trim();
             });
             if (ImageDataDownloader != null)
                 ImageDataDownloader.CancelAsync();
 
-            CurrentFileName = Regex.Replace(textBox1.Text, @"^\w+:", "", RegexOptions.IgnoreCase);
+            CurrentFileName = Regex.Replace(txtLocalName.Text, @"^\w+:", "", RegexOptions.IgnoreCase);
 
             EnableForm(false);
 
@@ -398,7 +398,7 @@ namespace ForTheCommonGood
                     potentialProblems.Add("• " + Localization.GetString("NowCommonsPotentialProblem"));
                     if (CurrentFileSequence != null) 
                     {
-                        CurrentFileSequence.BlacklistFile(textBox1.Text);  // don't turn up this file again
+                        CurrentFileSequence.BlacklistFile(txtLocalName.Text);  // don't turn up this file again
                         RandomImage(null, null);
                         return;
                     }
@@ -942,16 +942,14 @@ namespace ForTheCommonGood
             ImageDataDownloader.DownloadDataAsync(new Uri(ImageInfos[SelectedRevisions[currentIndexIndex]].Attributes["url"].Value));
         }
 
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        private void txtLocalName_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
-                button1_Click(sender, e);
+                btnGo_Click(sender, e);
         }
 
         // Random File feature
         // ===================
-
-        FileSequence RandomSequence;
 
         private void RandomImage(object sender, EventArgs e)
         {
@@ -962,7 +960,6 @@ namespace ForTheCommonGood
                 throw new NotImplementedException();
             }
 
-
             CurrentFileSequence.NextFile(RandomImageCore, ErrorHandler, () => ErrorHandler(Localization.GetString("NoMoreFiles")));
         }
 
@@ -970,7 +967,7 @@ namespace ForTheCommonGood
         {
             Invoke((MethodInvoker) delegate()
             {
-                textBox1.Text = fileName;
+                txtLocalName.Text = fileName;
             });
 
             CurrentFileWasManuallyInput = false;
