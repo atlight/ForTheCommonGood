@@ -233,38 +233,7 @@ namespace ForTheCommonGood
                 session.CookieJar = new CookieContainer();
             ((HttpWebRequest) req).CookieContainer = session.CookieJar;
 
-            // login doesn't seem to work properly when done asynchronously
-            if (loggingIn)
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
-                req.ContentLength = bytes.Length;
-                Stream s = req.GetRequestStream();
-                s.Write(bytes, 0, bytes.Length);
-                s.Close();
-            }
-            else if (method != WebRequestMethods.Http.Get)
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
-                req.ContentLength = bytes.Length;
-                req.BeginGetRequestStream(delegate(IAsyncResult innerResult)
-                {
-                    try
-                    {
-                        using (Stream s = req.EndGetRequestStream(innerResult))
-                        {
-                            s.Write(bytes, 0, bytes.Length);
-                            s.Close();
-                        }
-                    }
-                    catch (WebException e)
-                    {
-                        onError(Localization.GetString("MorebitsDotNet_NetRequestFailure") + "\n\n" + e.Message);
-                        return;
-                    }
-                }, null);
-            }
-
-            IAsyncResult result = (IAsyncResult) req.BeginGetResponse(delegate(IAsyncResult innerResult)
+            AsyncCallback callback = delegate (IAsyncResult innerResult)
             {
                 WebResponse resp = null;
                 try
@@ -311,9 +280,52 @@ namespace ForTheCommonGood
                     onSuccess(doc);
                 else
                     onError(Localization.GetString("MorebitsDotNet_ApiError") + "\n\n" + list[0].Attributes["info"].Value);
-            }, null);
+            };
 
-            ThreadPool.RegisterWaitForSingleObject(result.AsyncWaitHandle, new WaitOrTimerCallback(TimeoutCallback), req, DefaultTimeout, true);
+            // login doesn't seem to work properly when done asynchronously
+            if (loggingIn)
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
+                req.ContentLength = bytes.Length;
+                Stream s = req.GetRequestStream();
+                s.Write(bytes, 0, bytes.Length);
+                s.Close();
+
+                IAsyncResult result = (IAsyncResult) req.BeginGetResponse(callback, null);
+
+                ThreadPool.RegisterWaitForSingleObject(result.AsyncWaitHandle, new WaitOrTimerCallback(TimeoutCallback), req, DefaultTimeout, true);
+            }
+            else if (method != WebRequestMethods.Http.Get)
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(requestContent);
+                req.ContentLength = bytes.Length;
+                req.BeginGetRequestStream(delegate (IAsyncResult innerResult)
+                {
+                    try
+                    {
+                        using (Stream s = req.EndGetRequestStream(innerResult))
+                        {
+                            s.Write(bytes, 0, bytes.Length);
+                            s.Close();
+                        }
+                    }
+                    catch (WebException e)
+                    {
+                        onError(Localization.GetString("MorebitsDotNet_NetRequestFailure") + "\n\n" + e.Message);
+                        return;
+                    }
+
+                    IAsyncResult result = (IAsyncResult) req.BeginGetResponse(callback, null);
+
+                    ThreadPool.RegisterWaitForSingleObject(result.AsyncWaitHandle, new WaitOrTimerCallback(TimeoutCallback), req, DefaultTimeout, true);
+                }, null);
+            }
+            else
+            {
+                IAsyncResult result = (IAsyncResult) req.BeginGetResponse(callback, null);
+
+                ThreadPool.RegisterWaitForSingleObject(result.AsyncWaitHandle, new WaitOrTimerCallback(TimeoutCallback), req, DefaultTimeout, true);
+            }
         }
 
         public static void UploadFile(Wiki wiki, StringDictionary query, byte[] file, string fileName, //string fileMimeType, 
