@@ -9,7 +9,7 @@ using System.Resources;
 [assembly: AssemblyTitle("For the Common Good")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("This, that and the other")]
+[assembly: AssemblyCompany("Alan Thomas (This, that and the other)")]
 [assembly: AssemblyProduct("For the Common Good")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
@@ -33,6 +33,6 @@ using System.Resources;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0.6")]
-[assembly: AssemblyFileVersion("1.1.0.6")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en")]

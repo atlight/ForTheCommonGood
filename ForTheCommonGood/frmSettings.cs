@@ -61,9 +61,9 @@ namespace ForTheCommonGood
             chkAutoUpdate.Text = Localization.GetString("CheckForUpdates_CheckBox");
             chkOpenBrowserLocal.Text = Localization.GetString("OpenLocalFilePageAutomatically_CheckBox");
             chkLogTransfers.Text = Localization.GetString("LogTransfers_CheckBox");
-            lnkThisThatOther.Text = Localization.GetString("Author_Label") + " This, that and the other";
-            lnkThisThatOther.LinkArea = new LinkArea(lnkThisThatOther.Text.Length - "This, that and the other".Length,
-                lnkThisThatOther.Text.Length - 1);
+            lnkThisThatOther.Text = Localization.GetString("Author_Label") + " Alan Thomas (This, that and the other)";
+            lnkThisThatOther.LinkArea = new LinkArea(lnkThisThatOther.Text.Length - "This, that and the other)".Length,
+                "This, that and the other".Length);
             lblLicense.Text = Localization.GetString("PublicDomain_Label");
             openFileDialog1.Title = Localization.GetString("OpenTextFile_WindowTitle");
             grpLocalData.Text = Localization.GetString("LocalWikiData_Label");
